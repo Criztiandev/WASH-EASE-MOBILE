@@ -1,8 +1,11 @@
-import { SafeAreaView, StatusBar, Text, TextInput, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
+import { cn } from "../../utils/dev.utils";
 
-export default function Input({ label, onChangeText }) {
+export default function Input({ label, onChangeText, className, style }) {
+  const defastyle = cn("", className);
+
   return (
-    <View>
+    <View className={defastyle} style={style}>
       <Text className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         {label}
       </Text>
