@@ -43,7 +43,7 @@ const MOCKDATA = [
 ];
 
 const HomeScreen = () => {
-  const renderSeparator = () => <View style={{ width: 24 }} />;
+  const renderSeparator = () => <View style={{ width: 8 }} />;
 
   return (
     <ScreenLayout className="bg-[#f0f0f0]">

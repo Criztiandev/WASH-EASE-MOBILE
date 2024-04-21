@@ -26,7 +26,7 @@ const LaundryShopCardVertical = ({ image, title, path, details, status }) => {
 
   return (
     <TouchableOpacity onPress={handleNavigate}>
-      <View className="flex-row relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+      <View className="flex-row relative bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
         <View className="w-[40%]">
           <Image
             source={image}

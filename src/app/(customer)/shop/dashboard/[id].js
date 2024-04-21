@@ -9,9 +9,11 @@ import Button from "../../../../components/atoms/Button";
 import ScreenLayout from "../../../../layout/ScreenLayout";
 import ShopDetailsCover from "../../../../components/organism/ShopDetailsCover";
 import ShopServiceTab from "../../../../components/views/shop/ShopServiceTab";
+import RequestTab from "../../../../components/views/shop/RequestTab";
 const renderScene = SceneMap({
   about: AboutTab,
   service: ShopServiceTab,
+  request: RequestTab,
 });
 
 const ShopDetails = () => {
@@ -22,6 +24,7 @@ const ShopDetails = () => {
   const [routes] = useState([
     { key: "about", title: "About" },
     { key: "service", title: "Service" },
+    { key: "request", title: "Request" },
   ]);
 
   return (

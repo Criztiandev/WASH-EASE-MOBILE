@@ -3,12 +3,12 @@ import React from "react";
 import HorizontalCard from "../../molecule/HorizontalCard";
 import { router } from "expo-router";
 
-const ShopServiceTab = () => {
+const ShopServiceTab = (prpos) => {
   return (
     <View className="py-4">
       <ScrollView className="px-4">
         <TouchableOpacity
-          onPress={() => router.replace("/shop/service/select-machine")}>
+          onPress={() => router.push("/shop/service/self-service")}>
           <HorizontalCard
             image={
               "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"

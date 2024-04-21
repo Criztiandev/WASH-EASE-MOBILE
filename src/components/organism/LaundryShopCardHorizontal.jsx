@@ -24,14 +24,14 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
   return (
     <View
       style={{
-        width: Dimensions.get("screen").width - 32,
+        width: Dimensions.get("screen").width - 64,
       }}
-      className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+      className="relative  max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
       <Image
         source={image}
         contentFit="cover"
         transition={1000}
-        className="h-[150px] rounded-t-md flex-1 "
+        className="h-[120px] rounded-t-md flex-1 "
       />
       <View className="p-5 space-y-4">
         <Text className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
