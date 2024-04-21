@@ -4,19 +4,17 @@ import StarRating from "../../assets/icons/start_fill_icon.svg";
 import { Image } from "expo-image";
 import Badge from "../atoms/Badge";
 import Button from "../atoms/Button";
-import { Link, router, useNavigation } from "expo-router";
-import CloseIcon from "../../assets/icons/close_icon.svg";
 
 const ShopDetailsCover = () => {
   return (
-    <View className="relative">
+    <View className="relative  p-0">
       <Image
         source={
           "https://images.pexels.com/photos/13696491/pexels-photo-13696491.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
         }
         contentFit="cover"
         transition={1000}
-        className="h-[250px] rounded-t-md relative -z-30"
+        className="h-[250px]  -z-30"
       />
 
       <View
@@ -43,12 +41,6 @@ const ShopDetailsCover = () => {
             </Text>
           </View>
         </View>
-
-        <Link
-          href={"../../home"}
-          className="absolute right-0 bg-white rounded-full mx-2 p-2 justify-center items-center">
-          <CloseIcon />
-        </Link>
 
         <Badge className="bg-green-300 m-2">
           <Text>Open</Text>

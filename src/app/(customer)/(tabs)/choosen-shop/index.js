@@ -47,7 +47,7 @@ const ChoosenShopScreen = () => {
   const renderSeparator = () => <View style={{ width: 24 }} />;
 
   return (
-    <ScreenLayout className="bg-[#f0f0f0] pt-2">
+    <ScreenLayout className="bg-[#f0f0f0]">
       <View className="px-2 mb-4">
         <SearchBar />
       </View>

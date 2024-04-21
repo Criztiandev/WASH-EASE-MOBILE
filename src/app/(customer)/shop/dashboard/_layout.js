@@ -5,7 +5,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
+        name="[id]"
         options={{
           title: "Choosen Shop",
         }}

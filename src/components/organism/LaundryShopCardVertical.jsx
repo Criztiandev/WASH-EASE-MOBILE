@@ -21,7 +21,7 @@ const statusFlag = cva("left-0 m-2", {
 const LaundryShopCardVertical = ({ image, title, path, details, status }) => {
   const statusStyle = cn(statusFlag({ status }));
   const handleNavigate = () => {
-    router.replace(path);
+    router.push(path);
   };
 
   return (

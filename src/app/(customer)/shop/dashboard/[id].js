@@ -28,18 +28,16 @@ const ShopDetails = () => {
   ]);
 
   return (
-    <ScreenLayout>
+    <View className="flex-1">
       <ShopDetailsCover />
 
-      <View className="flex-1">
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          initialLayout={{ width: layout.width }}
-        />
-      </View>
-    </ScreenLayout>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+      />
+    </View>
   );
 };
 
