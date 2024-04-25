@@ -18,6 +18,13 @@ export default () => {
       />
 
       <Tabs.Screen
+        name="message"
+        options={{
+          title: "Message",
+        }}
+      />
+
+      <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",

@@ -6,6 +6,7 @@ import MapFrame from "../../../../components/atoms/MapFrame";
 import { Link } from "expo-router";
 import LaundryShopCardHorizontal from "../../../../components/organism/LaundryShopCardHorizontal";
 import LaundryShopCardVertical from "../../../../components/organism/LaundryShopCardVertical";
+import { Searchbar } from "react-native-paper";
 
 const MOCKDATA = [
   {
@@ -47,10 +48,8 @@ const ChoosenShopScreen = () => {
   const renderSeparator = () => <View style={{ width: 24 }} />;
 
   return (
-    <ScreenLayout className="bg-[#f0f0f0]">
-      <View className="px-2 mb-4">
-        <SearchBar />
-      </View>
+    <ScreenLayout className="bg-[#f0f0f0] px-2 space-y-4 ">
+      <Searchbar className="bg-white mt-4" placeholder="Search" />
 
       <FlatList
         className="px-2 "

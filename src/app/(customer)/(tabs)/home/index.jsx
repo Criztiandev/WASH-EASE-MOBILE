@@ -1,5 +1,6 @@
-import { View, Text, FlatList, ScrollView } from "react-native";
-import React from "react";
+import { View, FlatList, ScrollView, TouchableOpacity } from "react-native";
+import { TouchableRipple, Text } from "react-native-paper";
+import React, { useState } from "react";
 import ScreenLayout from "../../../../layout/ScreenLayout";
 import SearchBar from "../../../../components/molecule/Searchbar";
 import MapFrame from "../../../../components/atoms/MapFrame";
@@ -43,30 +44,32 @@ const MOCKDATA = [
 ];
 
 const HomeScreen = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const renderSeparator = () => <View style={{ width: 8 }} />;
 
   return (
     <ScreenLayout className="bg-[#f0f0f0]">
       <ScrollView className="px-[16px] pt-[16px] space-y-4">
-        <SearchBar />
+        <Link
+          href={"../../shop/lists"}
+          className=" py-4 px-8 rounded-full bg-white mb-4"
+          asChild>
+          <Text className="justify-start text-[18px]" variant="">
+            Search here
+          </Text>
+        </Link>
+
         <MapFrame />
 
-        <View>
-          <View className="flex-row justify-between items-center">
-            <Text className="text-[18px] font-semibold">
-              Nearby <Text className="text-[#4E60DE] ml-2">Laundry Shops</Text>
-            </Text>
-            <Link href={"../../shop/lists"} className="text-[#4e60DE]">
-              View All
-            </Link>
-          </View>
-        </View>
+        <Text variant="titleLarge" className="font-bold">
+          Nearby Laundy shops
+        </Text>
         <FlatList
           horizontal
           data={MOCKDATA}
           ItemSeparatorComponent={renderSeparator}
           renderItem={({ item }) => <LaundryShopCardHorizontal {...item} />}
-          keyExtractor={(item) => item.id}
+          className="mb-4"
         />
       </ScrollView>
     </ScreenLayout>

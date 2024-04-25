@@ -5,9 +5,9 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="[id]"
+        name="index"
         options={{
-          title: "Choosen Shop",
+          title: "Shop lists",
         }}
       />
     </Stack>
