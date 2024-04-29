@@ -7,13 +7,15 @@ import { Picker } from "@react-native-picker/picker";
 import ServiceSelection from "../../../../components/molecule/ServiceSelection";
 import MaterialSelection from "../../../../components/molecule/MaterialSelection";
 import { useForm } from "react-hook-form";
-import { Button } from "react-native-paper";
 import DryMachineSelection from "../../../../components/molecule/DryMachineSelection";
 import WashMachineSelection from "../../../../components/molecule/WashMachineSelection";
+import Button from "../../../../components/atoms/Button";
 
 const SelfServiceScreen = () => {
   const form = useForm({
     defaultValues: {
+      "basic-service": [],
+      "basic-material": [],
       dry: "",
       wash: "",
     },
@@ -23,43 +25,50 @@ const SelfServiceScreen = () => {
     useMultiform([
       <WashMachineSelection controller={form.control} name={"wash"} />,
       <DryMachineSelection controller={form.control} name={"dry"} />,
-      <ServiceSelection form={form} name={"basic-service"} />,
-      <MaterialSelection form={form} name="basic-material" />,
+      <ServiceSelection
+        form={form}
+        name={"basic-service"}
+        initialData={form.getValues("basic-service")}
+      />,
+      <MaterialSelection
+        form={form}
+        name="basic-material"
+        initialData={form.getValues("basic-material")}
+      />,
       <CheckOutPanel />,
     ]);
 
   const onSubmit = (value) => {
     console.log(value);
+
+    console.log(form.getValues("basic-service"));
+  };
+
+  const handleStep = () => {
+    nextStep();
   };
 
   return (
-    <View className="flex-1">
-      <Button onPress={form.handleSubmit(onSubmit)}>Test</Button>
+    <View className="flex-1 bg-[#FAF8FF]">
+      <Button onPress={form.handleSubmit(onSubmit)}>
+        <Text>Submit</Text>
+      </Button>
 
-      {step}
+      <View className=" flex-1 justify-center items-center">{step}</View>
 
-      {!isLastStep && (
-        <View className={cn("w-full px-4 mt-4 absolute bottom-0  mb-4")}>
-          <Button
-            onPress={() => nextStep()}
-            className="bg-blue-700 py-2 rounded-full">
-            <Text className="text-white font-semibold text-[18px] text-center">
-              {isLastStep ? `Procced (P${70000})` : "Next"}
-            </Text>
-          </Button>
+      <View className="px-4">
+        <Button onPress={() => nextStep()}>
+          <Text className="text-center font-semibold text-xl text-white">
+            Next
+          </Text>
+        </Button>
 
-          {currentStepIndex > 0 && (
-            <Button
-              variant={"outline"}
-              onPress={() => prevStep()}
-              className="bg-gray-300 py-2 rounded-full mt-2">
-              <Text className="text-black font-semibold text-[18px] text-center">
-                Back
-              </Text>
-            </Button>
-          )}
-        </View>
-      )}
+        <Button variant={"outline"} onPress={() => prevStep()}>
+          <Text className="text-center font-semibold text-xl text-black">
+            Back
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 };

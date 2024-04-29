@@ -43,14 +43,14 @@ const WashMachineSelection = ({ controller, name }) => {
   });
 
   return (
-    <View className="mt-[64px]">
+    <View className="">
       <View className="justify-center items-center mb-12">
-        <Text className="text-[24px] font-bold mb-2" variant="titleLarge">
+        <Text className="text-2xl font-bold mb-2" variant="titleLarge">
           Select Washing Machine
         </Text>
-        <Text className="text-[18px] font-semibold  px-8 py-1 rounded-full bg-blue-200">
-          Wash
-        </Text>
+        <View className="bg-secondary px-8 py-2 rounded-full">
+          <Text className="text-[18px] font-semibold text-white ">Wash</Text>
+        </View>
       </View>
 
       <ToggleButton.Row

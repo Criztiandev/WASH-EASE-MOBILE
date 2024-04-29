@@ -7,15 +7,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-blue-800 hover:bg-blue-900py-4  ",
+        default: "bg-primary",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border ",
+        outline: "border border-primary",
 
         ghost: "bg-none outline-none border-none",
       },
       size: {
-        icon: "h-10 w-10 p-2 justify-center item-center rounded-full",
+        icon: "h-10 w-10 justify-center item-center rounded-full",
       },
     },
     defaultVariants: {

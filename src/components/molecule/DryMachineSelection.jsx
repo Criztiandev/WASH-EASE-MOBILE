@@ -5,6 +5,8 @@ import { Text } from "react-native-paper";
 
 import { ToggleButton } from "react-native-paper";
 import { cn } from "../../utils/dev.utils";
+import { useAtom } from "jotai";
+import { helperAtom } from "../../app/(customer)/shop/service/self-service";
 
 const WASHMOCKDATA = [
   {
@@ -41,14 +43,14 @@ const DryMachineSelection = ({ controller, name }) => {
   });
 
   return (
-    <View className="mt-[64px]">
+    <View className="">
       <View className="justify-center items-center mb-12">
-        <Text className="text-[24px] font-bold mb-2" variant="titleLarge">
-          Select Washing Machine
+        <Text className="text-2xl font-bold mb-2" variant="titleLarge">
+          Select Drying Machine
         </Text>
-        <Text className="text-[18px] font-semibold  px-8 py-1 rounded-full bg-blue-200">
-          Dry
-        </Text>
+        <View className="bg-secondary px-8 py-2 rounded-full">
+          <Text className="text-[18px] font-semibold text-white ">Dry</Text>
+        </View>
       </View>
 
       <ToggleButton.Row

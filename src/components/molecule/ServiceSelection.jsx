@@ -1,15 +1,10 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import InfoIcon from "../../assets/icons/info_icon.svg";
 import { Modal, Portal } from "react-native-paper";
 import { cn } from "../../utils/dev.utils";
 import { ToggleButton } from "react-native-paper";
+import { FlashList } from "@shopify/flash-list";
 
 const MOCKDATA = [
   { id: 0, title: "Test" },
@@ -21,8 +16,8 @@ const MOCKDATA = [
   { id: 6, title: "Test" },
 ];
 
-const ServiceSelection = ({ form, name }) => {
-  const [selected, setSelected] = useState([]);
+const ServiceSelection = ({ form, name, initialData = [] }) => {
+  const [selected, setSelected] = useState(initialData || []);
   const [visible, setVisible] = useState(false);
 
   const showModal = useCallback(() => setVisible(true), []);
@@ -43,33 +38,38 @@ const ServiceSelection = ({ form, name }) => {
     ({ item }) => (
       <ServiceItem
         value={item.id}
+        isActive={selected.includes(item.id)}
         onSelect={handleSelect}
         onShowModal={showModal}
       />
     ),
-    [handleSelect, showModal]
+    [handleSelect, showModal, selected]
   );
-
   const keyExtractor = useCallback((item) => item.id.toString(), []);
 
-  useMemo(() => {
-    form.setValue(name, selected);
-  }, [selected, form, name]);
+  useEffect(() => {
+    form.setValue(name, selected); // Always set the selected value to the form
+  }, [selected, form, name]); // Dependencies: selected, form, and name
+
+  useEffect(() => {
+    const value = form.getValues("basic-service");
+    console.log(value);
+  }, []);
 
   return (
     <>
-      <View>
-        <View className="items-center justify-center my-4">
-          <Text className="text-[24px] font-semibold">
+      <View className="flex-1  w-full mb-4">
+        <View className="px-4">
+          <Text className="text-[24px] font-semibold text-center my-4 py-2 rounded-full">
             Select Basic Service
           </Text>
         </View>
 
-        <FlatList
+        <FlashList
           data={MOCKDATA}
           renderItem={renderItem}
+          estimatedItemSize={200}
           keyExtractor={keyExtractor}
-          className="mb-[220px] px-2"
         />
       </View>
 
@@ -82,8 +82,9 @@ const ServiceSelection = ({ form, name }) => {
   );
 };
 
-const ServiceItem = ({ value, onSelect, onShowModal }) => {
-  const [checked, setChecked] = useState(false);
+const ServiceItem = ({ value, onSelect, onShowModal, isActive = false }) => {
+  const [checked, setChecked] = useState(isActive);
+
   const handleChecked = useCallback(() => {
     setChecked((prev) => {
       const newValue = !prev;
@@ -95,24 +96,23 @@ const ServiceItem = ({ value, onSelect, onShowModal }) => {
   return (
     <TouchableOpacity
       className={cn(
-        `p-4 bg-white mb-2 rounded-md border border-gray-200 ${
-          checked ? "border-2 border-blue-700" : "border-none"
-        }`
+        `${
+          checked && "bg-blue-300/50 border-2 border-blue-400"
+        } rounded-[5px] mb-2`
       )}
       onPress={handleChecked}>
-      <View className="flex-row space-x-4 justify-between ">
-        <View className="flex-row space-x-4">
-          <View className="w-[64px] h-[64px] flex border rounded-md"></View>
+      <View className=" max-h-[150px] py-4 px-2 flex-row justify-between ">
+        <View className="flex-row space-x-3" style={{ flexShrink: 1 }}>
+          <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
           <View>
             <Text className="text-[18px] font-bold">Regular Wash</Text>
-            <Text className="text-[24px] font-bold">P 670</Text>
+            <Text className="text-[18px]">950</Text>
           </View>
         </View>
-        <View className="justify-center">
-          <TouchableOpacity className="  rounded-full " onPress={onShowModal}>
-            <InfoIcon width={36} height={36} className="" />
-          </TouchableOpacity>
-        </View>
+
+        <TouchableOpacity className="  rounded-full " onPress={onShowModal}>
+          <InfoIcon width={36} height={36} className="" />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
