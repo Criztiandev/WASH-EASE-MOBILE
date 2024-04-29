@@ -20,7 +20,8 @@ const ShopServiceTab = (prpos) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => router.push("/shop/service/pickup-deliver-service")}>
           <HorizontalCard
             image={
               "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"

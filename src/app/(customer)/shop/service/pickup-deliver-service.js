@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const PickupService = () => {
+const PickupDeliveryService = () => {
   return (
     <View>
       <Text>PickupService</Text>
@@ -9,4 +9,4 @@ const PickupService = () => {
   );
 };
 
-export default PickupService;
+export default PickupDeliveryService;

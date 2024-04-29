@@ -9,8 +9,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import InfoIcon from "../../assets/icons/info_icon.svg";
 import { Modal, Portal } from "react-native-paper";
 import { cn } from "../../utils/dev.utils";
-import { useController, useFieldArray } from "react-hook-form";
-import Checkbox from "expo-checkbox";
+import { ToggleButton } from "react-native-paper";
 
 const MOCKDATA = [
   { id: 0, title: "Test" },

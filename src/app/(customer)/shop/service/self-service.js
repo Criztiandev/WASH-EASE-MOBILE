@@ -4,7 +4,6 @@ import { cn } from "../../../../utils/dev.utils";
 import useMultiform from "../../../../hooks/useMultiform";
 import InfoIcon from "../../../../assets/icons/info_icon.svg";
 import { Picker } from "@react-native-picker/picker";
-import MachineSelection from "../../../../components/molecule/MachineSelection";
 import ServiceSelection from "../../../../components/molecule/ServiceSelection";
 import MaterialSelection from "../../../../components/molecule/MaterialSelection";
 import { useForm } from "react-hook-form";
@@ -17,7 +16,6 @@ const SelfServiceScreen = () => {
     defaultValues: {
       dry: "",
       wash: "",
-      "basic-service": [],
     },
   });
 
@@ -26,7 +24,7 @@ const SelfServiceScreen = () => {
       <WashMachineSelection controller={form.control} name={"wash"} />,
       <DryMachineSelection controller={form.control} name={"dry"} />,
       <ServiceSelection form={form} name={"basic-service"} />,
-      <MaterialSelection />,
+      <MaterialSelection form={form} name="basic-material" />,
       <CheckOutPanel />,
     ]);
 
