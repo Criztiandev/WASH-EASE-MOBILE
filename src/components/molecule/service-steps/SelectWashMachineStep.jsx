@@ -1,12 +1,10 @@
 import { View } from "react-native";
-import WashingMachine from "../../assets/icons/washing_machine.svg";
+import WashingMachine from "../../../assets/icons/washing_machine.svg";
 import { useController } from "react-hook-form";
 import { Text } from "react-native-paper";
 
 import { ToggleButton } from "react-native-paper";
-import { cn } from "../../utils/dev.utils";
-import { useAtom } from "jotai";
-import { helperAtom } from "../../app/(customer)/shop/service/self-service";
+import { cn } from "../../../utils/dev.utils";
 
 const WASHMOCKDATA = [
   {
@@ -36,7 +34,7 @@ const WASHMOCKDATA = [
   },
 ];
 
-const WashMachineSelection = ({ controller, name }) => {
+const SelectWashMachineStep = ({ controller, name }) => {
   const { field } = useController({
     control: controller,
     name,
@@ -82,4 +80,4 @@ const WashMachineSelection = ({ controller, name }) => {
   );
 };
 
-export default WashMachineSelection;
+export default SelectWashMachineStep;

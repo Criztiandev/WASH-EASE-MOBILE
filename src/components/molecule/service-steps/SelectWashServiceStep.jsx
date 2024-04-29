@@ -1,9 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import InfoIcon from "../../assets/icons/info_icon.svg";
+import React, { useCallback, useEffect, useState } from "react";
+import InfoIcon from "../../../assets/icons/info_icon.svg";
 import { Modal, Portal } from "react-native-paper";
-import { cn } from "../../utils/dev.utils";
-import { ToggleButton } from "react-native-paper";
+import { cn } from "../../../utils/dev.utils";
 import { FlashList } from "@shopify/flash-list";
 
 const MOCKDATA = [
@@ -16,7 +15,7 @@ const MOCKDATA = [
   { id: 6, title: "Test" },
 ];
 
-const ServiceSelection = ({ form, name, initialData = [] }) => {
+const SelectWashServiceStep = ({ form, name, initialData = [] }) => {
   const [selected, setSelected] = useState(initialData || []);
   const [visible, setVisible] = useState(false);
 
@@ -118,4 +117,4 @@ const ServiceItem = ({ value, onSelect, onShowModal, isActive = false }) => {
   );
 };
 
-export default ServiceSelection;
+export default SelectWashServiceStep;

@@ -1,21 +1,10 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-  Dimensions,
-} from "react-native";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import InfoIcon from "../../assets/icons/info_icon.svg";
-import { Badge, IconButton, Modal, Portal } from "react-native-paper";
-import { cn } from "../../utils/dev.utils";
-import { ToggleButton } from "react-native-paper";
+import { View, Text, TouchableOpacity } from "react-native";
+import React, { memo, useCallback, useEffect, useState } from "react";
+import { Badge, IconButton } from "react-native-paper";
 import { useController } from "react-hook-form";
-import Checkbox from "expo-checkbox";
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+
 import { FlashList } from "@shopify/flash-list";
-import Button from "../atoms/Button";
+import { cn } from "../../../utils/dev.utils";
 
 const MOCKDATA = [
   { id: 0, title: "Test" },
@@ -27,7 +16,7 @@ const MOCKDATA = [
   { id: 6, title: "Test" },
 ];
 
-const MaterialSelection = ({ form, name }) => {
+const SelectWashMaterialStep = ({ form, name }) => {
   const { field } = useController({ control: form.control, name });
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -158,4 +147,4 @@ const MaterialItem = memo(({ value, onSelect, isActive = false }) => {
   );
 });
 
-export default MaterialSelection;
+export default SelectWashMaterialStep;
