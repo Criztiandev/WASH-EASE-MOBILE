@@ -16,9 +16,9 @@ const MOCKDATA = [
   { id: 6, title: "Test" },
 ];
 
-const SelectWashMaterialStep = ({ form, name }) => {
+const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(initialData);
 
   useEffect(() => {
     form.setValue(name, selectedItems);
@@ -31,7 +31,10 @@ const SelectWashMaterialStep = ({ form, name }) => {
         key={item.id}
         value={item.id}
         onSelect={setSelectedItems}
-        isActive={selectedItems.includes(item.id)}
+        isActive={selectedItems.some((current) => current.id === item.id)}
+        initialQuantity={
+          selectedItems.find((current) => current.id === item.id)?.quantity
+        }
       />
     ),
     []
@@ -56,95 +59,99 @@ const SelectWashMaterialStep = ({ form, name }) => {
   );
 };
 
-const MaterialItem = memo(({ value, onSelect, isActive = false }) => {
-  const [checked, setChecked] = useState(isActive);
-  const [quantity, setQuantity] = useState(0);
+const MaterialItem = memo(
+  ({ value, onSelect, isActive = false, initialQuantity = 0 }) => {
+    const [checked, setChecked] = useState(isActive);
+    const [quantity, setQuantity] = useState(initialQuantity);
 
-  const handleIncrement = () => setQuantity((prev) => Math.min(prev + 1, 99));
-  const handleDecrement = () => setQuantity((prev) => Math.max(prev - 1, 0));
+    const handleIncrement = () => setQuantity((prev) => Math.min(prev + 1, 99));
+    const handleDecrement = () => setQuantity((prev) => Math.max(prev - 1, 0));
 
-  const handleSelect = useCallback(() => {
-    setChecked((prevState) => {
-      const newState = !prevState;
+    const handleSelect = useCallback(() => {
+      setChecked((prevState) => {
+        const newState = !prevState;
 
-      if (newState) {
-        handleIncrement();
-      } else {
-        handleDecrement();
-      }
-
-      return newState;
-    });
-  }, []);
-
-  useEffect(() => {
-    if (checked) {
-      onSelect((prev) => {
-        const index = prev.findIndex((item) => item.id === value);
-        if (index > -1) {
-          return prev.map((item) =>
-            item.id === value ? { ...item, quantity } : item
-          );
+        if (newState) {
+          handleIncrement();
         } else {
-          return [...prev, { id: value, quantity }];
+          handleDecrement();
         }
+
+        return newState;
       });
-    } else {
-      onSelect((prev) => prev.filter((item) => item.id !== value));
-    }
-  }, [checked, quantity]);
+    }, []);
 
-  return (
-    <TouchableOpacity
-      className={cn(
-        `${
-          checked && "bg-blue-300/50 border-2 border-blue-400"
-        } rounded-[5px] mb-2`
-      )}
-      onPress={handleSelect}>
-      <View className=" max-h-[150px] py-4 px-2 flex-row ">
-        <View className="justify-between flex-row  flex-1">
-          {/* Details */}
-          <View
-            className="flex-row space-x-3 justify-between items-center"
-            style={{ flexShrink: 1 }}>
-            {quantity > 0 && (
-              <Badge
-                className={
-                  "absolute -top-3 left-1 text-[14px] w-[24px] h-[24px] rounded-full"
-                }>
-                {quantity}
-              </Badge>
+    useEffect(() => {
+      if (checked) {
+        onSelect((prev) => {
+          const index = prev.findIndex((item) => item.id === value);
+          if (index > -1) {
+            return prev.map((item) =>
+              item.id === value ? { ...item, quantity } : item
+            );
+          } else {
+            return [...prev, { id: value, quantity }];
+          }
+        });
+      } else {
+        onSelect((prev) => prev.filter((item) => item.id !== value));
+      }
+    }, [checked, quantity]);
+
+    return (
+      <TouchableOpacity
+        className={cn(
+          `${
+            checked && "bg-blue-300/50 border-2 border-blue-400"
+          } rounded-[5px] mb-2`
+        )}
+        onPress={handleSelect}>
+        <View className=" max-h-[150px] py-4 px-2 flex-row ">
+          <View className="justify-between flex-row  flex-1">
+            {/* Details */}
+            <View
+              className="flex-row space-x-3 justify-between items-center"
+              style={{ flexShrink: 1 }}>
+              {quantity > 0 ? (
+                <Badge
+                  className={
+                    "absolute -top-3 left-1 text-[14px] w-[24px] h-[24px] rounded-full"
+                  }>
+                  {quantity}
+                </Badge>
+              ) : (
+                <></>
+              )}
+              <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
+              <View>
+                <Text className="text-[18px] font-bold">Regular Wash</Text>
+                <Text className="text-[18px]">950</Text>
+              </View>
+            </View>
+
+            {/* Actions */}
+            {checked && (
+              <View className="flex-row">
+                <IconButton
+                  icon="plus"
+                  size={24}
+                  onPress={handleIncrement}
+                  className=" bg-gray-400/50"
+                />
+
+                <IconButton
+                  icon="minus"
+                  size={24}
+                  onPress={handleDecrement}
+                  className=" bg-gray-400/50"
+                />
+              </View>
             )}
-            <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
-            <View>
-              <Text className="text-[18px] font-bold">Regular Wash</Text>
-              <Text className="text-[18px]">950</Text>
-            </View>
           </View>
-
-          {/* Actions */}
-          {checked && (
-            <View className="flex-row">
-              <IconButton
-                icon="plus"
-                size={24}
-                onPress={handleIncrement}
-                className=" bg-gray-400/50"
-              />
-
-              <IconButton
-                icon="minus"
-                size={24}
-                onPress={handleDecrement}
-                className=" bg-gray-400/50"
-              />
-            </View>
-          )}
         </View>
-      </View>
-    </TouchableOpacity>
-  );
-});
+      </TouchableOpacity>
+    );
+  }
+);
 
 export default SelectWashMaterialStep;
