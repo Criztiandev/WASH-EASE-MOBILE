@@ -19,7 +19,11 @@ const ServiceItem = ({
   const handleChecked = useCallback(() => {
     setChecked((prev) => {
       const newValue = !prev;
-      onSelect(newValue, { id: payload.id, title: payload.title });
+      onSelect(newValue, {
+        id: payload.id,
+        title: payload.title,
+        price: payload.price,
+      });
       return newValue;
     });
   }, [onSelect, serviceID]);

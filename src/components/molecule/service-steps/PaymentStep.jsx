@@ -1,9 +1,10 @@
 import { View, Text, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataTable } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 import { Picker } from "@react-native-picker/picker";
 import { useController } from "react-hook-form";
+import Divider from "../../atoms/Divider";
 
 const MOCKDATA = [
   { id: 0, title: "Test" },
@@ -16,8 +17,6 @@ const MOCKDATA = [
 ];
 
 const PaymentStep = ({ form, name }) => {
-  const [services, setServices] = useState([]);
-  const [materials, setMaterials] = useState([]);
   const { field } = useController({
     control: form.control,
     name,
@@ -41,93 +40,24 @@ const PaymentStep = ({ form, name }) => {
 
       <ScrollView>
         <View className="px-4">
-          <DataTable className="h-[300px] ">
-            <DataTable.Header>
-              <DataTable.Title>
-                <Text className="font-bold text-base">Service</Text>
-              </DataTable.Title>
-              <DataTable.Title numeric>
-                <Text className="font-bold text-">Quantity</Text>
-              </DataTable.Title>
-              <DataTable.Title numeric>
-                <Text className="font-bold text-">Price</Text>
-              </DataTable.Title>
-            </DataTable.Header>
+          {Object.keys(form.getValues()).map((key) => {
+            const serviceKey = ["basic-service"];
+            if (serviceKey.includes(key)) {
+              return <ServiceTable payload={form.getValues(key)} />;
+            }
+          })}
 
-            <FlashList
-              data={MOCKDATA}
-              renderItem={(item) => (
-                <DataTable.Row
-                  style={{
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                  }}>
-                  <DataTable.Cell className="justify-start" numeric>
-                    <Text className="opacity-75">Regular Wash</Text>
-                  </DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>99</DataTable.Cell>
-                </DataTable.Row>
-              )}
-              estimatedItemSize={200}
-            />
-          </DataTable>
+          <Divider />
 
-          <View
-            style={{ borderStyle: "dashed" }}
-            className="border-b-[1.5px] border-gray-400 my-2"></View>
+          {Object.keys(form.getValues()).map((key) => {
+            const expectedKey = ["basic-material"];
 
-          <DataTable className="h-[300px] ">
-            <DataTable.Header>
-              <DataTable.Title>
-                <Text className="font-bold text-base">Materials</Text>
-              </DataTable.Title>
-              <DataTable.Title numeric>
-                <Text className="font-bold text-">Quantity</Text>
-              </DataTable.Title>
-              <DataTable.Title numeric>
-                <Text className="font-bold text-">Price</Text>
-              </DataTable.Title>
-            </DataTable.Header>
-
-            <FlashList
-              data={MOCKDATA}
-              renderItem={(item) => (
-                <DataTable.Row style={{ justifyContent: "flex-start" }}>
-                  <DataTable.Cell className="justify-start" numeric>
-                    <Text className="opacity-75">Regular Wash</Text>
-                  </DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>99</DataTable.Cell>
-                </DataTable.Row>
-              )}
-              estimatedItemSize={200}
-            />
-          </DataTable>
-
-          <View
-            style={{ borderStyle: "dashed" }}
-            className="border-b-[1.5px] border-gray-400 my-2"></View>
-
-          <View className="py-4 space-y-4">
-            <View className="flex-row justify-between items-start">
-              <Text className="font-bold text-[18px]">Subtotal</Text>
-              <Text className="font-bold text-[18px]">P 323232</Text>
-            </View>
-            <View className="flex-row justify-between items-start sa">
-              <Text className="font-semibold text-[18px] opacity-50">Tax</Text>
-              <Text className="font-bold text-[18px] ">P 0</Text>
-            </View>
-          </View>
-
-          <View
-            style={{ borderStyle: "dashed" }}
-            className="border-b-[1.5px] border-gray-400 my-2"></View>
-
-          <View className="flex-row justify-between items-start my-4">
-            <Text className="font-bold text-[18px]">Total</Text>
-            <Text className="font-bold text-[18px]">P 323232</Text>
-          </View>
+            if (expectedKey.includes(key)) {
+              return <QuantityTable payload={form.getValues(key)} />;
+            }
+          })}
+          <Divider />
+          <TotalSection />
         </View>
       </ScrollView>
     </View>
@@ -135,3 +65,96 @@ const PaymentStep = ({ form, name }) => {
 };
 
 export default PaymentStep;
+
+const ServiceTable = ({ payload }) => {
+  return (
+    <DataTable className="min-h-[64px]">
+      <DataTable.Header>
+        <DataTable.Title>
+          <Text className="font-bold text-base">Service</Text>
+        </DataTable.Title>
+
+        <DataTable.Title numeric>
+          <Text className="font-bold text-base">Price</Text>
+        </DataTable.Title>
+      </DataTable.Header>
+
+      <View className="">
+        <FlashList
+          data={payload}
+          renderItem={({ item }) => (
+            <DataTable.Row
+              style={{
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+              }}>
+              <DataTable.Cell className="justify-start" numeric>
+                <Text className="opacity-75">{item.title}</Text>
+              </DataTable.Cell>
+
+              <DataTable.Cell numeric>{item.price}</DataTable.Cell>
+            </DataTable.Row>
+          )}
+          estimatedItemSize={200}
+        />
+      </View>
+    </DataTable>
+  );
+};
+const QuantityTable = ({ payload }) => {
+  return (
+    <DataTable className="min-h-[64px]">
+      <DataTable.Header>
+        <DataTable.Title>
+          <Text className="font-bold text-base">Materials</Text>
+        </DataTable.Title>
+        <DataTable.Title numeric>
+          <Text className="font-bold text-">Quantity</Text>
+        </DataTable.Title>
+        <DataTable.Title numeric>
+          <Text className="font-bold text-">Price</Text>
+        </DataTable.Title>
+      </DataTable.Header>
+
+      <View className="">
+        <FlashList
+          data={payload}
+          renderItem={({ item }) => (
+            <DataTable.Row style={{ justifyContent: "flex-start" }}>
+              <DataTable.Cell className="justify-start" numeric>
+                <Text className="opacity-75">{item.title}</Text>
+              </DataTable.Cell>
+              <DataTable.Cell numeric>{item.quantity}</DataTable.Cell>
+              <DataTable.Cell numeric>{item.price}</DataTable.Cell>
+            </DataTable.Row>
+          )}
+          estimatedItemSize={200}
+        />
+      </View>
+    </DataTable>
+  );
+};
+
+const TotalSection = () => {
+  return (
+    <>
+      <View className="py-4 space-y-4">
+        <View className="flex-row justify-between items-start">
+          <Text className="font-bold text-[18px]">Subtotal</Text>
+          <Text className="font-bold text-[18px]">P 323232</Text>
+        </View>
+        <View className="flex-row justify-between items-start sa">
+          <Text className="font-semibold text-[18px] opacity-50">Tax</Text>
+          <Text className="font-bold text-[18px] ">P 0</Text>
+        </View>
+      </View>
+
+      <Divider />
+
+      <View className="flex-row justify-between items-start my-4">
+        <Text className="font-bold text-[18px]">Total</Text>
+        <Text className="font-bold text-[18px]">P 323232</Text>
+      </View>
+    </>
+  );
+};

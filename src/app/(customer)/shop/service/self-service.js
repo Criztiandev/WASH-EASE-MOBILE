@@ -49,19 +49,24 @@ const SelfServiceScreen = () => {
   ]);
 
   const onSubmit = (value) => {
-    const isHasValue = form.getValues(currentStep);
+    if (!isLastStep) {
+      const isHasValue = form.getValues(currentStep);
 
-    console.log(isHasValue);
+      if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
+        Toast.show({
+          type: "error",
+          text1: "Please Fill all the field to proceed",
+        });
+        return;
+      }
 
-    if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
-      Toast.show({
-        type: "error",
-        text1: "Please Fill all the field to proceed",
-      });
+      console.log(form.formState.defaultValues);
+
+      nextStep();
       return;
     }
 
-    nextStep();
+    console.log(value);
   };
 
   return (
