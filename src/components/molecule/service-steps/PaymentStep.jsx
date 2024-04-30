@@ -1,7 +1,5 @@
 import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { DataTable } from "react-native-paper";
-import { FlashList } from "@shopify/flash-list";
 import { Picker } from "@react-native-picker/picker";
 import { useController } from "react-hook-form";
 import Divider from "../../atoms/Divider";

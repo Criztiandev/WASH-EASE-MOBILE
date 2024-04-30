@@ -2,8 +2,8 @@ import { View, Text } from "react-native";
 import useMultiform from "../../../../hooks/useMultiform";
 import { useForm } from "react-hook-form";
 import Button from "../../../../components/atoms/Button";
-import SelectWashServiceStep from "../../../../components/molecule/service-steps/SelectWashServiceStep";
-import SelectWashMaterialStep from "../../../../components/molecule/service-steps/SelectWashMaterialStep";
+import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
+import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
 import { useAtomValue } from "jotai";
 
@@ -126,13 +126,13 @@ const RootScreen = () => {
   });
 
   const { step, nextStep, prevStep, isLastStep, isFirstStep } = useMultiform([
-    <SelectWashServiceStep
+    <SelectServiceStep
       form={form}
       name={"basic-service"}
       initialData={form.getValues("basic-service")}
     />,
 
-    <SelectWashMaterialStep
+    <SelectMaterialStep
       form={form}
       name="basic-material"
       initialData={form.getValues("basic-material")}

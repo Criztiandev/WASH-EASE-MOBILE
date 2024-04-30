@@ -9,7 +9,7 @@ import { stepAtom } from "../../../service/states/service.atoms";
 
 const MOCKDATA = [{ id: 0, title: "Regular Wash", price: 300 }];
 
-const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
+const SelectMaterialStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
   const [selectedItems, setSelectedItems] = useState(initialData);
   const setCurrentStep = useSetAtom(stepAtom);
@@ -62,4 +62,4 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
   );
 };
 
-export default SelectWashMaterialStep;
+export default SelectMaterialStep;

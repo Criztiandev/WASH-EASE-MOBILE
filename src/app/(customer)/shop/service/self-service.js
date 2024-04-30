@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import Button from "../../../../components/atoms/Button";
 import SelectWashMachineStep from "../../../../components/molecule/service-steps/SelectWashMachineStep";
 import SelectDryMachineStep from "../../../../components/molecule/service-steps/SelectDryMachineStep";
-import SelectWashServiceStep from "../../../../components/molecule/service-steps/SelectWashServiceStep";
-import SelectWashMaterialStep from "../../../../components/molecule/service-steps/SelectWashMaterialStep";
+import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
+import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
 import { useAtomValue } from "jotai";
 
@@ -28,13 +28,13 @@ const SelfServiceScreen = () => {
   const { step, nextStep, prevStep, isLastStep, isFirstStep } = useMultiform([
     <SelectWashMachineStep controller={form.control} name={"wash"} />,
     <SelectDryMachineStep controller={form.control} name={"dry"} />,
-    <SelectWashServiceStep
+    <SelectServiceStep
       form={form}
       name={"basic-service"}
       initialData={form.getValues("basic-service")}
     />,
 
-    <SelectWashMaterialStep
+    <SelectMaterialStep
       form={form}
       name="basic-material"
       initialData={form.getValues("basic-material")}

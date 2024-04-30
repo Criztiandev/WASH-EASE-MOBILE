@@ -56,7 +56,7 @@ const MOCKDATA = [
   },
 ];
 
-const SelectWashServiceStep = ({ form, name, initialData = [] }) => {
+const SelectServiceStep = ({ form, name, initialData = [] }) => {
   const [selected, setSelected] = useState(initialData || []);
   const setCurrentStep = useSetAtom(stepAtom);
 
@@ -108,4 +108,4 @@ const SelectWashServiceStep = ({ form, name, initialData = [] }) => {
   );
 };
 
-export default SelectWashServiceStep;
+export default SelectServiceStep;
