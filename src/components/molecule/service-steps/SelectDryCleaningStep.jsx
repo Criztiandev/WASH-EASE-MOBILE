@@ -48,7 +48,7 @@ const SelectDryCleaningStep = ({ form, name, initialData = [] }) => {
     <>
       <View className="flex-1  w-full mb-4">
         <Text className="text-[24px] font-semibold text-center my-4">
-          Select Material
+          Select Cleaning
         </Text>
 
         <FlashList

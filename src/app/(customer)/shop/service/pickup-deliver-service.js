@@ -2,13 +2,19 @@ import { View, Text } from "react-native";
 import useMultiform from "../../../../hooks/useMultiform";
 import { useForm } from "react-hook-form";
 import Button from "../../../../components/atoms/Button";
-import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
-import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
-import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
+
 import { useAtomValue } from "jotai";
 
 import { router } from "expo-router";
 import { stepAtom } from "../../../../service/states/service.atoms";
+import Toast from "react-native-toast-message";
+
+// Steps
+import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
+import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
+import SelectDryCleaningStep from "../../../../components/molecule/service-steps/SelectDryCleaningStep";
+import SelectIroningStep from "../../../../components/molecule/service-steps/SelectIroningStep";
+import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
 
 const Basic1 = [
   {
@@ -111,8 +117,6 @@ const Basic2 = [
   },
 ];
 
-import Toast from "react-native-toast-message";
-
 const RootScreen = () => {
   const currentStep = useAtomValue(stepAtom);
   const form = useForm({
@@ -132,11 +136,24 @@ const RootScreen = () => {
       initialData={form.getValues("basic-service")}
     />,
 
+    <SelectDryCleaningStep
+      form={form}
+      name={"basic-cleaning"}
+      initialData={form.getValues("basic-cleaning")}
+    />,
+
+    <SelectIroningStep
+      form={form}
+      name={"basic-ironing"}
+      initialData={form.getValues("basic-ironing")}
+    />,
+
     <SelectMaterialStep
       form={form}
       name="basic-material"
       initialData={form.getValues("basic-material")}
     />,
+    <PaymentStep form={form} name="method" />,
   ]);
 
   const onSubmit = (value) => {
@@ -156,8 +173,7 @@ const RootScreen = () => {
       return;
     }
 
-    console.log(value);
-    // router.push("/shop/service/success");
+    router.push("/shop/service/success");
   };
 
   return (

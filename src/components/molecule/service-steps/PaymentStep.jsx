@@ -71,6 +71,7 @@ const PaymentStep = ({ form, name }) => {
 
               return (
                 <ServiceTable
+                  key={key}
                   title={titleMap[key]}
                   payload={form.getValues(key)}
                 />
@@ -89,6 +90,7 @@ const PaymentStep = ({ form, name }) => {
               };
               return (
                 <QuantityTable
+                  key={key}
                   title={titleMap[key]}
                   payload={form.getValues(key)}
                 />
