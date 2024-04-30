@@ -27,8 +27,11 @@ const PaymentStep = ({ form, name }) => {
     const deliveryMethod = form.watch("delivery-method");
 
     setIsGcash(paymentMethod === "gcash");
-    setIsFullService(deliveryMethod !== "self-service");
-  }, [form.watch("method")]);
+
+    if (deliveryMethod !== "self-service") {
+      setIsFullService(true);
+    }
+  }, [form.watch("payment-method"), form.watch("delivery-method")]);
 
   return (
     <View className="flex-1  w-full">

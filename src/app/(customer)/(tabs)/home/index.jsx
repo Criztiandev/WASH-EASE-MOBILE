@@ -64,7 +64,7 @@ const HomeScreen = () => {
         <Text variant="titleLarge" className="font-bold">
           Nearby Laundy shops
         </Text>
-        <View className="mb-4">
+        <View className="">
           <FlatList
             horizontal
             data={MOCKDATA}

@@ -21,7 +21,8 @@ const SelfServiceScreen = () => {
       "basic-material": [],
       dry: "",
       wash: "",
-      method: "",
+      "payment-method": "",
+      "delivery-method": "self-service",
     },
   });
 
@@ -45,7 +46,7 @@ const SelfServiceScreen = () => {
   const onSubmit = (value) => {
     const isHasValue = form.getValues(currentStep);
 
-    if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
+    if (isHasValue === "" || isHasValue === null || isHasValue?.length <= 0) {
       Toast.show({
         type: "error",
         text1: "Please Fill all the field to proceed",
