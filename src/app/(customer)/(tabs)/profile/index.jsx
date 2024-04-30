@@ -1,82 +1,63 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import React from "react";
 import ScreenLayout from "../../../../layout/ScreenLayout";
-import { Link, router } from "expo-router";
-
-const OtherInfo = [
-  {
-    id: 1,
-    icon: <View className="w-[64px] h-[64px] border rounded-full"></View>,
-    title: "Account info",
-    path: "/account/23232323",
-  },
-
-  {
-    id: 2,
-    icon: <View className="w-[64px] h-[64px] border rounded-full"></View>,
-    title: "Notification",
-    path: "/notification/232323",
-  },
-
-  {
-    id: 3,
-    icon: <View className="w-[64px] h-[64px] border rounded-full"></View>,
-    title: "Transaction History",
-    path: "/history/123123123",
-  },
-
-  {
-    id: 4,
-    icon: <View className="w-[64px] h-[64px] border rounded-full"></View>,
-    title: "Delivery Tracking",
-    path: "/delivery/123123123",
-  },
-
-  {
-    id: 5,
-    icon: <View className="w-[64px] h-[64px] border rounded-full"></View>,
-    title: "Laundary Status",
-    path: "/Laundary/123123123123",
-  },
-  {
-    id: 6,
-    icon: <View className="w-[64px] h-[64px] border rounded-full"></View>,
-    title: "Sign out",
-    path: "/signout/123123123123",
-  },
-];
+import Button from "../../../../components/atoms/Button";
+import { Avatar, Card, Icon } from "react-native-paper";
+import AccountIcon from "../../../../assets/icons/account_icon.svg";
+import NotificationIcon from "../../../../assets/icons/notification_icon.svg";
+import { router, useLocalSearchParams } from "expo-router";
+import FloationActionBtn from "../../../../components/atoms/FloationActionBtn";
 
 const ProfileScreen = () => {
+  const { id } = useLocalSearchParams();
   return (
     <ScreenLayout className="p-2">
-      <View className="w-[64px] h-[64px] border rounded-full mb-4"></View>
-      <View className="mb-2">
-        <Text className="text-[18px] font-semibold">Profile</Text>
-      </View>
+      <ProfileCard />
 
-      <View className="p-4 border rounded-md flex-row space-x-4 items-center">
-        <View className="w-[84px] h-[84px] border rounded-full"></View>
-        <View>
-          <Text className="text-[16px]">Welcome</Text>
-          <Text className="font-bold text-[24px]">Customer name</Text>
+      {/* Navigation */}
+
+      <TouchableOpacity
+        onPress={() => {
+          router.push(`/account/profile/details/${id}`);
+        }}>
+        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <AccountIcon width={32} height={32} className="" />
+          <Text className="text-lg font-bold">Account Information</Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
-      <Text className="text-[18px] font-semibold mt-4 mb-2">Other</Text>
-      <FlatList
-        data={OtherInfo}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => router.replace(item.path)}>
-            <View className="px-4 py-2 border rounded-md flex-row space-x-4 items-center">
-              {item.icon}
-              <Text className="font-semibold text-[18px]">{item.title}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.id}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          router.push(`/account/profile/notification/${id}`);
+        }}>
+        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <NotificationIcon width={32} height={32} className="" />
+          <Text className="text-lg font-bold">Notification</Text>
+        </View>
+      </TouchableOpacity>
+
+      <FloationActionBtn className="bg-red-400" label={"Logout"} />
     </ScreenLayout>
   );
 };
 
 export default ProfileScreen;
+
+const ProfileCard = () => {
+  return (
+    <>
+      <Text className="text-xl font-bold mb-2">Profile</Text>
+      <Card className="bg-white mb-4">
+        <Card.Content className="flex-row space-x-4">
+          <Avatar.Icon />
+          <View>
+            <Text className="text-lg font-bold">
+              Criztian Jade Mitra Tuplano
+            </Text>
+            <Text>Customer</Text>
+          </View>
+        </Card.Content>
+      </Card>
+    </>
+  );
+};
