@@ -3,9 +3,8 @@ import React from "react";
 import StarRating from "../../assets/icons/start_fill_icon.svg";
 import { Image } from "expo-image";
 import Badge from "../atoms/Badge";
-import Button from "../atoms/Button";
 
-const ShopDetailsCover = () => {
+const ShopDetailsCover = ({ name, address, rating, stars, status }) => {
   return (
     <View className="relative  p-0">
       <Image
@@ -23,12 +22,12 @@ const ShopDetailsCover = () => {
         <View className="absolute bottom-0 m-4">
           <View className="space-y-1">
             <Text className="text-[22px] font-bold underline text-white">
-              M&L Laundry Hub (KATUPARAN)
+              {name}
             </Text>
-            <Text className="text-white">Barangay kahit san</Text>
+            <Text className="text-white">{address}</Text>
           </View>
 
-          <View className="flex-row items-center ">
+          <View className="flex-row items-center space-x-2">
             <View className="space-x-1 flex-row">
               <StarRating />
               <StarRating />
@@ -36,14 +35,12 @@ const ShopDetailsCover = () => {
               <StarRating />
               <StarRating />
             </View>
-            <Text className="font-bold text-[16px] text-white">
-              (5 Reviews)
-            </Text>
+            <Text className="font-bold text-[16px] text-white">({rating})</Text>
           </View>
         </View>
 
         <Badge className="bg-green-300 m-2">
-          <Text>Open</Text>
+          <Text>{status}</Text>
         </Badge>
       </View>
     </View>

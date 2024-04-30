@@ -7,6 +7,7 @@ import { Link } from "expo-router";
 import LaundryShopCardHorizontal from "../../../../components/organism/LaundryShopCardHorizontal";
 import LaundryShopCardVertical from "../../../../components/organism/LaundryShopCardVertical";
 import { Searchbar } from "react-native-paper";
+import { FlashList } from "@shopify/flash-list";
 
 const MOCKDATA = [
   {
@@ -49,18 +50,18 @@ const ChoosenShopScreen = () => {
 
   return (
     <ScreenLayout className="bg-[#f0f0f0] px-2 space-y-4 ">
-      <Searchbar className="bg-white mt-4" placeholder="Search" />
+      <Searchbar className="bg-white my-4" placeholder="Search" />
 
-      <FlatList
-        className="px-2 "
+      <FlashList
         data={MOCKDATA}
         ItemSeparatorComponent={renderSeparator}
         renderItem={({ item }) => (
           <LaundryShopCardVertical
-            path={"/shop/dashboard/123123123"}
+            path={`/shop/choosen/details/${item.id}`}
             {...item}
           />
         )}
+        estimatedItemSize={200}
         keyExtractor={(item) => item.id}
       />
     </ScreenLayout>

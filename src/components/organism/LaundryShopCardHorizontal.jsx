@@ -58,7 +58,7 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
           <Link href={`../shop/details/${id}`} asChild>
             <Text
               variant="bodyLarge"
-              className="text-center font-semibold text-white">
+              className="text-center text-[18px] font-bold  text-white">
               View details
             </Text>
           </Link>

@@ -25,14 +25,7 @@ const SelfServiceScreen = () => {
     },
   });
 
-  const {
-    step,
-    nextStep,
-    prevStep,
-    isLastStep,
-    isFirstStep,
-    currentStepIndex,
-  } = useMultiform([
+  const { step, nextStep, prevStep, isLastStep, isFirstStep } = useMultiform([
     <SelectWashMachineStep controller={form.control} name={"wash"} />,
     <SelectDryMachineStep controller={form.control} name={"dry"} />,
     <SelectWashServiceStep
@@ -70,7 +63,7 @@ const SelfServiceScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-[#FAF8FF]">
+    <View className="flex-1 bg-[#FAF8FF] mb-2">
       <View className=" flex-1 justify-center items-center">{step}</View>
 
       <View className="px-4">

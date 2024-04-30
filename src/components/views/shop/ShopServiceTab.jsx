@@ -3,7 +3,7 @@ import React from "react";
 import HorizontalCard from "../../molecule/HorizontalCard";
 import { router } from "expo-router";
 
-const ShopServiceTab = (prpos) => {
+const ShopServiceTab = ({ services }) => {
   return (
     <View className="py-4">
       <ScrollView className="px-4">
