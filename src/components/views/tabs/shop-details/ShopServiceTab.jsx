@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
-import HorizontalCard from "../../molecule/HorizontalCard";
+import HorizontalCard from "../../../molecule/HorizontalCard";
 import { router } from "expo-router";
 
 const ShopServiceTab = ({ services }) => {

@@ -1,5 +1,6 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
+import Button from "../../atoms/Button";
 
 const AboutTab = ({
   about = "No about details available",
@@ -25,6 +26,12 @@ const AboutTab = ({
           <Text className="text-[18px] font-bold mb-2">Opening Hours</Text>
           <Text className="text-[16px] opacity-60">{opening}</Text>
         </View>
+
+        <Button>
+          <Text className="text-center font-bold text-[18px] text-white">
+            Message
+          </Text>
+        </Button>
       </View>
     </ScrollView>
   );

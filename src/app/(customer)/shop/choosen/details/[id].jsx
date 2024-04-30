@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 import AboutTab from "../../../../../components/views/tabs/AboutTab";
-import ShopServiceTab from "../../../../../components/views/shop/ShopServiceTab";
-import RequestTab from "../../../../../components/views/shop/RequestTab";
+import ShopServiceTab from "../../../../../components/views/tabs/shop-details/ShopServiceTab";
+import RequestTab from "../../../../../components/views/tabs/shop-details/RequestTab";
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 
 const ShopDetails = {
@@ -25,11 +25,13 @@ const RooScreen = () => {
   const [routes] = useState([
     { key: "about", title: "About" },
     { key: "service", title: "Service" },
+    { key: "request", title: "Request" },
   ]);
 
   const renderScene = SceneMap({
     about: () => <AboutTab {...ShopDetails} />,
     service: () => <ShopServiceTab {...ShopDetails} />,
+    request: () => <RequestTab />,
   });
 
   return (
