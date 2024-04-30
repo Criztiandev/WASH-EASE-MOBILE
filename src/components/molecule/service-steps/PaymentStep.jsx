@@ -5,16 +5,9 @@ import { FlashList } from "@shopify/flash-list";
 import { Picker } from "@react-native-picker/picker";
 import { useController } from "react-hook-form";
 import Divider from "../../atoms/Divider";
-
-const MOCKDATA = [
-  { id: 0, title: "Test" },
-  { id: 1, title: "Test" },
-  { id: 2, title: "Test" },
-  { id: 3, title: "Test" },
-  { id: 4, title: "Test" },
-  { id: 5, title: "Test" },
-  { id: 6, title: "Test" },
-];
+import ServiceTable from "./partials/ServiceTable";
+import QuantityTable from "./partials/QuantityTable";
+import TotalSection from "./partials/TotalSection";
 
 const PaymentStep = ({ form, name }) => {
   const { field } = useController({
@@ -43,7 +36,16 @@ const PaymentStep = ({ form, name }) => {
           {Object.keys(form.getValues()).map((key) => {
             const serviceKey = ["basic-service"];
             if (serviceKey.includes(key)) {
-              return <ServiceTable payload={form.getValues(key)} />;
+              const titleMap = {
+                "basic-service": "Service",
+              };
+
+              return (
+                <ServiceTable
+                  title={titleMap[key]}
+                  payload={form.getValues(key)}
+                />
+              );
             }
           })}
 
@@ -53,11 +55,19 @@ const PaymentStep = ({ form, name }) => {
             const expectedKey = ["basic-material"];
 
             if (expectedKey.includes(key)) {
-              return <QuantityTable payload={form.getValues(key)} />;
+              const titleMap = {
+                "basic-material": "Service",
+              };
+              return (
+                <QuantityTable
+                  title={titleMap[key]}
+                  payload={form.getValues(key)}
+                />
+              );
             }
           })}
           <Divider />
-          <TotalSection />
+          <TotalSection subtotal={100} total={100} />
         </View>
       </ScrollView>
     </View>
@@ -65,96 +75,3 @@ const PaymentStep = ({ form, name }) => {
 };
 
 export default PaymentStep;
-
-const ServiceTable = ({ payload }) => {
-  return (
-    <DataTable className="min-h-[64px]">
-      <DataTable.Header>
-        <DataTable.Title>
-          <Text className="font-bold text-base">Service</Text>
-        </DataTable.Title>
-
-        <DataTable.Title numeric>
-          <Text className="font-bold text-base">Price</Text>
-        </DataTable.Title>
-      </DataTable.Header>
-
-      <View className="">
-        <FlashList
-          data={payload}
-          renderItem={({ item }) => (
-            <DataTable.Row
-              style={{
-                justifyContent: "flex-start",
-                alignItems: "flex-start",
-              }}>
-              <DataTable.Cell className="justify-start" numeric>
-                <Text className="opacity-75">{item.title}</Text>
-              </DataTable.Cell>
-
-              <DataTable.Cell numeric>{item.price}</DataTable.Cell>
-            </DataTable.Row>
-          )}
-          estimatedItemSize={200}
-        />
-      </View>
-    </DataTable>
-  );
-};
-const QuantityTable = ({ payload }) => {
-  return (
-    <DataTable className="min-h-[64px]">
-      <DataTable.Header>
-        <DataTable.Title>
-          <Text className="font-bold text-base">Materials</Text>
-        </DataTable.Title>
-        <DataTable.Title numeric>
-          <Text className="font-bold text-">Quantity</Text>
-        </DataTable.Title>
-        <DataTable.Title numeric>
-          <Text className="font-bold text-">Price</Text>
-        </DataTable.Title>
-      </DataTable.Header>
-
-      <View className="">
-        <FlashList
-          data={payload}
-          renderItem={({ item }) => (
-            <DataTable.Row style={{ justifyContent: "flex-start" }}>
-              <DataTable.Cell className="justify-start" numeric>
-                <Text className="opacity-75">{item.title}</Text>
-              </DataTable.Cell>
-              <DataTable.Cell numeric>{item.quantity}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.price}</DataTable.Cell>
-            </DataTable.Row>
-          )}
-          estimatedItemSize={200}
-        />
-      </View>
-    </DataTable>
-  );
-};
-
-const TotalSection = () => {
-  return (
-    <>
-      <View className="py-4 space-y-4">
-        <View className="flex-row justify-between items-start">
-          <Text className="font-bold text-[18px]">Subtotal</Text>
-          <Text className="font-bold text-[18px]">P 323232</Text>
-        </View>
-        <View className="flex-row justify-between items-start sa">
-          <Text className="font-semibold text-[18px] opacity-50">Tax</Text>
-          <Text className="font-bold text-[18px] ">P 0</Text>
-        </View>
-      </View>
-
-      <Divider />
-
-      <View className="flex-row justify-between items-start my-4">
-        <Text className="font-bold text-[18px]">Total</Text>
-        <Text className="font-bold text-[18px]">P 323232</Text>
-      </View>
-    </>
-  );
-};

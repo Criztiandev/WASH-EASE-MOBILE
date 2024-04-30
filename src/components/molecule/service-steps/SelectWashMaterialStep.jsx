@@ -8,15 +8,7 @@ import { cn } from "../../../utils/dev.utils";
 import { useSetAtom } from "jotai";
 import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 
-const MOCKDATA = [
-  { id: 0, title: "Test" },
-  { id: 1, title: "Test" },
-  { id: 2, title: "Test" },
-  { id: 3, title: "Test" },
-  { id: 4, title: "Test" },
-  { id: 5, title: "Test" },
-  { id: 6, title: "Test" },
-];
+const MOCKDATA = [{ id: 0, title: "Regular Wash", price: 300 }];
 
 const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
@@ -32,6 +24,7 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
       <MaterialItem
         field={field}
         id={item.id}
+        payload={item}
         onSelect={setSelectedItems}
         isActive={selectedItems.some((current) => current.id === item.id)}
         initialQuantity={
@@ -71,7 +64,13 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
 };
 
 const MaterialItem = memo(
-  ({ id: materialID, onSelect, isActive = false, initialQuantity = 0 }) => {
+  ({
+    id: materialID,
+    payload,
+    onSelect,
+    isActive = false,
+    initialQuantity = 0,
+  }) => {
     const [checked, setChecked] = useState(isActive);
     const [quantity, setQuantity] = useState(initialQuantity);
 
@@ -90,7 +89,7 @@ const MaterialItem = memo(
           // if checked and doesnt exist, create instance
           if (!exist) {
             setQuantity((prev) => prev + 1);
-            return [...prev, { id: materialID, quantity: 1 }];
+            return [...prev, { ...payload, quantity: 1 }];
           }
 
           // if checked and exist, find the item and update its quantity

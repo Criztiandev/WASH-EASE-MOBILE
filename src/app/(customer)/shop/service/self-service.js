@@ -34,11 +34,11 @@ const SelfServiceScreen = () => {
   } = useMultiform([
     // <SelectWashMachineStep controller={form.control} name={"wash"} />,
     // <SelectDryMachineStep controller={form.control} name={"dry"} />,
-    <SelectWashServiceStep
-      form={form}
-      name={"basic-service"}
-      initialData={form.getValues("basic-service")}
-    />,
+    // <SelectWashServiceStep
+    //   form={form}
+    //   name={"basic-service"}
+    //   initialData={form.getValues("basic-service")}
+    // />,
 
     <SelectWashMaterialStep
       form={form}
@@ -59,9 +59,7 @@ const SelfServiceScreen = () => {
         });
         return;
       }
-
-      console.log(form.formState.defaultValues);
-
+      console.log(value);
       nextStep();
       return;
     }
