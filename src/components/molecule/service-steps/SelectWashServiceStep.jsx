@@ -85,7 +85,7 @@ const SelectWashServiceStep = ({ form, name, initialData = [] }) => {
       <ServiceItem
         id={item.id}
         payload={item}
-        isActive={selected.includes(item.id)}
+        isActive={selected.some((current) => current.id === item.id)}
         onSelect={handleSelect}
       />
     ),

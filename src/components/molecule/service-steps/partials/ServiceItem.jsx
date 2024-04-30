@@ -19,7 +19,7 @@ const ServiceItem = ({
   const handleChecked = useCallback(() => {
     setChecked((prev) => {
       const newValue = !prev;
-      onSelect(newValue, serviceID);
+      onSelect(newValue, { id: payload.id, title: payload.title });
       return newValue;
     });
   }, [onSelect, serviceID]);
@@ -37,7 +37,7 @@ const ServiceItem = ({
           <View className="flex-row space-x-3" style={{ flexShrink: 1 }}>
             <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
             <View style={{ flexShrink: 1 }}>
-              <Text className="text-[18px] font-bold">{title}</Text>
+              <Text className="text-[18px] font-bold mb-1">{title}</Text>
               <Text className="text-[18px]">₱ {price}</Text>
             </View>
           </View>
