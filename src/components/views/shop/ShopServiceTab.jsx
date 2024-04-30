@@ -15,31 +15,21 @@ const ShopServiceTab = ({ services }) => {
             }
             title={"Self Service"}
             description={
-              "Our self service option \n provides  customers to \n handle their  laundry with \n their  own terms."
+              "Efficient, clean, and user-friendly, our self-service laundry lets you handle your washing with high-efficiency machines. Perfect for the independent individual on the go."
             }
           />
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("/shop/service/pickup-deliver-service")}>
+          onPress={() => router.push("/shop/service/full-service")}>
           <HorizontalCard
             image={
               "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             }
-            title={"Pickup and Delivery"}
+            title={"Full Service"}
             description={
-              "Offering convenient pickup and\ndelivery services for\nyour laundry needs"
+              "Drop off your laundry and leave the rest to us! Our full-service option includes washing, drying, and folding. Ideal for busy lifestyles, get your clothes clean and ready without lifting a finger."
             }
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => {}}>
-          <HorizontalCard
-            image={
-              "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            }
-            title={"Pickup Only"}
-            description={"Convenient pickup-only mode\nfor customers on the go"}
           />
         </TouchableOpacity>
       </ScrollView>

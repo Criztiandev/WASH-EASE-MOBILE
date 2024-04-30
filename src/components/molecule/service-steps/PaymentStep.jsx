@@ -11,11 +11,8 @@ import { stepAtom } from "../../../service/states/service.atoms";
 
 const PaymentStep = ({ form, name }) => {
   const [isGCash, setIsGcash] = useState(false);
+  const [isFullService, setIsFullService] = useState(false);
   const setCurrentStep = useSetAtom(stepAtom);
-  const { field } = useController({
-    control: form.control,
-    name,
-  });
 
   useEffect(() => {
     setCurrentStep(name);
@@ -26,8 +23,11 @@ const PaymentStep = ({ form, name }) => {
   }, []);
 
   useEffect(() => {
-    const method = form.watch("method");
-    setIsGcash(method === "gcash");
+    const paymentMethod = form.watch("payment-method");
+    const deliveryMethod = form.watch("delivery-method");
+
+    setIsGcash(paymentMethod === "gcash");
+    setIsFullService(deliveryMethod !== "self-service");
   }, [form.watch("method")]);
 
   return (
@@ -39,12 +39,26 @@ const PaymentStep = ({ form, name }) => {
       </Text>
 
       <View className=" rounded-[5px] m-4 border border-gray-300">
-        <Picker selectedValue={field.value} onValueChange={field.onChange}>
+        <Picker
+          selectedValue={form.getValues("payment-method")}
+          onValueChange={(value) => form.setValue("payment-method", value)}>
           <Picker.Item label="Choose Payment Method" value="" />
           <Picker.Item label="Cash" value="cash" />
           <Picker.Item label="Gcash" value="gcash" />
         </Picker>
       </View>
+
+      {isFullService && (
+        <View className=" rounded-[5px] m-4 border border-gray-300">
+          <Picker
+            selectedValue={form.getValues("delivery-method")}
+            onValueChange={(value) => form.setValue("delivery-method", value)}>
+            <Picker.Item label="Choose Develivery Method" value="" />
+            <Picker.Item label="Pick up" value="pick-up" />
+            <Picker.Item label="Delivery" value="delivery" />
+          </Picker>
+        </View>
+      )}
 
       <ScrollView>
         {isGCash && (

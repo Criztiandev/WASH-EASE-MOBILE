@@ -13,7 +13,7 @@ const HorizontalCard = ({ image, description, title }) => {
           className=" rounded-t-md flex-1"
         />
       </View>
-      <View className="space-y-2 p-4 ">
+      <View className="space-y-2 p-4 " style={{ flexShrink: 1 }}>
         <Text className="text-xl font-bold">{title}</Text>
 
         <View className="opacity-50 space-y-2 ">

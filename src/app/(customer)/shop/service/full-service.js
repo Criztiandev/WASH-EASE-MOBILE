@@ -125,7 +125,8 @@ const RootScreen = () => {
       "basic-cleaning": [],
       "basic-ironing": [],
       "basic-material": [],
-      method: "",
+      "payment-method": "",
+      "delivery-method": "",
     },
   });
 
@@ -173,7 +174,8 @@ const RootScreen = () => {
       return;
     }
 
-    router.push("/shop/service/success");
+    console.log(value);
+    // router.push("/shop/service/success");
   };
 
   return (

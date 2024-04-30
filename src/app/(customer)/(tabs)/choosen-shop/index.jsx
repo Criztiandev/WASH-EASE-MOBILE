@@ -46,15 +46,12 @@ const MOCKDATA = [
 ];
 
 const ChoosenShopScreen = () => {
-  const renderSeparator = () => <View style={{ width: 24 }} />;
-
   return (
     <ScreenLayout className="bg-[#f0f0f0] px-2 space-y-4 ">
       <Searchbar className="bg-white my-4" placeholder="Search" />
 
       <FlashList
         data={MOCKDATA}
-        ItemSeparatorComponent={renderSeparator}
         renderItem={({ item }) => (
           <LaundryShopCardVertical
             path={`/shop/choosen/details/${item.id}`}

@@ -21,13 +21,13 @@ const StackLayout = () => {
         }}
       />
       <Stack.Screen
-        name="pickup-deliver-service"
+        name="full-service"
         options={{
           title: "",
           headerTitle: ({ data }) => (
             <View style={{ width: Dimensions.get("screen").width - 90 }}>
               <Text className="text-center text-[18px] font-bold">
-                Pick up & Delivery
+                Full service
               </Text>
             </View>
           ),

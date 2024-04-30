@@ -64,13 +64,14 @@ const HomeScreen = () => {
         <Text variant="titleLarge" className="font-bold">
           Nearby Laundy shops
         </Text>
-        <FlatList
-          horizontal
-          data={MOCKDATA}
-          ItemSeparatorComponent={renderSeparator}
-          renderItem={({ item }) => <LaundryShopCardHorizontal {...item} />}
-          className="mb-4"
-        />
+        <View className="mb-4">
+          <FlatList
+            horizontal
+            data={MOCKDATA}
+            ItemSeparatorComponent={renderSeparator}
+            renderItem={({ item }) => <LaundryShopCardHorizontal {...item} />}
+          />
+        </View>
       </ScrollView>
     </ScreenLayout>
   );
