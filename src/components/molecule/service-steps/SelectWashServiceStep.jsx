@@ -4,57 +4,93 @@ import InfoIcon from "../../../assets/icons/info_icon.svg";
 import { Modal, Portal } from "react-native-paper";
 import { cn } from "../../../utils/dev.utils";
 import { FlashList } from "@shopify/flash-list";
+import { useSetAtom } from "jotai";
+import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
+import ServiceItem from "./partials/ServiceItem";
 
 const MOCKDATA = [
-  { id: 0, title: "Test" },
-  { id: 1, title: "Test" },
-  { id: 2, title: "Test" },
-  { id: 3, title: "Test" },
-  { id: 4, title: "Test" },
-  { id: 5, title: "Test" },
-  { id: 6, title: "Test" },
+  {
+    id: 0,
+    title: "Regular Wash",
+    price: "840",
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 1,
+    title: "Wash Dis",
+    price: 400,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 2,
+    title: "I Miss you",
+    price: 203,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 3,
+    title: "Balik kana",
+    price: 300,
+    description: "Di mapigilang magising",
+  },
+  {
+    id: 4,
+    title: "Sorry",
+    price: 500,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 5,
+    title: "Mahal",
+    price: 400,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 6,
+    title: "Ikay Nasaktan bumalik kana sakin",
+    price: 402,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
 ];
 
 const SelectWashServiceStep = ({ form, name, initialData = [] }) => {
   const [selected, setSelected] = useState(initialData || []);
-  const [visible, setVisible] = useState(false);
+  const setCurrentStep = useSetAtom(stepAtom);
 
-  const showModal = useCallback(() => setVisible(true), []);
-  const hideModal = useCallback(() => setVisible(false), []);
-
+  // Selection handling
   const handleSelect = useCallback((checked, value) => {
-    setSelected((prevSelected) => {
-      if (checked) {
-        return prevSelected.includes(value)
-          ? prevSelected
-          : [...prevSelected, value];
-      }
-      return prevSelected.filter((item) => item !== value);
-    });
+    setSelected((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
   }, []);
 
+  useEffect(() => {
+    form.setValue(name, selected);
+  }, [selected, form, name]);
+
+  useEffect(() => {
+    setCurrentStep(name);
+    return () => setCurrentStep("");
+  }, [setCurrentStep, name]);
+
+  // Render service item
   const renderItem = useCallback(
     ({ item }) => (
       <ServiceItem
-        value={item.id}
+        id={item.id}
+        payload={item}
         isActive={selected.includes(item.id)}
         onSelect={handleSelect}
-        onShowModal={showModal}
       />
     ),
-    [handleSelect, showModal, selected]
+    [handleSelect, selected]
   );
-  const keyExtractor = useCallback((item) => item.id.toString(), []);
-
-  useEffect(() => {
-    form.setValue(name, selected); // Always set the selected value to the form
-  }, [selected, form, name]); // Dependencies: selected, form, and name
-
-  useEffect(() => {
-    const value = form.getValues("basic-service");
-    console.log(value);
-  }, []);
-
   return (
     <>
       <View className="flex-1  w-full mb-4">
@@ -68,52 +104,10 @@ const SelectWashServiceStep = ({ form, name, initialData = [] }) => {
           data={MOCKDATA}
           renderItem={renderItem}
           estimatedItemSize={200}
-          keyExtractor={keyExtractor}
+          keyExtractor={(item) => item.id.toString()}
         />
       </View>
-
-      <Portal>
-        <Modal visible={visible} onDismiss={hideModal}>
-          <Text>Example Modal. Click outside this area to dismiss.</Text>
-        </Modal>
-      </Portal>
     </>
-  );
-};
-
-const ServiceItem = ({ value, onSelect, onShowModal, isActive = false }) => {
-  const [checked, setChecked] = useState(isActive);
-
-  const handleChecked = useCallback(() => {
-    setChecked((prev) => {
-      const newValue = !prev;
-      onSelect(newValue, value);
-      return newValue;
-    });
-  }, [onSelect, value]);
-
-  return (
-    <TouchableOpacity
-      className={cn(
-        `${
-          checked && "bg-blue-300/50 border-2 border-blue-400"
-        } rounded-[5px] mb-2`
-      )}
-      onPress={handleChecked}>
-      <View className=" max-h-[150px] py-4 px-2 flex-row justify-between ">
-        <View className="flex-row space-x-3" style={{ flexShrink: 1 }}>
-          <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
-          <View>
-            <Text className="text-[18px] font-bold">Regular Wash</Text>
-            <Text className="text-[18px]">950</Text>
-          </View>
-        </View>
-
-        <TouchableOpacity className="  rounded-full " onPress={onShowModal}>
-          <InfoIcon width={36} height={36} className="" />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
   );
 };
 

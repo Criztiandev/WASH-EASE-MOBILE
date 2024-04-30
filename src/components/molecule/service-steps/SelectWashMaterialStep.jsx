@@ -5,6 +5,8 @@ import { useController } from "react-hook-form";
 
 import { FlashList } from "@shopify/flash-list";
 import { cn } from "../../../utils/dev.utils";
+import { useSetAtom } from "jotai";
+import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 
 const MOCKDATA = [
   { id: 0, title: "Test" },
@@ -19,6 +21,7 @@ const MOCKDATA = [
 const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
   const [selectedItems, setSelectedItems] = useState(initialData);
+  const setCurrentStep = useSetAtom(stepAtom);
 
   useEffect(() => {
     form.setValue(name, selectedItems);
@@ -30,15 +33,24 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
         field={field}
         id={item.id}
         onSelect={setSelectedItems}
-        // isActive={selectedItems.some((current) => current.id === item.id)}
-        // initialQuantity={
-        //   selectedItems.find((current) => current.id === item.id)?.quantity
-        // }
+        isActive={selectedItems.some((current) => current.id === item.id)}
+        initialQuantity={
+          selectedItems.find((current) => current.id === item.id)?.quantity
+        }
       />
     ),
     []
   );
   const keyExtractor = useCallback((item) => item.id.toString(), []);
+
+  // Check validation
+  useEffect(() => {
+    setCurrentStep(name);
+
+    return () => {
+      setCurrentStep("");
+    };
+  }, []);
 
   return (
     <>
@@ -61,7 +73,7 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
 const MaterialItem = memo(
   ({ id: materialID, onSelect, isActive = false, initialQuantity = 0 }) => {
     const [checked, setChecked] = useState(isActive);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(initialQuantity);
 
     const handleIncrement = () => setQuantity((prev) => Math.min(prev + 1, 99));
     const handleDecrement = () => setQuantity((prev) => Math.max(prev - 1, 0));
@@ -93,6 +105,8 @@ const MaterialItem = memo(
         );
       }
     }, [checked, quantity]);
+
+    // Check validation
 
     return (
       <TouchableOpacity

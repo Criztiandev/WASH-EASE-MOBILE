@@ -32,8 +32,8 @@ const SelfServiceScreen = () => {
     isFirstStep,
     currentStepIndex,
   } = useMultiform([
-    <SelectWashMachineStep controller={form.control} name={"wash"} />,
-    <SelectDryMachineStep controller={form.control} name={"dry"} />,
+    // <SelectWashMachineStep controller={form.control} name={"wash"} />,
+    // <SelectDryMachineStep controller={form.control} name={"dry"} />,
     <SelectWashServiceStep
       form={form}
       name={"basic-service"}
@@ -53,7 +53,7 @@ const SelfServiceScreen = () => {
 
     console.log(isHasValue);
 
-    if (isHasValue === "" || isHasValue === null) {
+    if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
       Toast.show({
         type: "error",
         text1: "Please Fill all the field to proceed",
