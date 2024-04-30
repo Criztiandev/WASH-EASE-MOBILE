@@ -10,6 +10,8 @@ import PaymentStep from "../../../../components/molecule/service-steps/PaymentSt
 import { atom, useAtomValue } from "jotai";
 
 import Toast from "react-native-toast-message";
+import CheckoutStep from "../../../../components/molecule/service-steps/CheckoutStep";
+import { router } from "expo-router";
 
 export const stepAtom = atom("");
 const SelfServiceScreen = () => {
@@ -49,21 +51,23 @@ const SelfServiceScreen = () => {
   ]);
 
   const onSubmit = (value) => {
-    if (!isLastStep) {
-      const isHasValue = form.getValues(currentStep);
+    const isHasValue = form.getValues(currentStep);
 
-      if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
-        Toast.show({
-          type: "error",
-          text1: "Please Fill all the field to proceed",
-        });
-        return;
-      }
+    if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
+      Toast.show({
+        type: "error",
+        text1: "Please Fill all the field to proceed",
+      });
+      return;
+    }
+
+    if (!isLastStep) {
       nextStep();
       return;
     }
 
     console.log(value);
+    router.push("/shop/service/success");
   };
 
   return (

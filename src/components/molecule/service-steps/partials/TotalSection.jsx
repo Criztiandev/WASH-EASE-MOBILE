@@ -35,8 +35,10 @@ const TotalSection = ({ payload }) => {
       return acc + innerTotal;
     }, 0);
 
-    setSubtotal(quantitySubtotal + serviceSubTotal);
-    setTotal(subtotal * (1 + taxRate));
+    const newSubtotal = quantitySubtotal + serviceSubTotal;
+    const newTotal = newSubtotal + (1 + taxRate);
+    setSubtotal(newSubtotal);
+    setTotal(newTotal);
   }, []);
 
   return (

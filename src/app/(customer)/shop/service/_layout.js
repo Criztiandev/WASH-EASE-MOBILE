@@ -13,6 +13,13 @@ const StackLayout = () => {
           title: "Self Service",
         }}
       />
+
+      <Stack.Screen
+        name="success"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

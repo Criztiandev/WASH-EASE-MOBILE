@@ -8,12 +8,23 @@ import Divider from "../../atoms/Divider";
 import ServiceTable from "./partials/ServiceTable";
 import QuantityTable from "./partials/QuantityTable";
 import TotalSection from "./partials/TotalSection";
+import { useSetAtom } from "jotai";
+import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 
 const PaymentStep = ({ form, name }) => {
+  const setCurrentStep = useSetAtom(stepAtom);
   const { field } = useController({
     control: form.control,
     name,
   });
+
+  useEffect(() => {
+    setCurrentStep(name);
+
+    return () => {
+      setCurrentStep("");
+    };
+  }, []);
 
   return (
     <View className="flex-1  w-full">
