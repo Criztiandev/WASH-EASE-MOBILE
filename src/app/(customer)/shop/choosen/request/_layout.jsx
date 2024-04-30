@@ -9,7 +9,7 @@ const RootLayout = () => {
         name="[id]"
         options={{
           title: "",
-          headerShadowVisible: false,
+
           headerStyle: "inherit",
         }}
       />

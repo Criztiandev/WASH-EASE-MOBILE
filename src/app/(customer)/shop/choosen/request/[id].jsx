@@ -1,8 +1,10 @@
-import { View } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import Timeline from "react-native-timeline-flatlist";
 
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+import Button from "../../../../../components/atoms/Button";
 
 const ShopDetails = {
   name: "Shabu Houze",
@@ -17,9 +19,51 @@ const ShopDetails = {
 const RooScreen = () => {
   const { id } = useLocalSearchParams();
 
+  const data = [
+    {
+      time: "09:00",
+      title: "Order Confirmed",
+      description: "Your order has been Confirmed",
+    },
+    {
+      time: "10:45",
+      title: "Pickup Arranged",
+      description: "Your order has been picked up.",
+    },
+    {
+      time: "12:00",
+      title: "In Process",
+      description: "Your laundry task is in process",
+    },
+    {
+      time: "14:00",
+      title: "Shipped",
+      description: "Your order is out for delivery.",
+    },
+    {
+      time: "16:30",
+      title: "Delivered",
+      description: "Successfully delivered.",
+    },
+  ];
+
   return (
     <View className="flex-1">
       <ShopDetailsCover {...ShopDetails} />
+      {/* // Delivery tracking // Messagening // Timeline */}
+
+      <View className="flex-1">
+        <Text className="font-bold text-xl m-4">Laundry Status</Text>
+        <Timeline data={data} />
+      </View>
+
+      <View className="px-2">
+        <Button onPress={() => router.push(`/shop/choosen/message/${id}`)}>
+          <Text className={"text-lg text-center text-white font-bold"}>
+            Message
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 };

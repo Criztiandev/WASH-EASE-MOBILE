@@ -50,17 +50,19 @@ const ChoosenShopScreen = () => {
     <ScreenLayout className="bg-[#f0f0f0] px-2 space-y-4 ">
       <Searchbar className="bg-white my-4" placeholder="Search" />
 
-      <FlashList
-        data={MOCKDATA}
-        renderItem={({ item }) => (
-          <LaundryShopCardVertical
-            path={`/shop/choosen/details/${item.id}`}
-            {...item}
-          />
-        )}
-        estimatedItemSize={200}
-        keyExtractor={(item) => item.id}
-      />
+      <View className="flex-1">
+        <FlashList
+          data={MOCKDATA}
+          renderItem={({ item }) => (
+            <LaundryShopCardVertical
+              path={`/shop/choosen/details/${item.id}`}
+              {...item}
+            />
+          )}
+          estimatedItemSize={200}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
     </ScreenLayout>
   );
 };
