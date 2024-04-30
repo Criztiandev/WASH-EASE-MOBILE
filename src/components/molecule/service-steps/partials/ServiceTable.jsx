@@ -34,7 +34,7 @@ const ServiceTable = ({ title, payload }) => {
                   <Text className="opacity-75">{item.title}</Text>
                 </DataTable.Cell>
 
-                <DataTable.Cell numeric>{item.price}</DataTable.Cell>
+                <DataTable.Cell numeric>₱ {item.price}</DataTable.Cell>
               </DataTable.Row>
             )}
             estimatedItemSize={200}

@@ -32,13 +32,13 @@ const SelfServiceScreen = () => {
     isFirstStep,
     currentStepIndex,
   } = useMultiform([
-    // <SelectWashMachineStep controller={form.control} name={"wash"} />,
-    // <SelectDryMachineStep controller={form.control} name={"dry"} />,
-    // <SelectWashServiceStep
-    //   form={form}
-    //   name={"basic-service"}
-    //   initialData={form.getValues("basic-service")}
-    // />,
+    <SelectWashMachineStep controller={form.control} name={"wash"} />,
+    <SelectDryMachineStep controller={form.control} name={"dry"} />,
+    <SelectWashServiceStep
+      form={form}
+      name={"basic-service"}
+      initialData={form.getValues("basic-service")}
+    />,
 
     <SelectWashMaterialStep
       form={form}
@@ -59,7 +59,6 @@ const SelfServiceScreen = () => {
         });
         return;
       }
-      console.log(value);
       nextStep();
       return;
     }
@@ -69,10 +68,6 @@ const SelfServiceScreen = () => {
 
   return (
     <View className="flex-1 bg-[#FAF8FF]">
-      <Button onPress={form.handleSubmit(onSubmit)}>
-        <Text>Submit</Text>
-      </Button>
-
       <View className=" flex-1 justify-center items-center">{step}</View>
 
       <View className="px-4">

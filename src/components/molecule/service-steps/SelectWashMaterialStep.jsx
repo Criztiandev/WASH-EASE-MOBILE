@@ -47,7 +47,7 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
 
   return (
     <>
-      <View className="flex-1 border w-full mb-4">
+      <View className="flex-1  w-full mb-4">
         <Text className="text-[24px] font-semibold text-center my-4">
           Select Material
         </Text>
