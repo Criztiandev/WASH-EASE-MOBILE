@@ -67,7 +67,7 @@ const PaymentStep = ({ form, name }) => {
             }
           })}
           <Divider />
-          <TotalSection subtotal={100} total={100} />
+          <TotalSection payload={form.getValues()} />
         </View>
       </ScrollView>
     </View>
