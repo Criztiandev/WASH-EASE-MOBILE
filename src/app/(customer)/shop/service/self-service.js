@@ -10,7 +10,6 @@ import PaymentStep from "../../../../components/molecule/service-steps/PaymentSt
 import { atom, useAtomValue } from "jotai";
 
 import Toast from "react-native-toast-message";
-import CheckoutStep from "../../../../components/molecule/service-steps/CheckoutStep";
 import { router } from "expo-router";
 
 export const stepAtom = atom("");

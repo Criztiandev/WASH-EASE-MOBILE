@@ -1,10 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { memo, useCallback, useEffect, useState } from "react";
-import { Badge, IconButton } from "react-native-paper";
+import { View, Text } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 
 import { FlashList } from "@shopify/flash-list";
-import { cn } from "../../../utils/dev.utils";
 import { useSetAtom } from "jotai";
 import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 import MaterialItem from "./partials/MaterialItem";
