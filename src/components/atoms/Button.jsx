@@ -30,9 +30,11 @@ export default function Button({
   children,
   onPress,
   className,
+  ...props
 }) {
   return (
     <TouchableOpacity
+      {...props}
       onPress={onPress}
       className={cn(buttonVariants({ variant, size, className }))}>
       {children}

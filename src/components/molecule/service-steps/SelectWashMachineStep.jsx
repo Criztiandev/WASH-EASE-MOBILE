@@ -5,6 +5,9 @@ import { Text } from "react-native-paper";
 
 import { ToggleButton } from "react-native-paper";
 import { cn } from "../../../utils/dev.utils";
+import { useEffect } from "react";
+import { useSetAtom } from "jotai";
+import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 
 const WASHMOCKDATA = [
   {
@@ -35,10 +38,19 @@ const WASHMOCKDATA = [
 ];
 
 const SelectWashMachineStep = ({ controller, name }) => {
+  const setCurrentStep = useSetAtom(stepAtom);
   const { field } = useController({
     control: controller,
     name,
   });
+
+  useEffect(() => {
+    setCurrentStep(name);
+
+    return () => {
+      setCurrentStep("");
+    };
+  }, []);
 
   return (
     <View className="">

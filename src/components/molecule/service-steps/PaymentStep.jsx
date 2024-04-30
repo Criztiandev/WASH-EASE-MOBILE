@@ -15,9 +15,11 @@ const MOCKDATA = [
   { id: 6, title: "Test" },
 ];
 
-const PaymentStep = ({ controller, name }) => {
+const PaymentStep = ({ form, name }) => {
+  const [services, setServices] = useState([]);
+  const [materials, setMaterials] = useState([]);
   const { field } = useController({
-    control: controller,
+    control: form.control,
     name,
   });
 
