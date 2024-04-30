@@ -12,6 +12,7 @@ import { useSetAtom } from "jotai";
 import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 
 const PaymentStep = ({ form, name }) => {
+  const [isGCash, setIsGcash] = useState(false);
   const setCurrentStep = useSetAtom(stepAtom);
   const { field } = useController({
     control: form.control,
@@ -25,6 +26,11 @@ const PaymentStep = ({ form, name }) => {
       setCurrentStep("");
     };
   }, []);
+
+  useEffect(() => {
+    const method = form.watch("method");
+    setIsGcash(method === "gcash");
+  }, [form.watch("method")]);
 
   return (
     <View className="flex-1  w-full">
@@ -43,6 +49,14 @@ const PaymentStep = ({ form, name }) => {
       </View>
 
       <ScrollView>
+        {isGCash && (
+          <View className="flex justify-center items-center space-y-2">
+            <View className="w-[200px] h-[200px] border rounded-[5px] mx-auto"></View>
+            <Text>Scan QR Code</Text>
+            <Text className="text-2xl font-bold">09482004868</Text>
+          </View>
+        )}
+
         <View className="px-4">
           {Object.keys(form.getValues()).map((key) => {
             const serviceKey = ["basic-service"];
