@@ -1,7 +1,9 @@
 import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { DataTable } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
+import { Picker } from "@react-native-picker/picker";
+import { useController } from "react-hook-form";
 
 const MOCKDATA = [
   { id: 0, title: "Test" },
@@ -13,16 +15,27 @@ const MOCKDATA = [
   { id: 6, title: "Test" },
 ];
 
-const PaymenStep = () => {
+const PaymentStep = ({ controller, name }) => {
+  const { field } = useController({
+    control: controller,
+    name,
+  });
+
   return (
-    <View className="flex-1 border w-full">
+    <View className="flex-1  w-full">
       <Text
         className="text-2xl font-bold m-4 text-center mb-2"
         variant="titleLarge">
-        Your Order
+        Order Details
       </Text>
 
-      <Selection />
+      <View className=" rounded-[5px] m-4 border border-gray-300">
+        <Picker selectedValue={field.value} onValueChange={field.onChange}>
+          <Picker.Item label="Choose Payment Method" value="" />
+          <Picker.Item label="Cash" value="cash" />
+          <Picker.Item label="Gcash" value="gcash" />
+        </Picker>
+      </View>
 
       <ScrollView>
         <View className="px-4">
@@ -119,4 +132,4 @@ const PaymenStep = () => {
   );
 };
 
-export default PaymenStep;
+export default PaymentStep;

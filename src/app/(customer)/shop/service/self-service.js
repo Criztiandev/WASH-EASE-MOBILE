@@ -8,7 +8,7 @@ import SelectWashMachineStep from "../../../../components/molecule/service-steps
 import SelectDryMachineStep from "../../../../components/molecule/service-steps/SelectDryMachineStep";
 import SelectWashServiceStep from "../../../../components/molecule/service-steps/SelectWashServiceStep";
 import SelectWashMaterialStep from "../../../../components/molecule/service-steps/SelectWashMaterialStep";
-import PaymenStep from "../../../../components/molecule/service-steps/PaymenStep";
+import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
 
 const SelfServiceScreen = () => {
   const form = useForm({
@@ -17,6 +17,7 @@ const SelfServiceScreen = () => {
       "basic-material": [],
       dry: "",
       wash: "",
+      method: "",
     },
   });
 
@@ -35,7 +36,7 @@ const SelfServiceScreen = () => {
         name="basic-material"
         initialData={form.getValues("basic-material")}
       />,
-      <PaymenStep />,
+      <PaymentStep form={form.control} name="method" />,
     ]);
 
   const onSubmit = (value) => {

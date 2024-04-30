@@ -28,13 +28,12 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
     ({ item }) => (
       <MaterialItem
         field={field}
-        key={item.id}
-        value={item.id}
+        id={item.id}
         onSelect={setSelectedItems}
-        isActive={selectedItems.some((current) => current.id === item.id)}
-        initialQuantity={
-          selectedItems.find((current) => current.id === item.id)?.quantity
-        }
+        // isActive={selectedItems.some((current) => current.id === item.id)}
+        // initialQuantity={
+        //   selectedItems.find((current) => current.id === item.id)?.quantity
+        // }
       />
     ),
     []
@@ -60,41 +59,38 @@ const SelectWashMaterialStep = ({ form, name, initialData = [] }) => {
 };
 
 const MaterialItem = memo(
-  ({ value, onSelect, isActive = false, initialQuantity = 0 }) => {
+  ({ id: materialID, onSelect, isActive = false, initialQuantity = 0 }) => {
     const [checked, setChecked] = useState(isActive);
-    const [quantity, setQuantity] = useState(initialQuantity);
+    const [quantity, setQuantity] = useState(0);
 
     const handleIncrement = () => setQuantity((prev) => Math.min(prev + 1, 99));
     const handleDecrement = () => setQuantity((prev) => Math.max(prev - 1, 0));
 
     const handleSelect = useCallback(() => {
-      setChecked((prevState) => {
-        const newState = !prevState;
-
-        if (newState) {
-          handleIncrement();
-        } else {
-          handleDecrement();
-        }
-
-        return newState;
-      });
+      setChecked((prev) => !prev);
     }, []);
 
     useEffect(() => {
       if (checked) {
         onSelect((prev) => {
-          const index = prev.findIndex((item) => item.id === value);
-          if (index > -1) {
-            return prev.map((item) =>
-              item.id === value ? { ...item, quantity } : item
-            );
-          } else {
-            return [...prev, { id: value, quantity }];
+          const exist = prev?.find(({ id: itemID }) => itemID === materialID);
+
+          // if checked and doesnt exist, create instance
+          if (!exist) {
+            setQuantity((prev) => prev + 1);
+            return [...prev, { id: materialID, quantity: 1 }];
           }
+
+          // if checked and exist, find the item and update its quantity
+          return prev.map((item) =>
+            item.id === materialID ? { ...item, quantity } : item
+          );
         });
       } else {
-        onSelect((prev) => prev.filter((item) => item.id !== value));
+        setQuantity(0);
+        onSelect((prev) =>
+          prev.filter(({ id: itemID }) => itemID !== materialID)
+        );
       }
     }, [checked, quantity]);
 
@@ -112,15 +108,13 @@ const MaterialItem = memo(
             <View
               className="flex-row space-x-3 justify-between items-center"
               style={{ flexShrink: 1 }}>
-              {quantity > 0 ? (
-                <Badge
-                  className={
-                    "absolute -top-3 left-1 text-[14px] w-[24px] h-[24px] rounded-full"
-                  }>
-                  {quantity}
-                </Badge>
-              ) : (
-                <></>
+              {quantity > 0 && (
+                <View className="">
+                  <Badge
+                    className={"text-[14px] w-[24px] h-[24px] rounded-full "}>
+                    {quantity}
+                  </Badge>
+                </View>
               )}
               <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
               <View>
