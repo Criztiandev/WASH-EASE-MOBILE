@@ -8,6 +8,8 @@ import NotificationIcon from "../../../../assets/icons/notification_icon.svg";
 import { router, useLocalSearchParams } from "expo-router";
 import FloationActionBtn from "../../../../components/atoms/FloationActionBtn";
 
+//TODO:Transaction History
+
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
   return (
@@ -33,6 +35,16 @@ const ProfileScreen = () => {
         <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} className="" />
           <Text className="text-lg font-bold">Notification</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          router.push(`/account/profile/notification/${id}`);
+        }}>
+        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <NotificationIcon width={32} height={32} className="" />
+          <Text className="text-lg font-bold">Transaction History</Text>
         </View>
       </TouchableOpacity>
 

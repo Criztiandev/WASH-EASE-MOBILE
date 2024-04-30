@@ -58,9 +58,9 @@ const RooScreen = () => {
       </View>
 
       <View className="px-2">
-        <Button onPress={() => router.push(`/shop/choosen/message/${id}`)}>
+        <Button onPress={() => router.push(`/shop/choosen/track/${id}`)}>
           <Text className={"text-lg text-center text-white font-bold"}>
-            Message
+            Track
           </Text>
         </Button>
       </View>

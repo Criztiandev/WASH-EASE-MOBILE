@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 
-export default () => {
+const HomeTab = () => {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
@@ -33,3 +33,5 @@ export default () => {
     </Tabs>
   );
 };
+
+export default HomeTab;
