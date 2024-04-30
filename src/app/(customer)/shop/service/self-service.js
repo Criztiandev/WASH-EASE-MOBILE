@@ -7,12 +7,12 @@ import SelectDryMachineStep from "../../../../components/molecule/service-steps/
 import SelectWashServiceStep from "../../../../components/molecule/service-steps/SelectWashServiceStep";
 import SelectWashMaterialStep from "../../../../components/molecule/service-steps/SelectWashMaterialStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
-import { atom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import { stepAtom } from "../../../../service/states/service.atoms";
 
-export const stepAtom = atom("");
 const SelfServiceScreen = () => {
   const currentStep = useAtomValue(stepAtom);
   const form = useForm({

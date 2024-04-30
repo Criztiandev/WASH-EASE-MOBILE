@@ -9,7 +9,7 @@ import ServiceTable from "./partials/ServiceTable";
 import QuantityTable from "./partials/QuantityTable";
 import TotalSection from "./partials/TotalSection";
 import { useSetAtom } from "jotai";
-import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
+import { stepAtom } from "../../../service/states/service.atoms";
 
 const PaymentStep = ({ form, name }) => {
   const [isGCash, setIsGcash] = useState(false);
@@ -59,10 +59,16 @@ const PaymentStep = ({ form, name }) => {
 
         <View className="px-4">
           {Object.keys(form.getValues()).map((key) => {
-            const serviceKey = ["basic-service"];
+            const serviceKey = [
+              "basic-service",
+              "basic-cleaning",
+              "basic-ironing",
+            ];
             if (serviceKey.includes(key)) {
               const titleMap = {
                 "basic-service": "Service",
+                "basic-cleaning": "Cleaning",
+                "basic-ironing": "Ironing",
               };
 
               return (

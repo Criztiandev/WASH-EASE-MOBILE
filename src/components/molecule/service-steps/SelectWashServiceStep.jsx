@@ -2,8 +2,8 @@ import { View, Text } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
-import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
 import ServiceItem from "./partials/ServiceItem";
+import { stepAtom } from "../../../service/states/service.atoms";
 
 const MOCKDATA = [
   {

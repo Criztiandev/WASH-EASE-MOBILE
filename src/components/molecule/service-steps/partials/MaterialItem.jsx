@@ -71,8 +71,8 @@ const MaterialItem = memo(
               )}
               <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
               <View>
-                <Text className="text-[18px] font-bold">Regular Wash</Text>
-                <Text className="text-[18px]">950</Text>
+                <Text className="text-[18px] font-bold">{payload.title}</Text>
+                <Text className="text-[18px]">{payload.price}</Text>
               </View>
             </View>
 

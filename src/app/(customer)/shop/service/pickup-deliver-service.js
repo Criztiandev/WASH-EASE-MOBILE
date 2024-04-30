@@ -2,17 +2,117 @@ import { View, Text } from "react-native";
 import useMultiform from "../../../../hooks/useMultiform";
 import { useForm } from "react-hook-form";
 import Button from "../../../../components/atoms/Button";
-import SelectWashMachineStep from "../../../../components/molecule/service-steps/SelectWashMachineStep";
-import SelectDryMachineStep from "../../../../components/molecule/service-steps/SelectDryMachineStep";
 import SelectWashServiceStep from "../../../../components/molecule/service-steps/SelectWashServiceStep";
 import SelectWashMaterialStep from "../../../../components/molecule/service-steps/SelectWashMaterialStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
-import { atom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
+
+import { router } from "expo-router";
+import { stepAtom } from "../../../../service/states/service.atoms";
+
+const Basic1 = [
+  {
+    id: 0,
+    title: "Regular Wash",
+    price: "840",
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 1,
+    title: "Wash Dis",
+    price: 400,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 2,
+    title: "I Miss you",
+    price: 203,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 3,
+    title: "Balik kana",
+    price: 300,
+    description: "Di mapigilang magising",
+  },
+  {
+    id: 4,
+    title: "Sorry",
+    price: 500,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 5,
+    title: "Mahal",
+    price: 400,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 6,
+    title: "Ikay Nasaktan bumalik kana sakin",
+    price: 402,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+];
+const Basic2 = [
+  {
+    id: 0,
+    title: "Regular Wash",
+    price: "840",
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 1,
+    title: "Wash Dis",
+    price: 400,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 2,
+    title: "I Miss you",
+    price: 203,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 3,
+    title: "Balik kana",
+    price: 300,
+    description: "Di mapigilang magising",
+  },
+  {
+    id: 4,
+    title: "Sorry",
+    price: 500,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 5,
+    title: "Mahal",
+    price: 400,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+  {
+    id: 6,
+    title: "Ikay Nasaktan bumalik kana sakin",
+    price: 402,
+    description:
+      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  },
+];
 
 import Toast from "react-native-toast-message";
-import { router } from "expo-router";
 
-export const stepAtom = atom("");
 const RootScreen = () => {
   const currentStep = useAtomValue(stepAtom);
   const form = useForm({
@@ -37,13 +137,12 @@ const RootScreen = () => {
       name="basic-material"
       initialData={form.getValues("basic-material")}
     />,
-    <PaymentStep form={form} name="method" />,
   ]);
 
   const onSubmit = (value) => {
-    const isHasValue = form.getValues(currentStep);
+    const isHasValue = form.getValues("basic-service");
 
-    if (isHasValue === "" || isHasValue === null || isHasValue.length <= 0) {
+    if (isHasValue === "" || isHasValue === null || isHasValue?.length <= 0) {
       Toast.show({
         type: "error",
         text1: "Please Fill all the field to proceed",
@@ -52,12 +151,13 @@ const RootScreen = () => {
     }
 
     if (!isLastStep) {
+      console.log(value);
       nextStep();
       return;
     }
 
     console.log(value);
-    router.push("/shop/service/success");
+    // router.push("/shop/service/success");
   };
 
   return (

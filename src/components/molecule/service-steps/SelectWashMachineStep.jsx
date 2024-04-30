@@ -7,7 +7,7 @@ import { ToggleButton } from "react-native-paper";
 import { cn } from "../../../utils/dev.utils";
 import { useEffect } from "react";
 import { useSetAtom } from "jotai";
-import { stepAtom } from "../../../app/(customer)/shop/service/self-service";
+import { stepAtom } from "../../../service/states/service.atoms";
 
 const WASHMOCKDATA = [
   {
