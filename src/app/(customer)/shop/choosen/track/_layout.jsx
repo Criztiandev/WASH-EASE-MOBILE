@@ -8,9 +8,7 @@ const RootLayout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "",
-
-          headerStyle: "inherit",
+          title: "Track",
         }}
       />
     </Stack>

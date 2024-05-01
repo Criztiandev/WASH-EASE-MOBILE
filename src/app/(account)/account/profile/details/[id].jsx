@@ -31,7 +31,7 @@ const RootScreen = () => {
       <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={40}>
         <ScrollView>
           <View className="justify-center items-center my-4">
-            <Avatar.Image size={150} source={"https://github.com/shadcn.png"} />
+            <Avatar.Image size={150} />
           </View>
 
           <View className="justify-between ">

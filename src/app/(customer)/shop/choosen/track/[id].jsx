@@ -3,6 +3,8 @@ import React from "react";
 import { useLocalSearchParams } from "expo-router";
 
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+import MapFrame from "../../../../../components/atoms/MapFrame";
+import Button from "../../../../../components/atoms/Button";
 
 const ShopDetails = {
   name: "Shabu Houze",
@@ -20,6 +22,15 @@ const RootScreen = () => {
   return (
     <View className="flex-1">
       <ShopDetailsCover {...ShopDetails} />
+      <View className="flex-1"></View>
+
+      <View>
+        <Button>
+          <Text className="text-center items-center text-lg font-bold text-white">
+            Message
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 };

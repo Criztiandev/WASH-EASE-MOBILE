@@ -63,7 +63,7 @@ const RootScreen = () => {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() =>
-                router.push(`/shop/choosen/transaction/${item.id}`)
+                router.push(`/shop/choosen/laundry-details/${item.id}`)
               }>
               <View className="mx-4 border bg-green-300/50 border-green-500 rounded-[5px] overflow-hidden mb-4">
                 <ReviewCard {...item} />

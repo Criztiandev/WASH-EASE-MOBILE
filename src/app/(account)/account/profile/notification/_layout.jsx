@@ -1,18 +1,21 @@
+import { TouchableOpacity } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
-import { Text } from "react-native";
+import { Stack, router } from "expo-router";
+import { Icon } from "react-native-paper";
 
-const StackLayout = () => {
+const RootLayout = () => {
   return (
     <Stack>
       <Stack.Screen
         name="[id]"
         options={{
           title: "Notification",
-          headerTitle: () => (
-            <Text className="text-lg font-bold border flex-1">
-              Notification
-            </Text>
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="p-2 rounded-full mr-2">
+              <Icon source={"arrow-left"} size={24} />
+            </TouchableOpacity>
           ),
         }}
       />
@@ -20,4 +23,4 @@ const StackLayout = () => {
   );
 };
 
-export default StackLayout;
+export default RootLayout;

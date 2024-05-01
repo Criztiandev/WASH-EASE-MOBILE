@@ -1,6 +1,6 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 import ServiceTable from "../../../../../components/molecule/service-steps/partials/ServiceTable";
@@ -8,7 +8,6 @@ import Divider from "../../../../../components/atoms/Divider";
 import QuantityTable from "../../../../../components/molecule/service-steps/partials/QuantityTable";
 import { DataTable } from "react-native-paper";
 import TotalSection from "../../../../../components/molecule/service-steps/partials/TotalSection";
-import Button from "../../../../../components/atoms/Button";
 
 const ShopDetails = {
   name: "Shabu Houze",
@@ -63,14 +62,6 @@ const RootScreen = () => {
             <Divider />
             <TotalSection payload={[]} />
           </View>
-        </View>
-
-        <View className="px-4">
-          <Button onPress={() => router.back()}>
-            <Text className="text-center font-bold text-white text-lg">
-              Back
-            </Text>
-          </Button>
         </View>
       </ScrollView>
     </View>
