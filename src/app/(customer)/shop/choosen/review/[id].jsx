@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { Chip } from "react-native-paper";
 
@@ -16,6 +16,7 @@ import InputField from "../../../../../components/atoms/InputField";
 import { useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../../../../../components/atoms/Button";
+import { cn } from "../../../../../utils/dev.utils";
 
 const ShopDetails = {
   name: "Shabu Houze",
@@ -56,12 +57,34 @@ const Category = [
 
 const RootScreen = () => {
   const { id } = useLocalSearchParams();
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(0);
 
   const form = useForm({
-    defaultValues: {
-      description: "",
-    },
+    defaultValues: { description: "", rating: 0 },
   });
+
+  const handleSelectCategory = (id) => {
+    if (selectedCategories.includes(id)) {
+      setSelectedCategories(selectedCategories.filter((item) => item !== id));
+    } else {
+      setSelectedCategories([...selectedCategories, id]);
+    }
+  };
+
+  const onSubmit = (value) => {
+    const transformedPayload = {
+      ...value,
+      category: selectedCategories,
+    };
+
+    console.log(transformedPayload);
+  };
+
+  const handleRating = (value) => {
+    setSelectedRating(value);
+    form.setValue("rating", value);
+  };
 
   return (
     <View className="flex-1 ">
@@ -77,21 +100,45 @@ const RootScreen = () => {
           <FlatList
             data={Category}
             horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity className="min-w-[150px] max-w-[200px] px-4 py-2 rounded-full border border-gray-300 bg-white mr-2">
-                <Text className="text-lg font-md text-center">
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
-            )}
+            renderItem={({ item }) => {
+              const isSelected = selectedCategories.includes(item.id);
+              return (
+                <TouchableOpacity
+                  onPress={() => handleSelectCategory(item.id)}
+                  className={cn(
+                    `border border-gray-300 bg-white ${
+                      isSelected && "border-2 border-blue-500 bg-blue-300/50"
+                    } min-w-[150px] max-w-[200px] px-4 py-2 rounded-full  mr-3`
+                  )}>
+                  <Text className="text-lg font-md text-center">
+                    {item.title}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
             keyExtractor={(item) => item.id}
           />
         </View>
 
         <View className="px-4">
+          <Text>Select Rating</Text>
+          <View className=" rounded-[5px] my-4 border border-gray-300">
+            <Picker selectedValue={selectedRating} onValueChange={handleRating}>
+              <Picker.Item label="Select Rating" value="" />
+              <Picker.Item label="One Star" value={1} />
+              <Picker.Item label="Two Star" value={2} />
+              <Picker.Item label="Three Star" value={3} />
+              <Picker.Item label="Four Star" value={4} />
+              <Picker.Item label="Five Star" value={5} />
+            </Picker>
+          </View>
+        </View>
+
+        <View className="px-4">
           <Text className="text-lg font-bold mb-1">Description</Text>
-          <View className="border border-gray-300 rounded-[5px]">
+          <View className="border border-gray-300 rounded-[5px] p-4">
             <TextInput
+              onChangeText={(value) => form.setValue("description", value)}
               multiline={true}
               numberOfLines={10}
               style={{ height: 150, textAlignVertical: "top" }}
@@ -99,21 +146,8 @@ const RootScreen = () => {
           </View>
         </View>
 
-        <View className=" rounded-[5px] m-4 border border-gray-300">
-          <Picker
-            selectedValue={""}
-            onValueChange={(value) => console.log(value)}>
-            <Picker.Item label="Select Rating" value="" />
-            <Picker.Item label="One Star" value="1" />
-            <Picker.Item label="Two Star" value="2" />
-            <Picker.Item label="Three Star" value="3" />
-            <Picker.Item label="Four Star" value="4" />
-            <Picker.Item label="Five Star" value="5" />
-          </Picker>
-        </View>
-
         <View className="px-4">
-          <Button>
+          <Button onPress={form.handleSubmit(onSubmit)}>
             <Text className="text-center text-lg font-bold text-white">
               Submit
             </Text>

@@ -1,14 +1,14 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
+import { Icon, Searchbar } from "react-native-paper";
 
 const MOCKDATA = [
   {
     userId: 1,
     id: 1,
-    title:
-      "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    title: "sunt aut facere repellat provident occaecati ",
     body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
   },
   {
@@ -615,11 +615,26 @@ const MOCKDATA = [
 ];
 
 const RootScreen = () => {
+  const [searchedItems, setSearchedItems] = useState(MOCKDATA);
+
+  const handleSearch = (value) => {
+    const query = value.toLowerCase();
+    const filteredData = MOCKDATA.filter((item) =>
+      item.title.toLocaleLowerCase().includes(query)
+    );
+    setSearchedItems(filteredData);
+  };
+
   return (
     <View className="flex-1 ">
       <View className="flex-1 py-4">
+        <Searchbar
+          onChangeText={handleSearch}
+          className="mb-4 bg-white mx-4"
+          placeholder="Search here"
+        />
         <FlashList
-          data={MOCKDATA}
+          data={searchedItems}
           renderItem={({ item }) => (
             <View className="px-4  mb-2">
               <NotificationCard {...item} />
@@ -641,10 +656,23 @@ const NotificationCard = ({ id, title, body }) => {
       onPress={() => {
         router.push(`/shop/choosen/review/${id}`);
       }}>
-      <View className="p-4 border border-gray-300 bg-white space-y-1 rounded-[5px]">
-        <Text className="text-lg font-semibold capitalize">{title}</Text>
+      <View
+        className="p-4 border border-gray-300 bg-white space-y-1 rounded-[5px]"
+        style={{ flexShrink: 1 }}>
+        <View className="flex-row space-x-2 mb-2 items-center justify-between">
+          <Icon source={"bell"} size={24} />
+          <Text className="px-4 py-1 bg-gray-300 rounded-full max-w-[100px] text-center ml-auto font-semibold mb-2">
+            05/05/50
+          </Text>
+        </View>
+
+        <Text
+          className="text-lg font-semibold capitalize"
+          style={{ flexShrink: 1 }}>
+          {title}
+        </Text>
+
         <Text style={{ flexShrink: 1 }}>{body}</Text>
-        <Text>05/05/50</Text>
       </View>
     </TouchableOpacity>
   );
