@@ -7,7 +7,7 @@ import {
   FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Chip } from "react-native-paper";
 
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../../../../../components/atoms/Button";
 import { cn } from "../../../../../utils/dev.utils";
+import ScreenLayout from "../../../../../layout/ScreenLayout";
 
 const ShopDetails = {
   name: "Shabu Houze",
@@ -87,7 +88,7 @@ const RootScreen = () => {
   };
 
   return (
-    <View className="flex-1 ">
+    <ScreenLayout>
       <ScrollView>
         <ShopDetailsCover {...ShopDetails} />
 
@@ -95,7 +96,7 @@ const RootScreen = () => {
           Tell us what can be improved?
         </Text>
 
-        <View className="px-4 my-4">
+        <View className="px-2 my-4">
           <Text className="text-lg mb-2 font-bold">Categories</Text>
           <FlatList
             data={Category}
@@ -152,9 +153,15 @@ const RootScreen = () => {
               Submit
             </Text>
           </Button>
+
+          <Button variant={"outline"} onPress={() => router.back()}>
+            <Text className="text-center text-lg font-bold text-black">
+              Back
+            </Text>
+          </Button>
         </View>
       </ScrollView>
-    </View>
+    </ScreenLayout>
   );
 };
 
