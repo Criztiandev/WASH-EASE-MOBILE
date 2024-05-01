@@ -1,6 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import React from "react";
 import StarRating from "../../../assets/icons/start_fill_icon.svg";
+import ReviewCard from "../../atoms/ReviewCard";
 
 const MockDate = [
   {
@@ -41,12 +42,7 @@ const ReviewTab = () => {
     <View style={{ flex: 1, paddingBottom: 75 }}>
       <FlatList
         data={MockDate}
-        renderItem={({ item }) => (
-          <View className="bg-white p-4 mb-[8px]">
-            <DetailsHeader {...item} />
-            <Text>{item.comment}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <ReviewCard {...item} />}
         keyExtractor={(item) => item.id}
       />
     </View>
@@ -54,22 +50,3 @@ const ReviewTab = () => {
 };
 
 export default ReviewTab;
-
-const DetailsHeader = ({ name, rating, date }) => {
-  return (
-    <View className=" flex-row items-center space-x-4 mb-2">
-      <View className="w-[64px] h-[64px] rounded-full border"></View>
-      <View className="flex-row justify-between flex-1">
-        <View>
-          <Text className="text-[18px] font-bold">{name}</Text>
-          <View className="flex-row space-x-2 items-center">
-            <StarRating />
-            <Text className="font-bold opacity-60">{rating}</Text>
-          </View>
-        </View>
-
-        <Text className="text-[16] opacity-50">{date}</Text>
-      </View>
-    </View>
-  );
-};

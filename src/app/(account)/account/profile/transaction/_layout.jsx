@@ -8,12 +8,7 @@ const StackLayout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "Notification",
-          headerTitle: () => (
-            <Text className="text-lg font-bold border flex-1">
-              Notification
-            </Text>
-          ),
+          title: "Transaction",
         }}
       />
     </Stack>

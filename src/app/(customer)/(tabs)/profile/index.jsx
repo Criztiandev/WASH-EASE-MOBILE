@@ -40,7 +40,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         onPress={() => {
-          router.push(`/account/profile/notification/${id}`);
+          router.push(`/account/profile/transaction/${id}`);
         }}>
         <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} className="" />

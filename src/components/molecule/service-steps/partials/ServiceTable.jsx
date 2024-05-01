@@ -3,7 +3,7 @@ import React from "react";
 import { DataTable } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 
-const ServiceTable = ({ title, payload }) => {
+const ServiceTable = ({ title, payload = [] }) => {
   return (
     <DataTable className="">
       <DataTable.Header>
@@ -17,7 +17,7 @@ const ServiceTable = ({ title, payload }) => {
       </DataTable.Header>
 
       <View className="min-h-[64px]">
-        {payload.length <= 0 ? (
+        {payload?.length <= 0 ? (
           <View className="p-4 flex-1 items-center justify-center">
             <Text>No Available {title}</Text>
           </View>
