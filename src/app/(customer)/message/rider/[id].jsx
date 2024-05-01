@@ -33,11 +33,11 @@ const RootScreen = () => {
             <View className="flex-row">
               <IconButton
                 icon={"message"}
-                onPress={() => router.push(`/message/rider/${id}`)}
+                onPress={() => router.push(`./rider/${id}/message`)}
               />
               <IconButton
                 icon={"information"}
-                onPress={() => router.push(`/rider/details/${id}`)}
+                onPress={() => router.push(`./rider`)}
               />
             </View>
           </View>

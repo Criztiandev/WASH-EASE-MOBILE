@@ -1,9 +1,9 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { Provider } from "jotai";
 import Toast from "react-native-toast-message";
+
 const _layout = () => {
   return (
     <>
