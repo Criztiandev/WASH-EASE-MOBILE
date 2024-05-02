@@ -37,7 +37,7 @@ const RootScreen = () => {
               />
               <IconButton
                 icon={"information"}
-                onPress={() => router.push(`/rider/details/${id}`)}
+                onPress={() => router.push(`../order-details/${id}}`)}
               />
             </View>
           </View>

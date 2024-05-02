@@ -9,7 +9,7 @@ const RootLayout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "Transaction",
+          title: "Order Details",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
