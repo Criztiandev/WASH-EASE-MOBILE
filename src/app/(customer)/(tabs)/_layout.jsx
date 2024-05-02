@@ -13,7 +13,13 @@ const HomeTab = () => {
       <Tabs.Screen
         name="choosen-shop"
         options={{
-          title: "Shop",
+          title: "My Shop",
+        }}
+      />
+      <Tabs.Screen
+        name="shop-list"
+        options={{
+          title: "Search",
         }}
       />
 

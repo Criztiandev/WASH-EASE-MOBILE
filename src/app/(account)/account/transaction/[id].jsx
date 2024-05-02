@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Icon, Searchbar } from "react-native-paper";
-import ReviewCard from "../../../../../components/atoms/ReviewCard";
+import ReviewCard from "../../../../components/atoms/ReviewCard";
 
 const MOCKDATA = [
   {

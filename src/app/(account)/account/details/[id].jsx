@@ -7,10 +7,9 @@ import {
 } from "react-native";
 import React from "react";
 import { Avatar } from "react-native-paper";
-import FloationActionBtn from "../../../../../components/atoms/FloationActionBtn";
-import Button from "../../../../../components/atoms/Button";
+import Button from "../../../../components/atoms/Button";
 import { useForm } from "react-hook-form";
-import InputField from "../../../../../components/atoms/InputField";
+import InputField from "../../../../components/atoms/InputField";
 
 const RootScreen = () => {
   const form = useForm({

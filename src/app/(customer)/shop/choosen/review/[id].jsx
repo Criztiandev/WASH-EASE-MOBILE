@@ -88,80 +88,72 @@ const RootScreen = () => {
   };
 
   return (
-    <ScreenLayout>
-      <ScrollView>
-        <ShopDetailsCover {...ShopDetails} />
+    <ScrollView>
+      <ShopDetailsCover {...ShopDetails} />
 
-        <Text className="px-4 text-[32px] font-bold mt-4">
-          Tell us what can be improved?
-        </Text>
+      <Text className="px-4 text-[32px] font-bold mt-4">
+        Tell us what can be improved?
+      </Text>
 
-        <View className="px-2 my-4">
-          <Text className="text-lg mb-2 font-bold">Categories</Text>
-          <FlatList
-            data={Category}
-            horizontal
-            renderItem={({ item }) => {
-              const isSelected = selectedCategories.includes(item.id);
-              return (
-                <TouchableOpacity
-                  onPress={() => handleSelectCategory(item.id)}
-                  className={cn(
-                    `border border-gray-300 bg-white ${
-                      isSelected && "border-2 border-blue-500 bg-blue-300/50"
-                    } min-w-[150px] max-w-[200px] px-4 py-2 rounded-full  mr-3`
-                  )}>
-                  <Text className="text-lg font-md text-center">
-                    {item.title}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }}
-            keyExtractor={(item) => item.id}
+      <View className="px-2 my-4">
+        <Text className="text-lg mb-2 font-bold">Categories</Text>
+        <FlatList
+          data={Category}
+          horizontal
+          renderItem={({ item }) => {
+            const isSelected = selectedCategories.includes(item.id);
+            return (
+              <TouchableOpacity
+                onPress={() => handleSelectCategory(item.id)}
+                className={cn(
+                  `border border-gray-300 bg-white ${
+                    isSelected && "border-2 border-blue-500 bg-blue-300/50"
+                  } min-w-[150px] max-w-[200px] px-4 py-2 rounded-full  mr-3`
+                )}>
+                <Text className="text-lg font-md text-center">
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+
+      <View className="px-4">
+        <Text>Select Rating</Text>
+        <View className=" rounded-[5px] my-4 border border-gray-300">
+          <Picker selectedValue={selectedRating} onValueChange={handleRating}>
+            <Picker.Item label="Select Rating" value="" />
+            <Picker.Item label="One Star" value={1} />
+            <Picker.Item label="Two Star" value={2} />
+            <Picker.Item label="Three Star" value={3} />
+            <Picker.Item label="Four Star" value={4} />
+            <Picker.Item label="Five Star" value={5} />
+          </Picker>
+        </View>
+      </View>
+
+      <View className="px-4">
+        <Text className="text-lg font-bold mb-1">Description</Text>
+        <View className="border border-gray-300 rounded-[5px] p-4">
+          <TextInput
+            onChangeText={(value) => form.setValue("description", value)}
+            multiline={true}
+            numberOfLines={10}
+            style={{ height: 150, textAlignVertical: "top" }}
           />
         </View>
+      </View>
 
-        <View className="px-4">
-          <Text>Select Rating</Text>
-          <View className=" rounded-[5px] my-4 border border-gray-300">
-            <Picker selectedValue={selectedRating} onValueChange={handleRating}>
-              <Picker.Item label="Select Rating" value="" />
-              <Picker.Item label="One Star" value={1} />
-              <Picker.Item label="Two Star" value={2} />
-              <Picker.Item label="Three Star" value={3} />
-              <Picker.Item label="Four Star" value={4} />
-              <Picker.Item label="Five Star" value={5} />
-            </Picker>
-          </View>
-        </View>
-
-        <View className="px-4">
-          <Text className="text-lg font-bold mb-1">Description</Text>
-          <View className="border border-gray-300 rounded-[5px] p-4">
-            <TextInput
-              onChangeText={(value) => form.setValue("description", value)}
-              multiline={true}
-              numberOfLines={10}
-              style={{ height: 150, textAlignVertical: "top" }}
-            />
-          </View>
-        </View>
-
-        <View className="px-4">
-          <Button onPress={form.handleSubmit(onSubmit)}>
-            <Text className="text-center text-lg font-bold text-white">
-              Submit
-            </Text>
-          </Button>
-
-          <Button variant={"outline"} onPress={() => router.back()}>
-            <Text className="text-center text-lg font-bold text-black">
-              Back
-            </Text>
-          </Button>
-        </View>
-      </ScrollView>
-    </ScreenLayout>
+      <View className="px-4 mt-4">
+        <Button onPress={form.handleSubmit(onSubmit)}>
+          <Text className="text-center text-lg font-bold text-white">
+            Submit
+          </Text>
+        </Button>
+      </View>
+    </ScrollView>
   );
 };
 

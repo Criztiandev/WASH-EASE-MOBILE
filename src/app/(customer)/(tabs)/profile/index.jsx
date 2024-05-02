@@ -13,14 +13,14 @@ import FloationActionBtn from "../../../../components/atoms/FloationActionBtn";
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
   return (
-    <ScreenLayout className="p-2">
+    <ScreenLayout className="p-4 pt-6">
       <ProfileCard />
 
       {/* Navigation */}
 
       <TouchableOpacity
         onPress={() => {
-          router.push(`/account/profile/details/${id}`);
+          router.push(`/account/details/${id}`);
         }}>
         <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <AccountIcon width={32} height={32} className="" />
@@ -30,7 +30,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         onPress={() => {
-          router.push(`/account/profile/notification/${id}`);
+          router.push(`/account/notification/${id}`);
         }}>
         <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} className="" />
@@ -40,7 +40,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         onPress={() => {
-          router.push(`/account/profile/transaction/${id}`);
+          router.push(`/account/transaction/${id}`);
         }}>
         <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} className="" />
