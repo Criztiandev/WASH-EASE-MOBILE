@@ -1,6 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import Button from "../../atoms/Button";
+import { router } from "expo-router";
 
 const AboutTab = ({
   about = "No about details available",
@@ -27,7 +28,7 @@ const AboutTab = ({
           <Text className="text-[16px] opacity-60">{opening}</Text>
         </View>
 
-        <Button>
+        <Button onPress={() => router.push(`/shop/choosen/message/${123123}`)}>
           <Text className="text-center font-bold text-[18px] text-white">
             Message
           </Text>

@@ -4,7 +4,6 @@ import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 import AboutTab from "../../../../../components/views/tabs/AboutTab";
 import ShopServiceTab from "../../../../../components/views/tabs/shop-details/ShopServiceTab";
-import RequestTab from "../../../../../components/views/tabs/shop-details/RequestTab";
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 
 const ShopDetails = {
@@ -17,7 +16,7 @@ const ShopDetails = {
   status: "Open",
 };
 
-const RooScreen = () => {
+const RootScreen = () => {
   const { id } = useLocalSearchParams();
   const layout = useWindowDimensions();
 
@@ -25,13 +24,11 @@ const RooScreen = () => {
   const [routes] = useState([
     { key: "about", title: "About" },
     { key: "service", title: "Service" },
-    { key: "request", title: "Request" },
   ]);
 
   const renderScene = SceneMap({
     about: () => <AboutTab {...ShopDetails} />,
     service: () => <ShopServiceTab {...ShopDetails} />,
-    request: () => <RequestTab />,
   });
 
   return (
@@ -48,4 +45,4 @@ const RooScreen = () => {
   );
 };
 
-export default RooScreen;
+export default RootScreen;

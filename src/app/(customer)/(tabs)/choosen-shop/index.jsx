@@ -1,13 +1,12 @@
-import { View, Text, FlatList, ScrollView } from "react-native";
-import React from "react";
-import ScreenLayout from "../../../../layout/ScreenLayout";
-import SearchBar from "../../../../components/molecule/Searchbar";
-import MapFrame from "../../../../components/atoms/MapFrame";
-import { Link } from "expo-router";
-import LaundryShopCardHorizontal from "../../../../components/organism/LaundryShopCardHorizontal";
+import { Text, View, useWindowDimensions } from "react-native";
+import React, { useState } from "react";
+
 import LaundryShopCardVertical from "../../../../components/organism/LaundryShopCardVertical";
 import { Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
+import RequestTab from "../../../../components/views/tabs/shop-details/RequestTab";
+import { SceneMap, TabView } from "react-native-tab-view";
+import ScreenLayout from "../../../../layout/ScreenLayout";
 
 const MOCKDATA = [
   {
@@ -45,9 +44,38 @@ const MOCKDATA = [
   },
 ];
 
-const ChoosenShopScreen = () => {
+const RootScreen = () => {
+  const layout = useWindowDimensions();
+
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: "shop", title: "Shops" },
+    { key: "request", title: "Request" },
+  ]);
+
+  const renderScene = SceneMap({
+    shop: () => <ShopListTab />,
+    request: () => <RequestTab />,
+  });
+
   return (
-    <ScreenLayout className="bg-[#f0f0f0] px-2 space-y-4 ">
+    <ScreenLayout>
+      <Text className="text-2xl font-bold p-4">Shop Lists</Text>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+      />
+    </ScreenLayout>
+  );
+};
+
+export default RootScreen;
+
+const ShopListTab = () => {
+  return (
+    <View className="px-2 flex-1">
       <Searchbar className="bg-white my-4" placeholder="Search" />
 
       <View className="flex-1">
@@ -63,8 +91,6 @@ const ChoosenShopScreen = () => {
           keyExtractor={(item) => item.id}
         />
       </View>
-    </ScreenLayout>
+    </View>
   );
 };
-
-export default ChoosenShopScreen;

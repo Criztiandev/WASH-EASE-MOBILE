@@ -8,7 +8,7 @@ const RootLayout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "",
+          title: "Shop Details",
           headerShadowVisible: false,
           headerStyle: "inherit",
         }}
