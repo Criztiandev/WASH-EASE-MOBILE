@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-import ScreenLayout from "../../../../../layout/ScreenLayout";
-import Button from "../../../../../components/atoms/Button";
+import ScreenLayout from "../../../../layout/ScreenLayout";
+import Button from "../../../../components/atoms/Button";
 import { router } from "expo-router";
 
 const SucessScreen = () => {

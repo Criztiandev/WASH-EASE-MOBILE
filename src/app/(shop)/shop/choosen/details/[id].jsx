@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 
-import ShopServiceTab from "../../../../../../components/views/tabs/shop-details/ShopServiceTab";
-import ShopDetailsCover from "../../../../../../components/organism/ShopDetailsCover";
-import AboutTab from "../../../../../../components/views/tabs/AboutTab";
+import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+import AboutTab from "../../../../../components/views/tabs/AboutTab";
+import ShopServiceTab from "../../../../../components/views/tabs/shop-details/ShopServiceTab";
 
 const ShopDetails = {
   name: "Shabu Houze",

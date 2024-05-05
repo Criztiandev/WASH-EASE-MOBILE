@@ -6,18 +6,18 @@ import { useAtomValue } from "jotai";
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 
-import { stepAtom } from "../../../../../service/states/service.atoms";
+import { stepAtom } from "../../../../service/states/service.atoms";
 
 // Components
-import Button from "../../../../../components/atoms/Button";
-import useMultiform from "../../../../../hooks/useMultiform";
+import Button from "../../../../components/atoms/Button";
+import useMultiform from "../../../../hooks/useMultiform";
 
 // Steps
-import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
-import SelectMaterialStep from "../../../../../components/molecule/service-steps/SelectMaterialStep";
-import SelectDryCleaningStep from "../../../../../components/molecule/service-steps/SelectDryCleaningStep";
-import SelectIroningStep from "../../../../../components/molecule/service-steps/SelectIroningStep";
-import PaymentStep from "../../../../../components/molecule/service-steps/PaymentStep";
+import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
+import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
+import SelectDryCleaningStep from "../../../../components/molecule/service-steps/SelectDryCleaningStep";
+import SelectIroningStep from "../../../../components/molecule/service-steps/SelectIroningStep";
+import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
 
 const Basic1 = [
   {

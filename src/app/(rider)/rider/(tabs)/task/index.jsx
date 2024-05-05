@@ -76,7 +76,9 @@ const RootScreen = () => {
           data={filteredData}
           ItemSeparatorComponent={renderSeparator}
           renderItem={({ item }) => (
-            <LaundryShopCardVertical {...item} path={`/details/${item.id}`}>
+            <LaundryShopCardVertical
+              {...item}
+              path={`/rider/task/details/${item.id}`}>
               <View className="flex-row items-center space-x-2">
                 <Icon size={24} source={"information"} className="border" />
                 <Text className="text-md font-bold">

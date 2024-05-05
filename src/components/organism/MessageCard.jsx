@@ -13,10 +13,10 @@ const MessageCard = ({ userName, lastMessageSent, unreadCount }) => {
         <Avatar.Icon />
         <View>
           <Text className="text-[16px] font-bold">
-            {userName.substr(0, 25)}
+            {userName?.substr(0, 25)}
           </Text>
           <Text className="text-[16px] opacity-50">
-            {lastMessageSent.substr(0, 30)}....
+            {lastMessageSent?.substr(0, 30)}....
           </Text>
         </View>
       </View>

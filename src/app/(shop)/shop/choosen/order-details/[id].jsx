@@ -3,11 +3,11 @@ import { View, Text, ScrollView } from "react-native";
 import { DataTable } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router";
 
-import ShopDetailsCover from "../../../../../../components/organism/ShopDetailsCover";
-import ServiceTable from "../../../../../../components/molecule/service-steps/partials/ServiceTable";
-import Divider from "../../../../../../components/atoms/Divider";
-import QuantityTable from "../../../../../../components/molecule/service-steps/partials/QuantityTable";
-import TotalSection from "../../../../../../components/molecule/service-steps/partials/TotalSection";
+import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+import ServiceTable from "../../../../../components/molecule/service-steps/partials/ServiceTable";
+import Divider from "../../../../../components/atoms/Divider";
+import QuantityTable from "../../../../../components/molecule/service-steps/partials/QuantityTable";
+import TotalSection from "../../../../../components/molecule/service-steps/partials/TotalSection";
 
 const ShopDetails = {
   name: "Shabu Houze",

@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 
-import AboutTab from "../../../../../components/views/tabs/AboutTab";
-import ReviewTab from "../../../../../components/views/tabs/ReviewTab";
-import ServiceTab from "../../../../../components/views/tabs/ServiceTab";
-import Button from "../../../../../components/atoms/Button";
-import ScreenLayout from "../../../../../layout/ScreenLayout";
-import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+import AboutTab from "../../../../components/views/tabs/AboutTab";
+import ReviewTab from "../../../../components/views/tabs/ReviewTab";
+import ServiceTab from "../../../../components/views/tabs/ServiceTab";
+import Button from "../../../../components/atoms/Button";
+import ScreenLayout from "../../../../layout/ScreenLayout";
+import ShopDetailsCover from "../../../../components/organism/ShopDetailsCover";
 const renderScene = SceneMap({
   about: AboutTab,
   reviews: ReviewTab,

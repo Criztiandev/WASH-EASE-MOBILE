@@ -10,10 +10,10 @@ import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
-import { cn } from "../../../../../../utils/dev.utils";
 
-import ShopDetailsCover from "../../../../../../components/organism/ShopDetailsCover";
-import Button from "../../../../../../components/atoms/Button";
+import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+import Button from "../../../../../components/atoms/Button";
+import { cn } from "../../../../../utils/dev.utils";
 
 const ShopDetails = {
   name: "Shabu Houze",

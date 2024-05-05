@@ -4,17 +4,17 @@ import { useAtomValue } from "jotai";
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 
-import { stepAtom } from "../../../../../service/states/service.atoms";
-import useMultiform from "../../../../../hooks/useMultiform";
+import { stepAtom } from "../../../../service/states/service.atoms";
+import useMultiform from "../../../../hooks/useMultiform";
 
-import Button from "../../../../../components/atoms/Button";
+import Button from "../../../../components/atoms/Button";
 
 //Steps
-import SelectWashMachineStep from "../../../../../components/molecule/service-steps/SelectWashMachineStep";
-import SelectDryMachineStep from "../../../../../components/molecule/service-steps/SelectDryMachineStep";
-import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
-import SelectMaterialStep from "../../../../../components/molecule/service-steps/SelectMaterialStep";
-import PaymentStep from "../../../../../components/molecule/service-steps/PaymentStep";
+import SelectWashMachineStep from "../../../../components/molecule/service-steps/SelectWashMachineStep";
+import SelectDryMachineStep from "../../../../components/molecule/service-steps/SelectDryMachineStep";
+import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
+import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
+import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
 
 const SelfServiceScreen = () => {
   const currentStep = useAtomValue(stepAtom);
