@@ -5,6 +5,7 @@ import { View, FlatList, ScrollView } from "react-native";
 import MapFrame from "../../../../../components/atoms/MapFrame";
 import LaundryShopCardHorizontal from "../../../../../components/organism/LaundryShopCardHorizontal";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
+import HeroShopCard from "../../../../../components/organism/HeroShopCard";
 
 const MOCKDATA = [
   {
@@ -61,7 +62,7 @@ const HomeScreen = () => {
             horizontal
             data={MOCKDATA}
             ItemSeparatorComponent={renderSeparator}
-            renderItem={({ item }) => <LaundryShopCardHorizontal {...item} />}
+            renderItem={({ item }) => <HeroShopCard {...item} />}
           />
         </View>
       </ScrollView>

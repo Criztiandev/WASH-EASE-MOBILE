@@ -1,7 +1,7 @@
-import { View, Text, FlatList } from "react-native";
+import { View } from "react-native";
 import React from "react";
-import StarRating from "../../../assets/icons/start_fill_icon.svg";
 import ReviewCard from "../../atoms/ReviewCard";
+import { FlashList } from "@shopify/flash-list";
 
 const MockDate = [
   {
@@ -39,11 +39,12 @@ const MockDate = [
 
 const ReviewTab = () => {
   return (
-    <View style={{ flex: 1, paddingBottom: 75 }}>
-      <FlatList
+    <View style={{ flex: 1 }}>
+      <FlashList
         data={MockDate}
         renderItem={({ item }) => <ReviewCard {...item} />}
         keyExtractor={(item) => item.id}
+        estimatedItemSize={200}
       />
     </View>
   );

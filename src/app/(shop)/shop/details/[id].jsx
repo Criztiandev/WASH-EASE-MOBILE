@@ -6,11 +6,27 @@ import { TabView, SceneMap } from "react-native-tab-view";
 import AboutTab from "../../../../components/views/tabs/AboutTab";
 import ReviewTab from "../../../../components/views/tabs/ReviewTab";
 import ServiceTab from "../../../../components/views/tabs/ServiceTab";
-import Button from "../../../../components/atoms/Button";
-import ScreenLayout from "../../../../layout/ScreenLayout";
 import ShopDetailsCover from "../../../../components/organism/ShopDetailsCover";
+import Button from "../../../../components/atoms/Button";
+
+const Details = {
+  name: "Shabu Houze",
+  address: "Biringan Leyte",
+  rating: 5.0,
+  about:
+    "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+  opening: "5 AM - 6 PM",
+  status: "Open",
+};
+
 const renderScene = SceneMap({
-  about: AboutTab,
+  about: () => (
+    <AboutTab
+      about="The Place is full of shinanigans"
+      address="Biringan City"
+      opening="10:30 - 3:30"
+    />
+  ),
   reviews: ReviewTab,
   service: ServiceTab,
 });
@@ -27,8 +43,8 @@ const ShopDetails = () => {
   ]);
 
   return (
-    <ScreenLayout>
-      <ShopDetailsCover />
+    <View className="flex-1">
+      <ShopDetailsCover {...Details} />
 
       <View className="flex-1">
         <TabView
@@ -39,14 +55,14 @@ const ShopDetails = () => {
         />
       </View>
 
-      <View className="absolute bottom-0 px-4 w-full ">
+      <View className="px-4">
         <Button>
-          <Text className="text-white text-center font-bold text-[18px] ">
+          <Text className="text-center text-white font-bold text-lg">
             Choose
           </Text>
         </Button>
       </View>
-    </ScreenLayout>
+    </View>
   );
 };
 

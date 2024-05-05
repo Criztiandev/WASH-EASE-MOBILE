@@ -6,16 +6,6 @@ import { IconButton, Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 import { Picker } from "@react-native-picker/picker";
 
-const ShopDetails = {
-  name: "Shabu Houze",
-  address: "Biringan Leyte",
-  rating: 5.0,
-  about:
-    "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
-  opening: "5 AM - 6 PM",
-  status: "Open",
-};
-
 const MOCKDATA = [
   {
     id: 0,

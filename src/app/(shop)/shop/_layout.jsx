@@ -5,12 +5,16 @@ import { Stack } from "expo-router";
 const RootLayout = () => {
   return (
     <Stack>
+      <Stack.Screen name="choosen" />
+      <Stack.Screen name="dashboard" />
       <Stack.Screen
-        name="[id]"
+        name="details"
         options={{
-          title: "Track",
+          title: "Details",
         }}
       />
+      <Stack.Screen name="lists" />
+      <Stack.Screen name="service" />
     </Stack>
   );
 };

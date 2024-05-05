@@ -77,7 +77,12 @@ const ShoplistScreen = () => {
         <FlatList
           data={filteredData}
           ItemSeparatorComponent={renderSeparator}
-          renderItem={({ item }) => <LaundryShopCardVertical {...item} />}
+          renderItem={({ item }) => (
+            <LaundryShopCardVertical
+              path={`/shop/details/${item.id}`}
+              {...item}
+            />
+          )}
         />
       </View>
     </ScreenLayout>
