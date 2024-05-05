@@ -3,15 +3,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Avatar, Card } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import FloationActionBtn from "../../../../../components/atoms/FloationActionBtn";
 import NotificationIcon from "../../../../../assets/icons/notification_icon.svg";
 import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
 import { useSetAtom } from "jotai";
 import { AuthAtoms } from "../../../../(auth)";
-
-//TODO:Transaction History
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();

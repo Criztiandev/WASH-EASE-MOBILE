@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import { Avatar } from "react-native-paper";
+import MapView from "react-native-maps";
 
 const RootScreen = () => {
   return (
@@ -14,7 +15,9 @@ const RootScreen = () => {
         </View>
       </View>
 
-      
+      <View className="flex-1 border">
+        <MapView className="w-full h-full" />
+      </View>
     </ScreenLayout>
   );
 };

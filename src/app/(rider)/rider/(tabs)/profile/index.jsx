@@ -3,19 +3,29 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Avatar, Card } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import FloationActionBtn from "../../../../../components/atoms/FloationActionBtn";
 import NotificationIcon from "../../../../../assets/icons/notification_icon.svg";
 import AccountIcon from "../../../../../assets/icons/account_icon.svg";
-
-//TODO:Transaction History
+import Button from "../../../../../components/atoms/Button";
+import Toast from "react-native-toast-message";
+import { useSetAtom } from "jotai";
+import { AuthAtoms } from "../../../../(auth)";
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
+  const setAuthAtom = useSetAtom(AuthAtoms);
+
+  const handleLogout = () => {
+    Toast.show({
+      type: "success",
+      text1: "Logout Successfully",
+    });
+
+    router.push("/auth/sign-in");
+    setAuthAtom("");
+  };
   return (
     <ScreenLayout className="p-4 pt-6">
       <ProfileCard />
-
-      {/* Navigation */}
 
       <TouchableOpacity
         onPress={() => {
@@ -47,7 +57,9 @@ const ProfileScreen = () => {
         </View>
       </TouchableOpacity>
 
-      <FloationActionBtn className="bg-red-400" label={"Logout"} />
+      <View className="my-4">
+        <Button onPress={handleLogout}>Logout</Button>
+      </View>
     </ScreenLayout>
   );
 };

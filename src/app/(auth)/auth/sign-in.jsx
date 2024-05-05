@@ -25,7 +25,7 @@ const SingInScreen = () => {
       text1: "Login Successfully",
     });
 
-    setAuthAtom("user");
+    setAuthAtom("rider");
   };
   return (
     <ScreenLayout>

@@ -170,7 +170,11 @@ const RootScreen = () => {
           <FlashList
             data={MOCKDATA}
             renderItem={({ item }) => (
-              <MessageCard userName={item.fullName} {...item} />
+              <MessageCard
+                path={`/rider/message/${item.id}`}
+                userName={item.fullName}
+                {...item}
+              />
             )}
             estimatedItemSize={200}
             keyExtractor={(item) => item.id}
