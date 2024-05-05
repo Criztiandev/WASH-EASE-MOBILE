@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Icon } from "react-native-paper";
 
 const RootLayout = () => {
@@ -17,6 +17,24 @@ const RootLayout = () => {
               <Icon source={"arrow-left"} size={24} />
             </TouchableOpacity>
           ),
+
+          headerRight: () => {
+            const { id } = useLocalSearchParams();
+            return (
+              <View className="flex-row items-center">
+                <TouchableOpacity
+                  onPress={() => router.push(`/shop/choosen/message/${id}`)}
+                  className="p-2 rounded-full mr-2">
+                  <Icon source={"message"} size={24} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.push(`/shop/choosen/details/${id}`)}
+                  className="p-2 rounded-full mr-2">
+                  <Icon source={"information"} size={24} />
+                </TouchableOpacity>
+              </View>
+            );
+          },
         }}
       />
 
@@ -24,6 +42,13 @@ const RootLayout = () => {
         name="order-details"
         options={{
           title: "Order Details",
+        }}
+      />
+
+      <Stack.Screen
+        name="details"
+        options={{
+          title: "Details",
         }}
       />
     </Stack>

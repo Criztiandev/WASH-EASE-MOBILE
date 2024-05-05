@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { FlashList } from "@shopify/flash-list";
-import LaundryShopCard from "../../molecule/cards/LaundryShopCardHorizontal";
+import LaundryShopCardHorizontal from "../../molecule/cards/LaundryShopCardHorizontal";
 import { Searchbar } from "react-native-paper";
 
 const MOCKDATA = [
@@ -51,7 +51,7 @@ const ShopListTab = () => {
         <FlashList
           data={MOCKDATA}
           renderItem={({ item }) => (
-            <LaundryShopCard
+            <LaundryShopCardHorizontal
               path={`/shop/choosen/details/${item.id}`}
               {...item}
             />

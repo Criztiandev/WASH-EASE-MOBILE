@@ -1,13 +1,13 @@
-import { View, useWindowDimensions } from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
 import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 
-import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 import AboutTab from "../../../../../components/views/tabs/AboutTab";
-import ShopServiceTab from "../../../../../components/views/tabs/shop-details/ShopServiceTab";
-
-const ShopDetails = {
+import ShopReviewTabs from "../../../../../components/views/tabs/ShopReviewTabs";
+import ShopServiceOfferTab from "../../../../../components/views/tabs/ShopServiceOfferTab";
+import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
+const Details = {
   name: "Shabu Houze",
   address: "Biringan Leyte",
   rating: 5.0,
@@ -17,33 +17,41 @@ const ShopDetails = {
   status: "Open",
 };
 
-const RootScreen = () => {
+const ShopDetails = () => {
   const { id } = useLocalSearchParams();
   const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: "about", title: "About" },
-    { key: "service", title: "Service" },
+    { key: "reviews", title: "Reviews" },
   ]);
 
   const renderScene = SceneMap({
-    about: () => <AboutTab {...ShopDetails} />,
-    service: () => <ShopServiceTab {...ShopDetails} />,
+    about: () => (
+      <AboutTab
+        about="The Place is full of shinanigans"
+        address="Biringan City"
+        opening="10:30 - 3:30"
+      />
+    ),
+    reviews: ShopReviewTabs,
   });
 
   return (
     <View className="flex-1">
-      <ShopDetailsCover {...ShopDetails} />
+      <ShopDetailsCover {...Details} />
 
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-      />
+      <View className="flex-1">
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+        />
+      </View>
     </View>
   );
 };
 
-export default RootScreen;
+export default ShopDetails;

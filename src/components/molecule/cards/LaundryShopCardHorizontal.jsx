@@ -20,11 +20,11 @@ const statusFlag = cva("right-0 m-2", {
   },
 });
 
-const LaundryShopCard = ({ image, title, id, details, status }) => {
+const LaundryShopCardHorizontal = ({ image, title, id, details, status }) => {
   const statusStyle = cn(statusFlag({ status }));
 
   return (
-    <View className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 mx-4">
+    <View className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pb-4 mb-4 mx-4">
       <Image
         source={image}
         contentFit="cover"
@@ -68,4 +68,4 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
   );
 };
 
-export default LaundryShopCard;
+export default LaundryShopCardHorizontal;

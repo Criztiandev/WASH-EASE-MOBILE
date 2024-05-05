@@ -2,7 +2,8 @@ import { View, FlatList } from "react-native";
 import { Searchbar } from "react-native-paper";
 import React, { useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import LaundryShopCardVertical from "../../../../../components/molecule/cards/LaundryShopCardVertical";
+import LaundryShopCardHorizontal from "../../../../../components/molecule/cards/LaundryShopCardHorizontal";
+import { FlashList } from "@shopify/flash-list";
 
 const MOCKDATA = [
   {
@@ -64,26 +65,28 @@ const ShoplistScreen = () => {
     setFilteredData(filteredData);
   };
 
-  const renderSeparator = () => <View style={{ width: 8 }} />;
-
   return (
-    <ScreenLayout className="bg-[#f0f0f0]">
-      <View className="px-[16px] pt-[16px] space-y-4">
-        <Searchbar
-          placeholder="Search"
-          className="bg-white"
-          onChangeText={() => console.log("hi")}
-        />
-        <FlatList
-          data={filteredData}
-          ItemSeparatorComponent={renderSeparator}
-          renderItem={({ item }) => (
-            <LaundryShopCardVertical
-              path={`/shop/details/${item.id}`}
-              {...item}
-            />
-          )}
-        />
+    <ScreenLayout>
+      <View className="flex-1">
+        <View className="px-4 my-4">
+          <Searchbar
+            placeholder="Search"
+            className="bg-white"
+            onChangeText={() => console.log("hi")}
+          />
+        </View>
+        <View className="flex-1">
+          <FlashList
+            data={filteredData}
+            estimatedItemSize={200}
+            renderItem={({ item }) => (
+              <LaundryShopCardHorizontal
+                path={`/shop/details/${item.id}`}
+                {...item}
+              />
+            )}
+          />
+        </View>
       </View>
     </ScreenLayout>
   );
