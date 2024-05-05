@@ -36,9 +36,7 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
           {title}
         </Text>
 
-        <View className="opacity-50 space-y-2 space-x-4 ">
-          <View></View>
-
+        <View className="opacity-50 space-y-2 ">
           <View className="space-x-2 flex-row items-center">
             <LocationIcon className="text-gray-400" />
             <Text className="text-[16px]">{details.location}</Text>

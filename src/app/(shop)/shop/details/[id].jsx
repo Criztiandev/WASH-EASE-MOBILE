@@ -19,18 +19,6 @@ const Details = {
   status: "Open",
 };
 
-const renderScene = SceneMap({
-  about: () => (
-    <AboutTab
-      about="The Place is full of shinanigans"
-      address="Biringan City"
-      opening="10:30 - 3:30"
-    />
-  ),
-  reviews: ShopReviewTabs,
-  service: ShopServiceOfferTab,
-});
-
 const ShopDetails = () => {
   const { id } = useLocalSearchParams();
   const layout = useWindowDimensions();
@@ -41,6 +29,18 @@ const ShopDetails = () => {
     { key: "reviews", title: "Reviews" },
     { key: "service", title: "Service" },
   ]);
+
+  const renderScene = SceneMap({
+    about: () => (
+      <AboutTab
+        about="The Place is full of shinanigans"
+        address="Biringan City"
+        opening="10:30 - 3:30"
+      />
+    ),
+    reviews: ShopReviewTabs,
+    service: () => <ShopServiceOfferTab id={id} status={true} />,
+  });
 
   return (
     <View className="flex-1">

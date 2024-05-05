@@ -4,7 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 
 import ShopServiceTab from "../../../../components/views/tabs/shop-details/ShopServiceTab";
-import RequestTab from "../../../../components/views/tabs/shop-details/RequestTab";
+import RequestTab from "../../../../components/views/tabs/RequestTab";
 import AboutTab from "../../../../components/views/tabs/AboutTab";
 import ShopDetailsCover from "../../../../components/organism/ShopDetailsCover";
 const renderScene = SceneMap({

@@ -12,6 +12,7 @@ import CloseIcon from "../../../assets/icons/close_icon.svg";
 import ShopServiceDetailCard from "../../molecule/ShopServiceDetailCard";
 import { Icon, IconButton } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
 
 const MOCKDATA = [
   {
@@ -34,13 +35,22 @@ const MOCKDATA = [
   },
 ];
 
-const ShopServiceOfferTab = () => {
+const ShopServiceOfferTab = ({ id, onPress, status }) => {
   const [isToggle, setIsToggle] = useState(false);
-  const [selected, setIsSelected] = useState("");
+  const [selectedService, setSelectedService] = useState("");
 
   const toggleModal = (id) => {
+    const credentials = MOCKDATA.find((items) => items.id === id) || [];
     setIsToggle((prev) => !prev);
-    setIsSelected(id);
+    setSelectedService(credentials);
+  };
+
+  const handleSelect = () => {
+    const currentTitle = selectedService?.title.replace(" ", "-");
+    if (!currentTitle) return;
+
+    setIsToggle(false);
+    router.push(`/shop/service/${currentTitle.toLowerCase()}`);
   };
 
   return (
@@ -59,19 +69,14 @@ const ShopServiceOfferTab = () => {
 
       <Modal animationType="slide" visible={isToggle} className="">
         <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-2xl font-semibold">Description</Text>
+          <Text className="text-2xl font-semibold">
+            {selectedService?.title}
+          </Text>
           <IconButton icon={"close"} onPress={() => setIsToggle(false)} />
         </View>
 
         <View className="px-4 space-y-4">
-          <Text className="text-base">
-            Experience the ultimate in convenience and care with our Full
-            Service Laundry package. We handle everything from sorting to
-            folding, ensuring each garment receives the attention it deserves.
-            Our services include professional washing, drying, and precision
-            ironing, using eco-friendly detergents and advanced cleaning
-            technologies.
-          </Text>
+          <Text className="text-base">{selectedService?.description}</Text>
           <View className="flex-row items-center space-x-2">
             <Icon source={"clock"} size={24} />
             <Text className="text-base">30 Minutes</Text>
@@ -84,7 +89,9 @@ const ShopServiceOfferTab = () => {
         </View>
 
         <View className="absolute bottom-0 w-full  px-4">
-          <Button className={"w-full"}>Choose</Button>
+          <Button className={"w-full"} onPress={handleSelect}>
+            {status ? "Select Service" : "Choose Shop"}
+          </Button>
         </View>
       </Modal>
     </>
