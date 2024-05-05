@@ -55,12 +55,14 @@ const RequestScreen = () => {
     <View className="flex-1">
       <ShopDetailsCover {...Details} />
 
-      <View className="p-4">
-        <RequestHeader id={id} name={"Geral Suarez"} status={"Online"} />
+      <View className="flex-1 m-4  border border-gray-300 bg-white rounded-[5px] p-4">
+        <View className="flex-1">
+          <Timeline data={timeline} />
+        </View>
       </View>
 
-      <View className="flex-1 mx-4 border border-gray-300 bg-white p-4 rounded-[5px]">
-        <Timeline data={timeline} />
+      <View className="p-4">
+        <RequestHeader id={id} name={"Geral Suarez"} status={"Online"} />
       </View>
     </View>
   );

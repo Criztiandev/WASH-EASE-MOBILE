@@ -4,6 +4,7 @@ import HorizontalCard from "../../molecule/HorizontalCard";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import LaundryShopCardVertical from "../../molecule/cards/LaundryShopCardVertical";
+import RequestCard from "../../molecule/cards/RequestCard";
 
 const MOCKDATA = [
   {
@@ -44,11 +45,8 @@ const RequestTab = () => {
       <FlashList
         data={MOCKDATA}
         renderItem={({ item }) => (
-          <View className="px-4 ">
-            <LaundryShopCardVertical
-              path={`/shop/choosen/request/${item.id}`}
-              {...item}
-            />
+          <View className="">
+            <RequestCard path={`/shop/choosen/request/${item.id}`} {...item} />
           </View>
         )}
         estimatedItemSize={200}
