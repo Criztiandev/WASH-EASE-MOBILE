@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, Modal } from "react-native";
 import InfoIcon from "../../../../assets/icons/info_icon.svg";
 import { cn } from "../../../../utils/dev.utils";
-import { Modal, Portal } from "react-native-paper";
+import { Icon, IconButton, Portal } from "react-native-paper";
+import Button from "../../../atoms/Button";
 
 const ServiceItem = ({
   id: serviceID,
@@ -26,6 +27,8 @@ const ServiceItem = ({
       });
       return newValue;
     });
+
+    setIsModalVisible(false);
   }, [onSelect, serviceID]);
 
   return (
@@ -34,7 +37,7 @@ const ServiceItem = ({
         className={cn(
           `${
             checked && "bg-blue-300/50 border-2 border-blue-400"
-          } rounded-[5px] mb-2`
+          } rounded-[5px] mt-4 mx-4 `
         )}
         onPress={handleChecked}>
         <View className=" max-h-[150px] py-4 px-2 flex-row justify-between ">
@@ -53,16 +56,32 @@ const ServiceItem = ({
       </TouchableOpacity>
 
       <Portal>
-        <Modal visible={isModalVisible} onDismiss={toggleModal}>
-          <View className=" bg-white h-[300px] mx-4 p-4 rounded-[5px] space-y-4">
-            <Text
-              className="text-center font-bold text-[32px]"
-              style={{ flexShrink: 1 }}>
-              Description
-            </Text>
-            <Text className="text-[16px]" style={{ flexShrink: 1 }}>
-              {description}
-            </Text>
+        <Modal animationType="slide" visible={isModalVisible} className="">
+          <View className="flex-row justify-between p-4 items-center">
+            <Text className="text-2xl font-semibold">{title}</Text>
+            <IconButton
+              icon={"close"}
+              onPress={() => setIsModalVisible(false)}
+            />
+          </View>
+
+          <View className="px-4 space-y-4">
+            <Text className="text-base">{description}</Text>
+            <View className="flex-row items-center space-x-2">
+              <Icon source={"clock"} size={24} />
+              <Text className="text-base">30 Minutes</Text>
+            </View>
+
+            <View className="flex-row items-center space-x-2">
+              <Icon source={"weight-kilogram"} size={24} />
+              <Text className="text-base">Max 7Kgs</Text>
+            </View>
+          </View>
+
+          <View className="absolute bottom-0 w-full  px-4">
+            <Button className={"w-full"} onPress={handleChecked}>
+              Select
+            </Button>
           </View>
         </Modal>
       </Portal>

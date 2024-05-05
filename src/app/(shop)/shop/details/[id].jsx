@@ -7,7 +7,6 @@ import AboutTab from "../../../../components/views/tabs/AboutTab";
 import ShopReviewTabs from "../../../../components/views/tabs/ShopReviewTabs";
 import ShopServiceOfferTab from "../../../../components/views/tabs/ShopServiceOfferTab";
 import ShopDetailsCover from "../../../../components/organism/ShopDetailsCover";
-import Button from "../../../../components/atoms/Button";
 
 const Details = {
   name: "Shabu Houze",
