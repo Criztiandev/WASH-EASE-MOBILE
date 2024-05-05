@@ -9,6 +9,9 @@ const InputField = ({
   label,
   className,
   keyboardType,
+  contentClassName,
+  labelClassName,
+  isPassword = false,
   ...props
 }) => {
   const { field } = useController({
@@ -16,19 +19,21 @@ const InputField = ({
     name,
   });
 
-  const defaultyStyle = cn("mb-4", className);
+  const defaultyStyle = cn("text-base", className);
+  const containerStyle = cn("mb-4", contentClassName);
+  const labelStyle = cn("text-base font-semibold mb-2", labelClassName);
 
   return (
-    <View className={defaultyStyle}>
-      <Text className="text-[16px] mb-2 font-semibold">{label}</Text>
-      <View
-        className={"w-full  px-4 py-2 rounded-[5px] border border-gray-300"}>
+    <View className={containerStyle}>
+      {label && <Text className={labelStyle}>{label}</Text>}
+      <View className="w-full  rounded-[5px] px-4 py-2 bg-blue-200 border border-blue-800">
         <TextInput
+          secureTextEntry={isPassword}
+          className={defaultyStyle}
           value={field.value}
           onBlur={field.onBlur}
           onChangeText={field.onChange}
           placeholder={props.placeholder}
-          keyboardType={keyboardType}
         />
       </View>
     </View>
