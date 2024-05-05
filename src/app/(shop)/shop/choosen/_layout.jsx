@@ -51,6 +51,13 @@ const RootLayout = () => {
           title: "Details",
         }}
       />
+
+      <Stack.Screen
+        name="message"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };
