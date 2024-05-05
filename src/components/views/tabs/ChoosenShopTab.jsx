@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { FlashList } from "@shopify/flash-list";
-import LaundryShopCard from "../../organism/LaundryShopCardHorizontal";
+import LaundryShopCard from "../../molecule/cards/LaundryShopCardHorizontal";
 import { Searchbar } from "react-native-paper";
 
 const MOCKDATA = [

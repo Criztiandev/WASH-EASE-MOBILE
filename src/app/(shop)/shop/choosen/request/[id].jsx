@@ -9,7 +9,7 @@ import ShopServiceOfferTab from "../../../../../components/views/tabs/ShopServic
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 import AboutTab from "../../../../../components/views/tabs/AboutTab";
 import { Avatar, IconButton } from "react-native-paper";
-import RequestHeader from "../../../../../components/molecule/message/RequestHeader";
+import RequestHeader from "../../../../../components/molecule/header/RequestHeader";
 
 const Details = {
   name: "Shabu Houze",

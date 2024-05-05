@@ -3,7 +3,7 @@ import React from "react";
 import HorizontalCard from "../../molecule/HorizontalCard";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
-import LaundryShopCardVertical from "../../organism/LaundryShopCardVertical";
+import LaundryShopCardVertical from "../../molecule/cards/LaundryShopCardVertical";
 
 const MOCKDATA = [
   {

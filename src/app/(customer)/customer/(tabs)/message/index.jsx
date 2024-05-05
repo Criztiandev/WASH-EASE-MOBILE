@@ -4,7 +4,7 @@ import { Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import LaundryShopCardVertical from "../../../../../components/organism/LaundryShopCardVertical";
+import LaundryShopCardVertical from "../../../../../components/molecule/cards/LaundryShopCardVertical";
 
 const MOCKDATA = [
   {

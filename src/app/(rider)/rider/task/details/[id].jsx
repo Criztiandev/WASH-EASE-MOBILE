@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-import TaskDetailsCard from "../../../../../components/organism/TaskDetailsCard";
+import TaskDetailsCard from "../../../../../components/molecule/cards/TaskDetailsCard";
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 import { IconButton, Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";

@@ -1,7 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import React from "react";
 import { Searchbar } from "react-native-paper";
-import LaundryShopCardVertical from "../../../../components/organism/LaundryShopCardVertical";
+import LaundryShopCardVertical from "../../../../components/molecule/cards/LaundryShopCardVertical";
 
 const MOCKDATA = [
   {

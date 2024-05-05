@@ -3,9 +3,9 @@ import { Image } from "expo-image";
 import React from "react";
 import { router } from "expo-router";
 
-import Badge from "../atoms/Badge";
-import { cn } from "../../utils/dev.utils";
+import Badge from "../../atoms/Badge";
 import { cva } from "class-variance-authority";
+import { cn } from "../../../utils/dev.utils";
 
 const statusFlag = cva("left-0 m-2", {
   variants: {

@@ -4,13 +4,12 @@ import React from "react";
 import { Link, router } from "expo-router";
 import { Text } from "react-native-paper";
 
-import LocationIcon from "../../assets/icons/location_icon.svg";
-import ClockIcon from "../../assets/icons/clock_icon.svg";
-import Badge from "../atoms/Badge";
-import { cn } from "../../utils/dev.utils";
+import LocationIcon from "../../../assets/icons/location_icon.svg";
+import ClockIcon from "../../../assets/icons/clock_icon.svg";
 import { cva } from "class-variance-authority";
-import Button from "../atoms/Button";
-
+import { cn } from "../../../utils/dev.utils";
+import Badge from "../../atoms/Badge";
+import Button from "../../atoms/Button";
 const statusFlag = cva("right-0 m-2", {
   variants: {
     status: {
@@ -20,11 +19,15 @@ const statusFlag = cva("right-0 m-2", {
   },
 });
 
-const LaundryShopCard = ({ image, title, id, details, status }) => {
+const HeroShopCard = ({ image, title, id, details, status }) => {
   const statusStyle = cn(statusFlag({ status }));
 
   return (
-    <View className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 mx-4">
+    <View
+      style={{
+        width: Dimensions.get("screen").width - 64,
+      }}
+      className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
       <Image
         source={image}
         contentFit="cover"
@@ -36,7 +39,9 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
           {title}
         </Text>
 
-        <View className="opacity-50 space-y-2 ">
+        <View className="opacity-50 space-y-2 space-x-4 ">
+          <View></View>
+
           <View className="space-x-2 flex-row items-center">
             <LocationIcon className="text-gray-400" />
             <Text className="text-[16px]">{details.location}</Text>
@@ -68,4 +73,4 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
   );
 };
 
-export default LaundryShopCard;
+export default HeroShopCard;

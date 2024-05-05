@@ -4,7 +4,7 @@ import { View, FlatList, ScrollView } from "react-native";
 
 import MapFrame from "../../../../../components/atoms/MapFrame";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import HeroShopCard from "../../../../../components/organism/HeroShopCard";
+import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 
 const MOCKDATA = [
   {
