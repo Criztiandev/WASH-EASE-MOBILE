@@ -3,11 +3,11 @@ import React from "react";
 import { Avatar, Badge } from "react-native-paper";
 import { router } from "expo-router";
 
-const MessageCard = ({ userName, lastMessageSent, unreadCount }) => {
+const MessageCard = ({ path, userName, lastMessageSent, unreadCount }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push("/rider/message/123123");
+        router.push(path);
       }}>
       <View className="flex-row items-center space-x-3   p-2 border-b border-gray-300/90">
         <Avatar.Icon />

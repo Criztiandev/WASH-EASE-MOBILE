@@ -160,6 +160,7 @@ const MOCKDATA = [
 ];
 
 const RootScreen = () => {
+  const id = 123123;
   return (
     <ScreenLayout>
       <View className="px-2 flex-1">
@@ -170,7 +171,11 @@ const RootScreen = () => {
           <FlashList
             data={MOCKDATA}
             renderItem={({ item }) => (
-              <MessageCard userName={item.fullName} {...item} />
+              <MessageCard
+                path={`/customer/message/${id}`}
+                userName={item.fullName}
+                {...item}
+              />
             )}
             estimatedItemSize={200}
             keyExtractor={(item) => item.id}
