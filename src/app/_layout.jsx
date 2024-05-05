@@ -10,8 +10,7 @@ const _layout = () => {
       <Provider>
         <PaperProvider>
           <Stack tack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(customer)" />
-            <Stack.Screen name="(account)" />
+            <Stack.Screen name="(auth)" />
           </Stack>
         </PaperProvider>
       </Provider>

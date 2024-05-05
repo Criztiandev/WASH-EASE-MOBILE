@@ -33,7 +33,7 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
         source={image}
         contentFit="cover"
         transition={1000}
-        className="h-[110px] rounded-t-md flex-1 "
+        className="h-[110px] rounded-t-md flex-1"
       />
       <View className="p-5 space-y-2">
         <Text variant="titleLarge" className="font-bold">

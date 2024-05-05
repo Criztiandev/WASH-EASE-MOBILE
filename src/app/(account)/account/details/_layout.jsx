@@ -1,7 +1,5 @@
-import { TouchableOpacity } from "react-native";
 import React from "react";
-import { Slot, Stack, router } from "expo-router";
-import { Icon } from "react-native-paper";
+import { Slot} from "expo-router";
 
 const RootLayout = () => {
   return <Slot />;

@@ -1,0 +1,19 @@
+import React from "react";
+import { Stack } from "expo-router";
+
+const RootLayout = () => {
+  return (
+    <Stack>
+      <Stack.Screen
+        name="[id]"
+        options={{
+          title: "Shop Details",
+          headerShadowVisible: false,
+          headerStyle: "inherit",
+        }}
+      />
+    </Stack>
+  );
+};
+
+export default RootLayout;

@@ -1,10 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
-import { Link, router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 
-import LocationIcon from "../../assets/icons/location_icon.svg";
-import ClockIcon from "../../assets/icons/clock_icon.svg";
 import Badge from "../atoms/Badge";
 import { cn } from "../../utils/dev.utils";
 import { cva } from "class-variance-authority";
@@ -18,7 +16,7 @@ const statusFlag = cva("left-0 m-2", {
   },
 });
 
-const LaundryShopCardVertical = ({ image, title, path, details, status }) => {
+const LaundryShopCardVertical = ({ image, title, path, children, status }) => {
   const statusStyle = cn(statusFlag({ status }));
   const handleNavigate = () => {
     router.push(path);
@@ -35,22 +33,12 @@ const LaundryShopCardVertical = ({ image, title, path, details, status }) => {
             className=" rounded-t-md flex-1"
           />
         </View>
-        <View className="p-5 space-y-4">
+        <View className="p-4">
           <Text className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {title}
           </Text>
 
-          <View className="opacity-50 space-y-2">
-            <View className="space-x-2 flex-row items-center">
-              <LocationIcon className="text-gray-400" />
-              <Text className="text-[16px]">{details.location}</Text>
-            </View>
-
-            <View className="space-x-2 flex-row items-center">
-              <ClockIcon />
-              <Text className="text-[16px]">{details.schedule}</Text>
-            </View>
-          </View>
+          <View className="opacity-50 space-y-2">{children}</View>
         </View>
 
         {status && (
