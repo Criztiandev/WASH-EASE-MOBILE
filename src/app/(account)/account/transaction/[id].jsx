@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Icon, Searchbar } from "react-native-paper";
-import ReviewCard from "../../../../components/atoms/ReviewCard";
+import CustomerReviewCard from "../../../../components/molecule/cards/CustomerReviewCard";
 
 const MOCKDATA = [
   {
@@ -66,7 +66,7 @@ const RootScreen = () => {
                 router.push(`/shop/choosen/order-details/${item.id}`)
               }>
               <View className="mx-4 border bg-green-300/50 border-green-500 rounded-[5px] overflow-hidden mb-4">
-                <ReviewCard {...item} />
+                <CustomerReviewCard {...item} />
               </View>
             </TouchableOpacity>
           )}

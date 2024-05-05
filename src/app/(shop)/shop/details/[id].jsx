@@ -4,8 +4,8 @@ import { useLocalSearchParams } from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 
 import AboutTab from "../../../../components/views/tabs/AboutTab";
-import ReviewTab from "../../../../components/views/tabs/ReviewTab";
-import ServiceTab from "../../../../components/views/tabs/ServiceTab";
+import ShopReviewTabs from "../../../../components/views/tabs/ShopReviewTabs";
+import ShopServiceOfferTab from "../../../../components/views/tabs/ShopServiceOfferTab";
 import ShopDetailsCover from "../../../../components/organism/ShopDetailsCover";
 import Button from "../../../../components/atoms/Button";
 
@@ -27,8 +27,8 @@ const renderScene = SceneMap({
       opening="10:30 - 3:30"
     />
   ),
-  reviews: ReviewTab,
-  service: ServiceTab,
+  reviews: ShopReviewTabs,
+  service: ShopServiceOfferTab,
 });
 
 const ShopDetails = () => {
@@ -53,14 +53,6 @@ const ShopDetails = () => {
           onIndexChange={setIndex}
           initialLayout={{ width: layout.width }}
         />
-      </View>
-
-      <View className="px-4">
-        <Button>
-          <Text className="text-center text-white font-bold text-lg">
-            Choose
-          </Text>
-        </Button>
       </View>
     </View>
   );

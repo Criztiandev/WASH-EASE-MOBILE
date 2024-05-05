@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import React from "react";
-import ReviewCard from "../../atoms/ReviewCard";
 import { FlashList } from "@shopify/flash-list";
+import CustomerReviewCard from "../../molecule/cards/CustomerReviewCard";
 
 const MockDate = [
   {
@@ -37,12 +37,12 @@ const MockDate = [
   },
 ];
 
-const ReviewTab = () => {
+const ShopReviewTabs = () => {
   return (
     <View style={{ flex: 1 }}>
       <FlashList
         data={MockDate}
-        renderItem={({ item }) => <ReviewCard {...item} />}
+        renderItem={({ item }) => <CustomerReviewCard {...item} />}
         keyExtractor={(item) => item.id}
         estimatedItemSize={200}
       />
@@ -50,4 +50,4 @@ const ReviewTab = () => {
   );
 };
 
-export default ReviewTab;
+export default ShopReviewTabs;

@@ -2,7 +2,7 @@ import React from "react";
 import { Slot } from "expo-router";
 
 const RootLayout = () => {
-  return <Slot />;
+  return <Slot screenOptions={{}} />;
 };
 
 export default RootLayout;

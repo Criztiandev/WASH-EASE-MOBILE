@@ -1,15 +1,17 @@
 import { View, Text } from "react-native";
 import React from "react";
-import StarRating from "../../assets/icons/start_fill_icon.svg";
-import { cn } from "../../utils/dev.utils";
+import StarRating from "../../../assets/icons/start_fill_icon.svg";
+import { cn } from "../../../utils/dev.utils";
+import { Avatar } from "react-native-paper";
+cn;
 
-const ReviewCard = ({ name, rating, date, comment, className }) => {
+const CustomerReviewCard = ({ name, rating, date, comment, className }) => {
   const defaultyStyle = cn("p-4 border-b border-gray-300", className);
 
   return (
     <View className={defaultyStyle}>
       <View className=" flex-row items-center space-x-4 mb-2">
-        <View className="w-[64px] h-[64px] rounded-full border"></View>
+        <Avatar.Icon />
         <View className="flex-row justify-between flex-1">
           <View>
             <Text className="text-[18px] font-bold">{name}</Text>
@@ -28,4 +30,4 @@ const ReviewCard = ({ name, rating, date, comment, className }) => {
   );
 };
 
-export default ReviewCard;
+export default CustomerReviewCard;

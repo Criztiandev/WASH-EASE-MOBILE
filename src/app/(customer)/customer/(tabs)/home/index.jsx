@@ -3,7 +3,6 @@ import { Text } from "react-native-paper";
 import { View, FlatList, ScrollView } from "react-native";
 
 import MapFrame from "../../../../../components/atoms/MapFrame";
-import LaundryShopCardHorizontal from "../../../../../components/organism/LaundryShopCardHorizontal";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/organism/HeroShopCard";
 
@@ -54,10 +53,8 @@ const HomeScreen = () => {
 
         <MapFrame />
 
-        <Text variant="titleLarge" className="font-bold">
-          Nearby Laundy shops
-        </Text>
-        <View className=" ">
+        <Text className="text-xl font-bold">Nearby Laundy shops</Text>
+        <View className="flex-1">
           <FlatList
             horizontal
             data={MOCKDATA}

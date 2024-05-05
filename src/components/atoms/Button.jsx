@@ -30,14 +30,20 @@ export default function Button({
   children,
   onPress,
   className,
+  textClassName,
   ...props
 }) {
+  const textClass = cn(
+    "text-white text-center text-xl font-bold",
+    textClassName
+  );
+
   return (
     <TouchableOpacity
       {...props}
       onPress={onPress}
       className={cn(buttonVariants({ variant, size, className }))}>
-      {children}
+      <Text className={textClass}>{children}</Text>
     </TouchableOpacity>
   );
 }
