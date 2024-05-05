@@ -75,7 +75,7 @@ export default RootScreen;
 
 const ShopListTab = () => {
   return (
-    <View className="px-2 flex-1">
+    <View className="flex-1">
       <Searchbar className="bg-white my-4" placeholder="Search" />
 
       <View className="flex-1">

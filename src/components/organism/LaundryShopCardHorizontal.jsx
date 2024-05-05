@@ -24,11 +24,7 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
   const statusStyle = cn(statusFlag({ status }));
 
   return (
-    <View
-      style={{
-        width: Dimensions.get("screen").width - 64,
-      }}
-      className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+    <View className="relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 mx-4">
       <Image
         source={image}
         contentFit="cover"
@@ -40,7 +36,9 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
           {title}
         </Text>
 
-        <View className="opacity-50 space-y-2 flex-row space-x-4">
+        <View className="opacity-50 space-y-2 space-x-4 ">
+          <View></View>
+
           <View className="space-x-2 flex-row items-center">
             <LocationIcon className="text-gray-400" />
             <Text className="text-[16px]">{details.location}</Text>
@@ -55,7 +53,7 @@ const LaundryShopCard = ({ image, title, id, details, status }) => {
 
       <View className="px-4">
         <Button>
-          <Link href={`../shop/details/${id}`} asChild>
+          <Link href={`/shop/details/${id}`} asChild>
             <Text
               variant="bodyLarge"
               className="text-center text-[18px] font-bold  text-white">

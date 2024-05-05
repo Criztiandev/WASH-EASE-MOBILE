@@ -9,7 +9,7 @@ const RootScreen = () => {
     user: "/customer/home",
   };
 
-  return <Redirect href={"/rider/home"} />;
+  return <Redirect href={"/customer/home"} />;
 };
 
 export default RootScreen;
