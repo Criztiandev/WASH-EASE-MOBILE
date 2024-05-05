@@ -5,9 +5,13 @@ import { Avatar } from "react-native-paper";
 import { useForm } from "react-hook-form";
 import InputField from "../../../components/atoms/InputField";
 import Button from "../../../components/atoms/Button";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import Toast from "react-native-toast-message";
+import { useSetAtom } from "jotai";
+import { AuthAtoms } from "..";
 
 const SingInScreen = () => {
+  const setAuthAtom = useSetAtom(AuthAtoms);
   const form = useForm({
     defaultValues: {
       email: "",
@@ -16,7 +20,12 @@ const SingInScreen = () => {
   });
 
   const onSubmit = (value) => {
-    console.log(value);
+    Toast.show({
+      type: "success",
+      text1: "Login Successfully",
+    });
+
+    setAuthAtom("user");
   };
   return (
     <ScreenLayout>

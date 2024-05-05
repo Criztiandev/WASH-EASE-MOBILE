@@ -8,11 +8,14 @@ import NotificationIcon from "../../../../../assets/icons/notification_icon.svg"
 import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
+import { useSetAtom } from "jotai";
+import { AuthAtoms } from "../../../../(auth)";
 
 //TODO:Transaction History
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
+  const setAuthAtom = useSetAtom(AuthAtoms);
 
   const handleLogout = () => {
     Toast.show({
@@ -21,6 +24,7 @@ const ProfileScreen = () => {
     });
 
     router.push("/auth/sign-in");
+    setAuthAtom("");
   };
   return (
     <ScreenLayout className="p-4 pt-6">
