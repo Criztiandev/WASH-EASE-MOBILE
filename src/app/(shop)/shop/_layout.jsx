@@ -7,7 +7,12 @@ import Toast from "react-native-toast-message";
 const RootLayout = () => {
   return (
     <Stack>
-      <Stack.Screen name="choosen" />
+      <Stack.Screen
+        name="choosen"
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="dashboard" />
       <Stack.Screen
         name="details"

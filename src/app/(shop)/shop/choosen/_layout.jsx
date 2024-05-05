@@ -1,21 +1,29 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
+import { Icon } from "react-native-paper";
 
 const RootLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="track"
+        name="request"
         options={{
-          title: "Track",
+          title: "Request",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="p-2 rounded-full mr-2">
+              <Icon source={"arrow-left"} size={24} />
+            </TouchableOpacity>
+          ),
         }}
       />
 
       <Stack.Screen
-        name="details"
+        name="order-details"
         options={{
-          title: "Details",
+          title: "Order Details",
         }}
       />
     </Stack>

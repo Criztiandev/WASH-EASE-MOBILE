@@ -12,18 +12,18 @@ const RootScreen = () => {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "shop", title: "Shops" },
     { key: "choosen", title: "Choosen" },
+    { key: "request", title: "Request" },
   ]);
 
   const renderScene = SceneMap({
-    shop: () => <ShopListTab />,
     choosen: () => <ChoosenShopTab />,
+    request: () => <RequestTab />,
   });
 
   return (
     <ScreenLayout>
-      <Text className="text-2xl font-bold p-4">Shop Lists</Text>
+      <Text className="text-2xl font-bold p-4">My Selection</Text>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
