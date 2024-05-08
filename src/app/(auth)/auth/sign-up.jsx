@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
 import ScreenLayout from "../../../layout/ScreenLayout";
 import { Avatar } from "react-native-paper";
 import { useForm } from "react-hook-form";
@@ -8,24 +8,28 @@ import Button from "../../../components/atoms/Button";
 import { Link, router } from "expo-router";
 import useMultiform from "../../../hooks/useMultiform";
 import Toast from "react-native-toast-message";
+import * as ImagePicker from "expo-image-picker";
+import { Image } from "expo-image";
+
+const defaultValues = {
+  profile: "",
+  firstName: "",
+  lastName: "",
+  address: "",
+  password: "",
+  email: "",
+  password: "",
+};
 
 const SignUpScreen = () => {
   const form = useForm({
-    defaultValues: {
-      profile: "",
-      firstName: "",
-      lastName: "",
-      address: "",
-      password: "",
-      email: "",
-      password: "",
-    },
+    defaultValues,
   });
 
   const { step, isLastStep, nextStep, prevStep, isFirstStep } = useMultiform([
     <PersonalInfo control={form.control} />,
     <OtherInfo control={form.control} />,
-    <AccountInfo control={form.control} />,
+    <AccountInfo form={form} control={form.control} />,
   ]);
 
   const onSubmit = (value) => {
@@ -41,6 +45,7 @@ const SignUpScreen = () => {
 
     nextStep();
   };
+
   return (
     <ScreenLayout>
       <View className="flex-1 justify-center items-center">
@@ -121,15 +126,41 @@ const OtherInfo = ({ control }) => {
   );
 };
 
-const AccountInfo = ({ control }) => {
+const AccountInfo = ({ form, control }) => {
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    const image = result.assets[0].uri;
+    setProfileImage(image);
+    form.setValue("profile", image);
+    if (!result.canceled) {
+      setProfileImage(image);
+    }
+  };
+
   return (
     <View>
-      <InputField
-        controller={control}
-        name="profileImage"
-        label={"Profile"}
-        placeholder="Enter your Profile"
-      />
+      <Text className="text-base font-bold mb-2 ">Profile</Text>
+      <TouchableOpacity
+        className="w-full  rounded-[5px] flex-row items-center bg-blue-200 border border-blue-800 mb-2"
+        onPress={handlePickImage}>
+        <Text className="px-4 py-2 rounded-[5px] border bg-blue-900 text-white mr-4">
+          Upload Image
+        </Text>
+        <Text style={{ flexShrink: 1 }} className="">
+          {profileImage
+            ? profileImage
+                .split("/")
+                [profileImage.split("/").length - 1].substr(0, 18) + "...."
+            : "No Image Choosen"}
+        </Text>
+      </TouchableOpacity>
 
       <InputField
         controller={control}

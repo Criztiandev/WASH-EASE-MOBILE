@@ -11,9 +11,13 @@ const RootScreen = () => {
   const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
-  const [routes] = useState([{ key: "request", title: "Request" }]);
+  const [routes] = useState([
+    { key: "choosen", title: "Choosen" },
+    { key: "request", title: "Request" },
+  ]);
 
   const renderScene = SceneMap({
+    choosen: () => <ChoosenShopTab />,
     request: () => <RequestTab />,
   });
 
