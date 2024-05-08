@@ -10,6 +10,7 @@ import useMultiform from "../../../hooks/useMultiform";
 import Toast from "react-native-toast-message";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
+import ProfileField from "../../../components/atoms/ProfileField";
 
 const defaultValues = {
   profile: "",
@@ -146,13 +147,7 @@ const AccountInfo = ({ form, control }) => {
 
   return (
     <View>
-      <Text className="text-base font-bold mb-2 ">Profile</Text>
-      <TouchableOpacity
-        className="w-full  rounded-[5px] flex-row items-center bg-blue-200 border border-blue-800 mb-2"
-        onPress={handlePickImage}>
-        <Text className="px-4 py-2 rounded-[5px] border bg-blue-900 text-white mr-4">
-          Upload Image
-        </Text>
+      <ProfileField label="Profile" onPick={handlePickImage}>
         <Text style={{ flexShrink: 1 }} className="">
           {profileImage
             ? profileImage
@@ -160,7 +155,7 @@ const AccountInfo = ({ form, control }) => {
                 [profileImage.split("/").length - 1].substr(0, 18) + "...."
             : "No Image Choosen"}
         </Text>
-      </TouchableOpacity>
+      </ProfileField>
 
       <InputField
         controller={control}
