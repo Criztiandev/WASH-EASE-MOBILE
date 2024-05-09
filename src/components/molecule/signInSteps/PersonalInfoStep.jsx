@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { Suspense } from "react";
-import InputField from "../../../../components/atoms/InputField";
+import InputField from "../../atoms/InputField";
 
 const PersonalInfoStep = ({ control, error }) => {
   return (

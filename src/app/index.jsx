@@ -10,7 +10,6 @@ import {
   signInDefaulValue,
 } from "../service/validation/auth/signIn.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAuth from "../hooks/useAuth";
 import ScreenLayout from "../layout/ScreenLayout";
 import { useAuthContext } from "../context/AuthContext";
 
@@ -57,7 +56,7 @@ const RootScreen = () => {
             <Text className="text-center text-primary">
               Dont have an Account ?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/auth/sign-up")}>
+            <TouchableOpacity onPress={() => router.push("./(public)/sign-up")}>
               <Text className="text-center underline text-primary font-bold text-lg">
                 Register
               </Text>

@@ -1,21 +1,21 @@
 import z from "zod";
 
 export const signUpDefaulValue = {
-  profile: "",
-  firstName: "",
-  lastName: "",
+  avatar: "",
+  first_name: "",
+  last_name: "",
   address: "",
-  contact: "",
+  phone_number: "",
   email: "",
   password: "",
 };
 
 export const PersonalInfoValidation = z.object({
-  firstName: z
+  first_name: z
     .string()
     .min(2, "First name is too short")
     .max(24, "First name is too long"),
-  lastName: z
+  last_name: z
     .string()
     .min(2, "Last name is too short")
     .max(24, "Last name is too long"),
@@ -26,15 +26,14 @@ export const OtherInfoValidation = z.object({
     .string()
     .min(2, "Adress is too short")
     .max(24, "Adress is too long"),
-  contact: z
+  phone_number: z
     .string()
     .min(2, "Contact is too short")
     .max(12, "Contact is too long"),
 });
 
 export const AccountInfoValidation = z.object({
-  profile: z.string(),
-
+  avatar: z.string(),
   email: z
     .string()
     .email()

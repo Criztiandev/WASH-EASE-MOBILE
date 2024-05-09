@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
 import React, { Suspense, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import ProfileField from "../../../../components/atoms/ProfileField";
-import InputField from "../../../../components/atoms/InputField";
+import ProfileField from "../../atoms/ProfileField";
+import InputField from "../../atoms/InputField";
 
 const AccountInfoStep = ({ form, control, error }) => {
   const [profileImage, setProfileImage] = useState(null);

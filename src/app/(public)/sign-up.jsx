@@ -1,27 +1,29 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import ScreenLayout from "../../../layout/ScreenLayout";
 import { Avatar } from "react-native-paper";
 import { useForm } from "react-hook-form";
-import Button from "../../../components/atoms/Button";
+import Button from "../../components/atoms/Button";
 import { router } from "expo-router";
-import useMultiform from "../../../hooks/useMultiform";
+import useMultiform from "../../hooks/useMultiform";
 import Toast from "react-native-toast-message";
 import {
   AccountInfoValidation,
   OtherInfoValidation,
   PersonalInfoValidation,
   signUpDefaulValue,
-} from "../../../service/validation/auth/signUp.validation";
+} from "../../service/validation/auth/signUp.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import PersonalInfoStep from "./partials/PersonalInfoStep";
-import OtherInfoStep from "./partials/OtherInfoStep";
-import AccountInfoStep from "./partials/AccountInfoStep";
+import PersonalInfoStep from "../../components/molecule/signInSteps/PersonalInfoStep";
+import OtherInfoStep from "../../components/molecule/signInSteps/OtherInfoStep";
+import AccountInfoStep from "../../components/molecule/signInSteps/AccountInfoStep";
+import ScreenLayout from "../../layout/ScreenLayout";
+import { useAuthContext } from "../../context/AuthContext";
 
-const SignUpScreen = () => {
+const RootScreen = () => {
   const [formData, setFormData] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const { handleLogin } = useAuthContext();
 
   const formValidationSchema = [
     PersonalInfoValidation,
@@ -50,22 +52,19 @@ const SignUpScreen = () => {
     setFormData(updatedFormData);
 
     if (isFinalStep) {
-      const compiledFormData = Object.assign({}, updatedFormData);
+      const compiledFormData = Object.assign({}, ...updatedFormData);
 
       Toast.show({
         type: "success",
         text1: "Registered Successfully",
       });
 
-      console.log(compiledFormData);
-
-      router.push("/auth/sign-in");
+      handleLogin(compiledFormData);
       return;
     }
 
-    setPayload((prev) => [...prev, ...value]);
     setCurrentStepIndex((prev) =>
-      prev >= validationMap.length ? prev : (prev += 1)
+      prev >= formValidationSchema.length ? prev : (prev += 1)
     );
     nextStep();
   };
@@ -92,7 +91,7 @@ const SignUpScreen = () => {
                 <Text className="text-center text-primary">
                   Already have an account ?
                 </Text>
-                <TouchableOpacity onPress={() => router.push("/auth/sign-in")}>
+                <TouchableOpacity onPress={() => router.push("/")}>
                   <Text className="text-center underline text-primary font-bold text-lg">
                     Login
                   </Text>
@@ -113,4 +112,4 @@ const SignUpScreen = () => {
   );
 };
 
-export default SignUpScreen;
+export default RootScreen;
