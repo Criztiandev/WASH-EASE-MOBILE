@@ -21,19 +21,7 @@ import AccountInfoStep from "./partials/AccountInfoStep";
 
 const SignUpScreen = () => {
   const [formData, setFormData] = useState([]);
-
-  const {
-    step,
-    isFinalStep,
-    isFirstStep,
-    nextStep,
-    prevStep,
-    currentStepIndex,
-  } = useMultiform([
-    <PersonalInfoStep control={control} error={errors} />,
-    <OtherInfoStep control={control} error={errors} />,
-    <AccountInfoStep form={form} control={control} error={errors} />,
-  ]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const formValidationSchema = [
     PersonalInfoValidation,
@@ -50,6 +38,10 @@ const SignUpScreen = () => {
     defaultValues: registrationDefault,
     resolver: zodResolver(formValidationSchema[currentStepIndex]),
   });
+
+  const { step, isFinalStep, isFirstStep, nextStep, prevStep } = useMultiform([
+    <PersonalInfoStep control={control} error={errors} />,
+  ]);
 
   const handleFormSubmit = (submittedFormData) => {
     const updatedFormData = [...formData, submittedFormData];
@@ -70,9 +62,15 @@ const SignUpScreen = () => {
     }
 
     setPayload((prev) => [...prev, ...value]);
-
-    setIndex((prev) => (prev >= validationMap.length ? prev : (prev += 1)));
+    setCurrentStepIndex((prev) =>
+      prev >= validationMap.length ? prev : (prev += 1)
+    );
     nextStep();
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStepIndex((prev) => (prev <= 0 ? prev : (prev -= 1)));
+    prevStep();
   };
 
   return (
@@ -92,7 +90,7 @@ const SignUpScreen = () => {
                 <Text className="text-center text-primary">
                   Already have an account ?
                 </Text>
-                <TouchableOpacity onPress={() => router.push("/auth/sign-up")}>
+                <TouchableOpacity onPress={() => router.push("/auth/sign-in")}>
                   <Text className="text-center underline text-primary font-bold text-lg">
                     Login
                   </Text>
@@ -101,7 +99,7 @@ const SignUpScreen = () => {
             ) : (
               <Button
                 variant={"outline"}
-                onPress={() => prevStep()}
+                onPress={handlePrevStep}
                 textClassName={"text-black"}>
                 Back
               </Button>

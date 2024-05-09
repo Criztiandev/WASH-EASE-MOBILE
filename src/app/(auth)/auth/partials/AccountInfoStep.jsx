@@ -23,41 +23,34 @@ const AccountInfoStep = ({ form, control, error }) => {
   };
 
   return (
-    <Suspense
-      fallback={
-        <View>
-          <Text>LOading</Text>
-        </View>
-      }>
-      <View>
-        <ProfileField label="Profile" onPick={handlePickImage}>
-          <Text style={{ flexShrink: 1 }} className="">
-            {profileImage
-              ? profileImage
-                  .split("/")
-                  [profileImage.split("/").length - 1].substr(0, 18) + "...."
-              : "No Image Choosen"}
-          </Text>
-        </ProfileField>
+    <View>
+      <ProfileField label="Profile" onPick={handlePickImage}>
+        <Text style={{ flexShrink: 1 }} className="">
+          {profileImage
+            ? profileImage
+                .split("/")
+                [profileImage.split("/").length - 1].substr(0, 18) + "...."
+            : "No Image Choosen"}
+        </Text>
+      </ProfileField>
 
-        <InputField
-          controller={control}
-          name="email"
-          label={"Email"}
-          placeholder="Enter your email"
-          errorMsg={error?.email?.message}
-        />
+      <InputField
+        controller={control}
+        name="email"
+        label={"Email"}
+        placeholder="Enter your email"
+        errorMsg={error?.email?.message}
+      />
 
-        <InputField
-          isPassword
-          controller={control}
-          name="password"
-          label={"Password"}
-          placeholder="Password"
-          errorMsg={error?.password?.message}
-        />
-      </View>
-    </Suspense>
+      <InputField
+        isPassword
+        controller={control}
+        name="password"
+        label={"Password"}
+        placeholder="Password"
+        errorMsg={error?.password?.message}
+      />
+    </View>
   );
 };
 export default AccountInfoStep;
