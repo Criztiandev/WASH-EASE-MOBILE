@@ -23,7 +23,7 @@ const RootScreen = () => {
 
   return (
     <ScreenLayout>
-      <Text className="text-2xl font-bold p-4">My Selection</Text>
+      <Text className="text-2xl font-bold p-4">Selected Shops</Text>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
