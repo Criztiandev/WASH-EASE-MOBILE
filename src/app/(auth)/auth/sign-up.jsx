@@ -11,8 +11,8 @@ import {
   AccountInfoValidation,
   OtherInfoValidation,
   PersonalInfoValidation,
-  registrationDefault,
-} from "../../../service/validation/registration.validation";
+  signUpDefaulValue,
+} from "../../../service/validation/auth/signUp.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import PersonalInfoStep from "./partials/PersonalInfoStep";
@@ -35,12 +35,14 @@ const SignUpScreen = () => {
     handleSubmit,
     ...form
   } = useForm({
-    defaultValues: registrationDefault,
+    defaultValues: signUpDefaulValue,
     resolver: zodResolver(formValidationSchema[currentStepIndex]),
   });
 
   const { step, isFinalStep, isFirstStep, nextStep, prevStep } = useMultiform([
     <PersonalInfoStep control={control} error={errors} />,
+    <OtherInfoStep control={control} error={errors} />,
+    <AccountInfoStep form={form} control={control} error={errors} />,
   ]);
 
   const handleFormSubmit = (submittedFormData) => {

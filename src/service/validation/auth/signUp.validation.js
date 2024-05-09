@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const registrationDefault = {
+export const signUpDefaulValue = {
   profile: "",
   firstName: "",
   lastName: "",
@@ -43,5 +43,5 @@ export const AccountInfoValidation = z.object({
   password: z
     .string()
     .min(2, "Password is too short")
-    .max(8, "Password is too long"),
+    .max(16, "Password is too long"),
 });
