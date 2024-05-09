@@ -12,6 +12,7 @@ const InputField = ({
   contentClassName,
   labelClassName,
   isPassword = false,
+  errorMsg = "",
   ...props
 }) => {
   const { field } = useController({
@@ -36,6 +37,9 @@ const InputField = ({
           placeholder={props.placeholder}
         />
       </View>
+      {errorMsg && (
+        <Text className="text-red-500 mt-2">{errorMsg || "Error"}</Text>
+      )}
     </View>
   );
 };

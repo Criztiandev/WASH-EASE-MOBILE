@@ -1,36 +1,49 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { View, Text } from "react-native";
+import React, { lazy, useState } from "react";
 import ScreenLayout from "../../../layout/ScreenLayout";
 import { Avatar } from "react-native-paper";
 import { useForm } from "react-hook-form";
-import InputField from "../../../components/atoms/InputField";
 import Button from "../../../components/atoms/Button";
 import { Link, router } from "expo-router";
 import useMultiform from "../../../hooks/useMultiform";
 import Toast from "react-native-toast-message";
-import * as ImagePicker from "expo-image-picker";
-import { Image } from "expo-image";
-import ProfileField from "../../../components/atoms/ProfileField";
+import {
+  AccountInfoValidation,
+  OtherInfoValidation,
+  PersonalInfoValidation,
+  registrationDefault,
+} from "../../../service/validation/registration.validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { atom, useAtomValue } from "jotai";
 
-const defaultValues = {
-  profile: "",
-  firstName: "",
-  lastName: "",
-  address: "",
-  password: "",
-  email: "",
-  password: "",
-};
+import PersonalInfoStep from "./partials/PersonalInfoStep";
+import OtherInfoStep from "./partials/OtherInfoStep";
+import AccountInfoStep from "./partials/AccountInfoStep";
 
 const SignUpScreen = () => {
-  const form = useForm({
-    defaultValues,
+  const [payload, setPayload] = useState([]);
+  const [index, setIndex] = useState(0);
+
+  const validationMap = [
+    PersonalInfoValidation,
+    OtherInfoValidation,
+    AccountInfoValidation,
+  ];
+
+  const {
+    formState: { errors },
+    control,
+    handleSubmit,
+    ...form
+  } = useForm({
+    defaultValues: registrationDefault,
+    resolver: zodResolver(validationMap[index]),
   });
 
   const { step, isLastStep, nextStep, prevStep, isFirstStep } = useMultiform([
-    <PersonalInfo control={form.control} />,
-    <OtherInfo control={form.control} />,
-    <AccountInfo form={form} control={form.control} />,
+    <PersonalInfoStep control={control} error={errors} />,
+    <OtherInfoStep control={control} error={errors} />,
+    <AccountInfoStep form={form} control={control} error={errors} />,
   ]);
 
   const onSubmit = (value) => {
@@ -39,12 +52,23 @@ const SignUpScreen = () => {
         type: "success",
         text1: "Registered Successfully",
       });
-      console.log(value);
-      router.navigate("/auth/sign-in");
+
+      const finalPayload = [...payload, value];
+      const result = Object.assign({}, ...finalPayload);
+
+      router.push("/auth/sign-in");
       return;
     }
 
+    setPayload((prev) => [...prev, ...value]);
+
+    setIndex((prev) => (prev >= validationMap.length ? prev : (prev += 1)));
     nextStep();
+  };
+
+  const handleBack = () => {
+    setIndex((prev) => (prev <= 0 ? prev : (prev -= 1)));
+    prevStep();
   };
 
   return (
@@ -52,10 +76,10 @@ const SignUpScreen = () => {
       <View className="flex-1 justify-center items-center">
         <Avatar.Icon size={200} />
         <View className=" w-full px-8 space-y-4">
-          {step}
+          <View>{step}</View>
 
           <View>
-            <Button onPress={form.handleSubmit(onSubmit)}>
+            <Button onPress={handleSubmit(onSubmit)}>
               {isLastStep ? "Register" : "Next"}
             </Button>
 
@@ -73,7 +97,7 @@ const SignUpScreen = () => {
             ) : (
               <Button
                 variant={"outline"}
-                onPress={() => prevStep()}
+                onPress={handleBack}
                 textClassName={"text-black"}>
                 Back
               </Button>
@@ -86,91 +110,3 @@ const SignUpScreen = () => {
 };
 
 export default SignUpScreen;
-
-const PersonalInfo = ({ control }) => {
-  return (
-    <View>
-      <InputField
-        controller={control}
-        name="firstName"
-        label={"First name"}
-        placeholder="Enter your first name"
-      />
-
-      <InputField
-        controller={control}
-        name="lastName"
-        label={"Last name"}
-        placeholder="Enter your last name"
-      />
-    </View>
-  );
-};
-
-const OtherInfo = ({ control }) => {
-  return (
-    <View>
-      <InputField
-        controller={control}
-        name="address"
-        label={"Address"}
-        placeholder="Enter your address"
-      />
-
-      <InputField
-        controller={control}
-        name="password"
-        label={"Phone number"}
-        placeholder="Enter your phone number"
-      />
-    </View>
-  );
-};
-
-const AccountInfo = ({ form, control }) => {
-  const [profileImage, setProfileImage] = useState(null);
-
-  const handlePickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    const image = result.assets[0].uri;
-    setProfileImage(image);
-    form.setValue("profile", image);
-    if (!result.canceled) {
-      setProfileImage(image);
-    }
-  };
-
-  return (
-    <View>
-      <ProfileField label="Profile" onPick={handlePickImage}>
-        <Text style={{ flexShrink: 1 }} className="">
-          {profileImage
-            ? profileImage
-                .split("/")
-                [profileImage.split("/").length - 1].substr(0, 18) + "...."
-            : "No Image Choosen"}
-        </Text>
-      </ProfileField>
-
-      <InputField
-        controller={control}
-        name="email"
-        label={"Email"}
-        placeholder="Enter your email"
-      />
-
-      <InputField
-        isPassword
-        controller={control}
-        name="password"
-        label={"Password"}
-        placeholder="Password"
-      />
-    </View>
-  );
-};

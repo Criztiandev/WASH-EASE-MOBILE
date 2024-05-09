@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { Provider } from "jotai";
 import Toast from "react-native-toast-message";
@@ -9,9 +9,7 @@ const _layout = () => {
     <>
       <Provider>
         <PaperProvider>
-          <Stack tack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-          </Stack>
+          <Slot />
         </PaperProvider>
       </Provider>
       <Toast />
