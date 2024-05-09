@@ -8,17 +8,31 @@ import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
 import { useAuthContext } from "../../../../../context/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import accoutApi from "../../../../../api/accout.api";
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
   const { handleLogout } = useAuthContext();
 
+  const logoutMutation = useMutation({
+    mutationFn: async () => await accoutApi.logout(),
+
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Logout Successfully",
+      });
+
+      handleLogout();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const onLogout = () => {
-    Toast.show({
-      type: "success",
-      text1: "Logout Successfully",
-    });
-    handleLogout();
+    logoutMutation.mutate({});
   };
   return (
     <ScreenLayout className="p-4 pt-6">
