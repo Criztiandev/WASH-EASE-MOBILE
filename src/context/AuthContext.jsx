@@ -15,10 +15,10 @@ const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useAtom(AuthAtom);
 
   const handleLogin = (value) => {
-    setAuthState((prev) => ({
-      isAuthenticated: true,
-      role: "user",
-    }));
+    // setAuthState((prev) => ({
+    //   isAuthenticated: true,
+    //   role: "user",
+    // }));
   };
 
   const handleLogout = () => {

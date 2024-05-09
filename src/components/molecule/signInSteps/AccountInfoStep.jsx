@@ -7,29 +7,29 @@ import InputField from "../../atoms/InputField";
 const AccountInfoStep = ({ form, control, error }) => {
   const [profileImage, setProfileImage] = useState(null);
 
-  const handlePickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
+  const handleImagePicked = async () => {
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
-    const image = result.assets[0].uri;
-    setProfileImage(image);
-    form.setValue("profile", image);
-    if (!result.canceled) {
-      setProfileImage(image);
+    if (!pickerResult.canceled && pickerResult.assets) {
+      const pickedImageUri = pickerResult.assets[0].uri
+        .split("/")
+        .pop()
+        .toLowerCase();
+      setProfileImage(pickedImageUri);
+      form.setValue("avatar", pickedImageUri);
     }
   };
 
   return (
     <View>
-      <ProfileField label="Profile" onPick={handlePickImage}>
+      <ProfileField label="Profile" onPick={handleImagePicked}>
         <Text style={{ flexShrink: 1 }} className="">
           {profileImage
-            ? profileImage
-                .split("/")
-                [profileImage.split("/").length - 1].substr(0, 18) + "...."
+            ? profileImage.substr(0, 18) + "...."
             : "No Image Choosen"}
         </Text>
       </ProfileField>

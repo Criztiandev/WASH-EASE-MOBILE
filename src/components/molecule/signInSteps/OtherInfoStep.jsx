@@ -15,10 +15,10 @@ const OtherInfoStep = ({ control, error }) => {
 
       <InputField
         controller={control}
-        name="contact"
+        name="phone_number"
         label={"Phone number"}
         placeholder="Enter your phone number"
-        errorMsg={error?.contact?.message}
+        errorMsg={error?.phone_number?.message}
       />
     </View>
   );

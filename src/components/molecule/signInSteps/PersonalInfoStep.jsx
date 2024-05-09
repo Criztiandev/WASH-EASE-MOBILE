@@ -7,18 +7,18 @@ const PersonalInfoStep = ({ control, error }) => {
     <View>
       <InputField
         controller={control}
-        name="firstName"
+        name="first_name"
         label={"First name"}
         placeholder="Enter your first name"
-        errorMsg={error?.firstName?.message}
+        errorMsg={error?.first_name?.message}
       />
 
       <InputField
         controller={control}
-        name="lastName"
+        name="last_name"
         label={"Last name"}
         placeholder="Enter your last name"
-        errorMsg={error?.lastName?.message}
+        errorMsg={error?.last_name?.message}
       />
     </View>
   );

@@ -26,8 +26,8 @@ const RootScreen = () => {
   const { handleLogin } = useAuthContext();
 
   const formValidationSchema = [
-    PersonalInfoValidation,
-    OtherInfoValidation,
+    // PersonalInfoValidation,
+    // OtherInfoValidation,
     AccountInfoValidation,
   ];
 
@@ -42,8 +42,8 @@ const RootScreen = () => {
   });
 
   const { step, isFinalStep, isFirstStep, nextStep, prevStep } = useMultiform([
-    <PersonalInfoStep control={control} error={errors} />,
-    <OtherInfoStep control={control} error={errors} />,
+    // <PersonalInfoStep control={control} error={errors} />,
+    // <OtherInfoStep control={control} error={errors} />,
     <AccountInfoStep form={form} control={control} error={errors} />,
   ]);
 
@@ -59,13 +59,32 @@ const RootScreen = () => {
         text1: "Registered Successfully",
       });
 
-      handleLogin(compiledFormData);
+      console.log(compiledFormData);
+      if (compiledFormData?.avatar) {
+        const validFormat = [".jpeg", "png"];
+
+        const { avatar } = compiledFormData;
+
+        const hasValidFormat = validFormat.some((format) =>
+          avatar.toLowerCase().endsWith(format)
+        );
+
+        if (!hasValidFormat) {
+          Toast.show({
+            type: "error",
+            text1: "Avatar is invalid format",
+          });
+          return;
+        }
+      }
+
+      // handleLogin(compiledFormData);
       return;
     }
 
-    setCurrentStepIndex((prev) =>
-      prev >= formValidationSchema.length ? prev : (prev += 1)
-    );
+    // setCurrentStepIndex((prev) =>
+    //   prev >= formValidationSchema.length ? prev : (prev += 1)
+    // );
     nextStep();
   };
 
