@@ -1,36 +1,30 @@
-import React from "react";
-import { Redirect, router } from "expo-router";
-import { atom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
+import { Redirect } from "expo-router";
+import { AuthRole } from "../../service/states/auth.atoms";
+import { useEffect } from "react";
 
-// Definition of atom for authentication status, initialized to null for clarity
-export const AuthAtoms = atom(null);
-
-const RootScreen = () => {
-  const authAtomValue = useAtomValue(AuthAtoms);
-
-  // Mapping of user types to routes
-  const navigationRoute = {
+const determineRoute = (status) => {
+  const routes = {
     user: "/customer/home",
     rider: "/rider/home",
   };
 
-  // Determine the route based on the atom value, default to sign-in page
-  const currentRoute = navigationRoute[authAtomValue] || "/auth/sign-in";
+  if (status && routes[status]) {
+    return routes[status];
+  } else {
+    return "/auth/sign-in";
+  }
+};
 
-  // Navigate to the determined route
-  React.useEffect(() => {
-    // Ensure navigation only if authAtomValue is null or not mapped correctly
-    if (
-      authAtomValue === null ||
-      !navigationRoute.hasOwnProperty(authAtomValue)
-    ) {
-      router.navigate("/auth/sign-in");
-    } else {
-      router.navigate(currentRoute);
-    }
-  }, [currentRoute, authAtomValue]);
+const RootScreen = () => {
+  const roleStatus = useAtomValue(AuthRole);
+  const currentRoute = determineRoute(roleStatus);
 
-  return null;
+  useEffect(() => {
+    console.log("The role status is updated");
+  }, [roleStatus]);
+
+  return <Redirect href={currentRoute} />;
 };
 
 export default RootScreen;

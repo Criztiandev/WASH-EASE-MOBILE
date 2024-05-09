@@ -7,21 +7,18 @@ import NotificationIcon from "../../../../../assets/icons/notification_icon.svg"
 import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
-import { useSetAtom } from "jotai";
-import { AuthAtoms } from "../../../../(auth)";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
-  const setAuthAtom = useSetAtom(AuthAtoms);
+  const { handleLogout } = useAuthContext();
 
-  const handleLogout = () => {
+  const onLogout = () => {
     Toast.show({
       type: "success",
       text1: "Logout Successfully",
     });
-
-    router.push("/auth/sign-in");
-    setAuthAtom("");
+    handleLogout();
   };
   return (
     <ScreenLayout className="p-4 pt-6">
@@ -58,7 +55,7 @@ const ProfileScreen = () => {
       </TouchableOpacity>
 
       <View className="my-4">
-        <Button onPress={handleLogout}>Logout</Button>
+        <Button onPress={onLogout}>Logout</Button>
       </View>
     </ScreenLayout>
   );

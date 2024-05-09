@@ -8,11 +8,11 @@ import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
 import { useSetAtom } from "jotai";
-import { AuthAtoms } from "../../../../(auth)";
+import { AuthRole } from "../../../../../service/states/auth.atoms";
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
-  const setAuthAtom = useSetAtom(AuthAtoms);
+  const setAuthAtom = useSetAtom(AuthRole);
 
   const handleLogout = () => {
     Toast.show({
