@@ -26,7 +26,7 @@ const useMultiform = (steps) => {
     prevStep,
     gotoStep,
     isFirstStep: currentStepIndex === 0,
-    isLastStep: currentStepIndex === steps.length - 1,
+    isFinalStep: currentStepIndex === steps.length - 1,
   };
 };
 

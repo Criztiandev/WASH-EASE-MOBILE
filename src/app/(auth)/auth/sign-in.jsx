@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import ScreenLayout from "../../../layout/ScreenLayout";
 import { Avatar } from "react-native-paper";
@@ -53,11 +53,11 @@ const SingInScreen = () => {
             <Text className="text-center text-primary">
               Dont have an Account ?{" "}
             </Text>
-            <Link
-              href={"/auth/sign-up"}
-              className="text-center underline text-primary font-bold text-lg">
-              Register
-            </Link>
+            <TouchableOpacity onPress={() => router.push("/auth/sign-up")}>
+              <Text className="text-center underline text-primary font-bold text-lg">
+                Register
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
