@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Slot, Stack } from "expo-router";
 
 const RootLayout = () => {
   return (
-    <Stack options={{ headerShown: false }}>
-      <Stack.Screen name="index" />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="auth/sign-up" />
     </Stack>
   );
 };

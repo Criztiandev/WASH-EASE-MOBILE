@@ -18,16 +18,40 @@ import PersonalInfoStep from "../../components/molecule/signInSteps/PersonalInfo
 import OtherInfoStep from "../../components/molecule/signInSteps/OtherInfoStep";
 import AccountInfoStep from "../../components/molecule/signInSteps/AccountInfoStep";
 import ScreenLayout from "../../layout/ScreenLayout";
-import { useAuthContext } from "../../context/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+
+import authApi from "../../api/auth.api";
 
 const RootScreen = () => {
   const [formData, setFormData] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const { handleLogin } = useAuthContext();
+
+  const registrationMutation = useMutation({
+    mutationFn: async (value) => {
+      return await authApi.register(value);
+    },
+
+    onSuccess: (payload) => {
+      Toast.show({
+        type: "success",
+        text1: "Registered Successfully",
+        text2: payload.data?.message,
+      });
+
+      router.replace("/");
+    },
+    onError: (error) => {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+        text2: error.response?.data.message || "An unknown error occurred",
+      });
+    },
+  });
 
   const formValidationSchema = [
-    // PersonalInfoValidation,
-    // OtherInfoValidation,
+    PersonalInfoValidation,
+    OtherInfoValidation,
     AccountInfoValidation,
   ];
 
@@ -42,8 +66,8 @@ const RootScreen = () => {
   });
 
   const { step, isFinalStep, isFirstStep, nextStep, prevStep } = useMultiform([
-    // <PersonalInfoStep control={control} error={errors} />,
-    // <OtherInfoStep control={control} error={errors} />,
+    <PersonalInfoStep control={control} error={errors} />,
+    <OtherInfoStep control={control} error={errors} />,
     <AccountInfoStep form={form} control={control} error={errors} />,
   ]);
 
@@ -54,19 +78,13 @@ const RootScreen = () => {
     if (isFinalStep) {
       const compiledFormData = Object.assign({}, ...updatedFormData);
 
-      Toast.show({
-        type: "success",
-        text1: "Registered Successfully",
-      });
-
-      console.log(compiledFormData);
       if (compiledFormData?.avatar) {
         const validFormat = [".jpeg", "png"];
 
         const { avatar } = compiledFormData;
-
+        const fileName = avatar.split("/").pop().toLowerCase();
         const hasValidFormat = validFormat.some((format) =>
-          avatar.toLowerCase().endsWith(format)
+          fileName.toLowerCase().endsWith(format)
         );
 
         if (!hasValidFormat) {
@@ -77,14 +95,13 @@ const RootScreen = () => {
           return;
         }
       }
-
-      // handleLogin(compiledFormData);
+      registrationMutation.mutate(compiledFormData);
       return;
     }
 
-    // setCurrentStepIndex((prev) =>
-    //   prev >= formValidationSchema.length ? prev : (prev += 1)
-    // );
+    setCurrentStepIndex((prev) =>
+      prev >= formValidationSchema.length ? prev : (prev += 1)
+    );
     nextStep();
   };
 
@@ -132,3 +149,9 @@ const RootScreen = () => {
 };
 
 export default RootScreen;
+
+// Helper
+const isValidAvatarFormat = (avatar) => {
+  const validFormats = [".jpeg", ".png"];
+  return validFormats.some((format) => avatar.toLowerCase().endsWith(format));
+};

@@ -11,11 +11,14 @@ import {
 } from "../service/validation/auth/signIn.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ScreenLayout from "../layout/ScreenLayout";
-import { useAuthContext } from "../context/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import authApi from "../api/auth.api";
+import Toast from "react-native-toast-message";
+import { useSetAtom } from "jotai";
+import { AuthAtom } from "../service/states/auth.atoms";
 
 const RootScreen = () => {
-  const { handleLogin } = useAuthContext();
-
+  const setAuth = useSetAtom(AuthAtom);
   const {
     control,
     handleSubmit: onSubmit,
@@ -25,8 +28,33 @@ const RootScreen = () => {
     resolver: zodResolver(SignInValidationSchema),
   });
 
+  const loginMutation = useMutation({
+    mutationFn: async (value) => await authApi.login(value),
+    onSuccess: ({ data }) => {
+      const { message, token, role, isAuthenticated } = data;
+
+      Toast.show({
+        type: "success",
+        text1: message,
+      });
+
+      setAuth({
+        token: token,
+        isAuthenticated,
+        role,
+      });
+    },
+    onError: (error) => {
+      console.log(error.message);
+      Toast.show({
+        type: "error",
+        text1: error.message,
+      });
+    },
+  });
+
   const handleSubmit = (value) => {
-    handleLogin(value);
+    loginMutation.mutate(value);
   };
   return (
     <ScreenLayout>

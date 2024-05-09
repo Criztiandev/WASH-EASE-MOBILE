@@ -15,11 +15,9 @@ const AccountInfoStep = ({ form, control, error }) => {
       quality: 1,
     });
     if (!pickerResult.canceled && pickerResult.assets) {
-      const pickedImageUri = pickerResult.assets[0].uri
-        .split("/")
-        .pop()
-        .toLowerCase();
-      setProfileImage(pickedImageUri);
+      const pickedImageUri = pickerResult.assets[0].uri;
+      setProfileImage(pickedImageUri.split("/").pop().toLowerCase());
+      console.log(pickerResult.assets);
       form.setValue("avatar", pickedImageUri);
     }
   };

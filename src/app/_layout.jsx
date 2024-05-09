@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Slot, Stack, useRouter, useSegments } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { Provider } from "jotai";
 import Toast from "react-native-toast-message";
 import AuthContextProvider, { useAuthContext } from "../context/AuthContext";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 const determineRoute = (role) => {
   const routes = {
@@ -12,10 +13,10 @@ const determineRoute = (role) => {
   };
   return routes[role] || "/";
 };
+const queryClient = new QueryClient();
 
 const RootStackLayout = () => {
   const { authState } = useAuthContext();
-  const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
@@ -38,14 +39,16 @@ const RootStackLayout = () => {
 const _layout = () => {
   return (
     <>
-      <Provider>
-        <PaperProvider>
-          <AuthContextProvider>
-            <RootStackLayout />
-          </AuthContextProvider>
-        </PaperProvider>
-      </Provider>
-      <Toast />
+      <QueryClientProvider client={queryClient}>
+        <Provider>
+          <PaperProvider>
+            <AuthContextProvider>
+              <RootStackLayout />
+            </AuthContextProvider>
+          </PaperProvider>
+        </Provider>
+        <Toast />
+      </QueryClientProvider>
     </>
   );
 };
