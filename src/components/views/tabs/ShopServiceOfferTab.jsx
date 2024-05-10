@@ -1,7 +1,5 @@
 import { View, Text, Modal } from "react-native";
 import React, { useState } from "react";
-import Button from "../../atoms/Button";
-import CloseIcon from "../../../assets/icons/close_icon.svg";
 import ShopServiceDetailCard from "../../molecule/ShopServiceDetailCard";
 import { Icon, IconButton } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
@@ -9,34 +7,89 @@ import { router } from "expo-router";
 
 const MOCKDATA = [
   {
-    id: "123123213213333",
+    id: "0",
     cover:
       "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    title: "Self Service",
-    price: 300,
-    description:
-      "Efficient, clean, and user-friendly, our self-service laundry lets you handle your washing with high-efficiency machines",
+    title: "Regular Wash",
+    price: "70.00",
+    timer: 38,
+    description: `KG: Regular Clothes (Max of 7kgs) , Maong Pants & Thick Jackets (Max of 6kgs)`,
+  },
+
+  {
+    id: "1",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Premium Wash",
+    price: "75.00",
+    timer: 48,
+    description: `Regular Clothes (Max of 7kgs) , Maong Pants & Thick Jackets (Max of 6kgs)`,
+  },
+
+  {
+    id: "2",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Regular Dry",
+    price: "70.00",
+    timer: 30,
+    description: `Regular Clothes (Max of 7kgs) , Maong Pants & Thick Jackets (Max of 6kgs)`,
+  },
+
+  {
+    id: "3",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Premium Dry",
+    price: "75.00",
+    timer: 40,
+    description: `Regular Clothes (Max of 7kgs) , Maong Pants & Thick Jackets (Max of 6kgs)`,
+  },
+
+  {
+    id: "4",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Fold",
+    price: "40.00",
+    description: "Per kilo",
   },
   {
-    id: "2323232",
+    id: "5",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Bedsheets/Curtains",
+    price: "55.00/kg",
+    description: "per kilo",
+  },
+  {
+    id: "6",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Blanket/Towel",
+    price: "55.00/kg",
+    description: "per kilo",
+  },
+
+  {
+    id: "7",
+    cover:
+      "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Comforter",
+    price: "85.00/KG",
+    description: "per kilo",
+  },
+  {
+    id: "8",
     cover:
       "https://images.pexels.com/photos/21525439/pexels-photo-21525439/free-photo-of-photographer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     title: "Full Service",
-    price: 300,
-    description:
-      "Drop off your laundry and leave the rest to us! Our full-service option includes washing, drying, and folding. ",
+    price: 200,
   },
 ];
 
-const ShopServiceOfferTab = ({ id, onPress, status }) => {
-  const [isToggle, setIsToggle] = useState(false);
+const ShopServiceOfferTab = () => {
   const [selectedService, setSelectedService] = useState("");
-
-  const toggleModal = (id) => {
-    const credentials = MOCKDATA.find((items) => items.id === id) || [];
-    setIsToggle((prev) => !prev);
-    setSelectedService(credentials);
-  };
 
   const handleSelect = () => {
     const currentTitle = selectedService?.title.replace(" ", "-");
@@ -48,45 +101,15 @@ const ShopServiceOfferTab = ({ id, onPress, status }) => {
 
   return (
     <>
-      <View className="flex-1">
+      <View className="flex-1 pb-4">
         <FlashList
           data={MOCKDATA}
-          renderItem={({ item }) => (
-            <ShopServiceDetailCard {...item} onToggle={toggleModal} />
-          )}
+          renderItem={({ item }) => <ShopServiceDetailCard {...item} />}
           estimatedItemSize={200}
           keyExtractor={(items) => items.id}
           className="mx-4"
         />
       </View>
-
-      <Modal animationType="slide" visible={isToggle} className="">
-        <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-2xl font-semibold">
-            {selectedService?.title}
-          </Text>
-          <IconButton icon={"close"} onPress={() => setIsToggle(false)} />
-        </View>
-
-        <View className="px-4 space-y-4">
-          <Text className="text-base">{selectedService?.description}</Text>
-          <View className="flex-row items-center space-x-2">
-            <Icon source={"clock"} size={24} />
-            <Text className="text-base">30 Minutes</Text>
-          </View>
-
-          <View className="flex-row items-center space-x-2">
-            <Icon source={"weight-kilogram"} size={24} />
-            <Text className="text-base">Max 7Kgs</Text>
-          </View>
-        </View>
-
-        <View className="absolute bottom-0 w-full  px-4">
-          <Button className={"w-full"} onPress={handleSelect}>
-            {status ? "Select Service" : "Choose Shop"}
-          </Button>
-        </View>
-      </Modal>
     </>
   );
 };

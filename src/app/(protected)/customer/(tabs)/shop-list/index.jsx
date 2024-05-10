@@ -61,7 +61,6 @@ const ShoplistScreen = () => {
       );
     });
 
-    console.log(filteredData);
     setFilteredData(filteredData);
   };
 

@@ -29,7 +29,7 @@ const SelfServiceScreen = () => {
     },
   });
 
-  const { step, nextStep, prevStep, isLastStep, isFirstStep } = useMultiform([
+  const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
     <SelectWashMachineStep controller={form.control} name={"wash"} />,
     <SelectDryMachineStep controller={form.control} name={"dry"} />,
     <SelectServiceStep
@@ -57,13 +57,13 @@ const SelfServiceScreen = () => {
       return;
     }
 
-    if (!isLastStep) {
+    if (!isFinalStep) {
       nextStep();
       return;
     }
 
     console.log(value);
-    router.push("/shop/service/success");
+    // router.push("/shop/service/success");
   };
 
   return (
@@ -73,7 +73,7 @@ const SelfServiceScreen = () => {
       <View className="px-4">
         <Button onPress={form.handleSubmit(onSubmit)}>
           <Text className="text-center font-semibold text-xl text-white">
-            Next
+            {isFinalStep ? "Proceed" : "Next"}
           </Text>
         </Button>
 

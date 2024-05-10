@@ -49,11 +49,10 @@ const HomeScreen = () => {
   return (
     <ScreenLayout className="bg-[#f0f0f0]">
       <ScrollView className="px-[16px] pt-[16px] space-y-4">
-        <Text className="text-2xl mb-4 font-bold">Welcome User!!, 👋</Text>
-
+        <Text className="text-2xl mb-4 font-bold">Welcome User!! 👋</Text>
         <MapFrame />
-
-        <Text className="text-xl font-bold">Nearby Laundy shops</Text>
+        {/* //TODO: Lalabas sa map ang shops  */}
+        <Text className="text-xl font-bold">Nearby Laundy Shop</Text>
         <View className="flex-1">
           <FlatList
             horizontal
