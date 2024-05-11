@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { cn } from "../utils/dev.utils";
 
 const ScreenLayout = ({ children, ...props }) => {
-  const defaultStyle = cn("flex-1", props.className);
+  const defaultStyle = cn("flex-1 w-full", props.className);
 
   return (
     <SafeAreaView className={defaultStyle} {...props}>

@@ -4,7 +4,7 @@ import { useController } from "react-hook-form";
 
 import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
-import MaterialItem from "./partials/MaterialItem";
+import MaterialItem from "../items/MaterialItem";
 import { stepAtom } from "../../../service/states/service.atoms";
 
 const MOCKDATA = [{ id: 0, title: "Regular Wash", price: 300 }];

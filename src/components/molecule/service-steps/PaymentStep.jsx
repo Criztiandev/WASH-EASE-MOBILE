@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useController } from "react-hook-form";
 import Divider from "../../atoms/Divider";
-import ServiceTable from "./partials/ServiceTable";
-import QuantityTable from "./partials/QuantityTable";
-import TotalSection from "./partials/TotalSection";
+import ServiceTable from "../tables/ServiceTable";
+import QuantityTable from "../tables/QuantityTable";
+import TotalSection from "./TotalSection";
 import { useSetAtom } from "jotai";
 import { stepAtom } from "../../../service/states/service.atoms";
 
@@ -34,7 +34,7 @@ const PaymentStep = ({ form, name }) => {
   }, [form.watch("payment-method"), form.watch("delivery-method")]);
 
   return (
-    <View className="flex-1  w-full">
+    <View className="flex-1  w-full mt-4">
       <Text
         className="text-2xl font-bold m-4 text-center mb-2"
         variant="titleLarge">
@@ -115,7 +115,7 @@ const PaymentStep = ({ form, name }) => {
             }
           })}
           <Divider />
-          <TotalSection payload={form.getValues()} />
+          <TotalSection payload={form.getValues()} form={form} />
         </View>
       </ScrollView>
     </View>

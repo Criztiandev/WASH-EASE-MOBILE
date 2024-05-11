@@ -3,7 +3,7 @@ import { cn } from "../../utils/dev.utils";
 import { cva } from "class-variance-authority";
 
 const buttonVariants = cva(
-  "  px-5 py-3.5 me-2 mb-2 dark:bg-blue-600  rounded-full ",
+  `  px-5 py-3.5 me-2 mb-2 dark:bg-blue-600  rounded-full   `,
   {
     variants: {
       variant: {
@@ -30,19 +30,24 @@ export default function Button({
   children,
   onPress,
   className,
+  disabled,
   textClassName,
   ...props
 }) {
   const textClass = cn(
-    "text-white text-center text-xl font-bold",
+    `text-white text-center text-xl font-bold`,
     textClassName
   );
 
   return (
     <TouchableOpacity
       {...props}
+      disabled={disabled}
       onPress={onPress}
-      className={cn(buttonVariants({ variant, size, className }))}>
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        `${disabled && "opacity-50"}`
+      )}>
       <Text className={textClass}>{children}</Text>
     </TouchableOpacity>
   );

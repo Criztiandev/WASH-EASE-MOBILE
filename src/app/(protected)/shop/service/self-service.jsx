@@ -15,6 +15,7 @@ import SelectDryMachineStep from "../../../../components/molecule/service-steps/
 import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
 import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
+import CheckOutStep from "../../../../components/molecule/service-steps/CheckOutStep";
 
 const SelfServiceScreen = () => {
   const currentStep = useAtomValue(stepAtom);
@@ -26,6 +27,7 @@ const SelfServiceScreen = () => {
       wash: "",
       "payment-method": "",
       "delivery-method": "self-service",
+      total: 0,
     },
   });
 
@@ -44,25 +46,15 @@ const SelfServiceScreen = () => {
       initialData={form.getValues("basic-material")}
     />,
     <PaymentStep form={form} name="method" />,
+    <CheckOutStep form={form} />,
   ]);
 
   const onSubmit = (value) => {
-    const isHasValue = form.getValues(currentStep);
-
-    if (isHasValue === "" || isHasValue === null || isHasValue?.length <= 0) {
-      Toast.show({
-        type: "error",
-        text1: "Please Fill all the field to proceed",
-      });
-      return;
-    }
-
     if (!isFinalStep) {
       nextStep();
       return;
     }
 
-    console.log(value);
     // router.push("/shop/service/success");
   };
 

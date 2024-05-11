@@ -1,11 +1,12 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import Divider from "../../../atoms/Divider";
+import Divider from "../../atoms/Divider";
+import { useSetAtom } from "jotai";
+import { serviceAtom } from "../../../service/states/service.atoms";
 
-const TotalSection = ({ payload }) => {
-  const taxRate = 0.1;
+const TotalSection = ({ form, payload }) => {
   const [total, setTotal] = useState(0);
-  const [subtotal, setSubtotal] = useState(0);
+  const setServiceAtom = useSetAtom(serviceAtom);
 
   const expectedService = [
     "basic-service",
@@ -36,26 +37,14 @@ const TotalSection = ({ payload }) => {
     }, 0);
 
     const newSubtotal = quantitySubtotal + serviceSubTotal;
-    const newTotal = newSubtotal + (1 + taxRate);
-    setSubtotal(newSubtotal);
+    const newTotal = newSubtotal;
     setTotal(newTotal);
+    form.setValue("total", newTotal);
+    setServiceAtom((prev) => ({ ...prev, total: newTotal }));
   }, []);
 
   return (
     <>
-      <View className="p-4 space-y-4">
-        <View className="flex-row justify-between items-start">
-          <Text className="font-bold ">Subtotal</Text>
-          <Text className="font-bold ">₱ {subtotal}</Text>
-        </View>
-        <View className="flex-row justify-between items-start sa">
-          <Text className="font-semibold  opacity-50">Tax</Text>
-          <Text className="font-bold  ">₱ {taxRate}</Text>
-        </View>
-      </View>
-
-      <Divider />
-
       <View className="px-4 flex-row justify-between items-start my-4">
         <Text className="font-bold ">Total</Text>
         <Text className="font-bold ">₱ {total.toFixed(2)}</Text>

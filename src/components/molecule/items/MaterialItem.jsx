@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { cn } from "../../../../utils/dev.utils";
 import { Badge, IconButton } from "react-native-paper";
+import { cn } from "../../../utils/dev.utils";
 
 const MaterialItem = memo(
   ({
@@ -72,7 +72,7 @@ const MaterialItem = memo(
               <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
               <View>
                 <Text className="text-[18px] font-bold">{payload.title}</Text>
-                <Text className="text-[18px]">{payload.price}</Text>
+                <Text className="text-[18px]">₱ {payload.price}.00</Text>
               </View>
             </View>
 

@@ -18,6 +18,8 @@ import SelectMaterialStep from "../../../../components/molecule/service-steps/Se
 import SelectDryCleaningStep from "../../../../components/molecule/service-steps/SelectDryCleaningStep";
 import SelectIroningStep from "../../../../components/molecule/service-steps/SelectIroningStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
+import ScreenLayout from "../../../../layout/ScreenLayout";
+import CheckOutStep from "../../../../components/molecule/service-steps/CheckOutStep";
 
 const Basic1 = [
   {
@@ -130,10 +132,11 @@ const RootScreen = () => {
       "basic-material": [],
       "payment-method": "",
       "delivery-method": "",
+      total: 0,
     },
   });
 
-  const { step, nextStep, prevStep, isLastStep, isFirstStep } = useMultiform([
+  const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
     <SelectServiceStep
       form={form}
       name={"basic-service"}
@@ -158,6 +161,10 @@ const RootScreen = () => {
       initialData={form.getValues("basic-material")}
     />,
     <PaymentStep form={form} name="method" />,
+    <CheckOutStep
+      total={form.getValues("total")}
+      method={form.getValues("payment-method")}
+    />,
   ]);
 
   const onSubmit = (value) => {
@@ -171,36 +178,37 @@ const RootScreen = () => {
       return;
     }
 
-    if (!isLastStep) {
-      console.log(value);
+    if (!isFinalStep) {
       nextStep();
       return;
     }
 
     console.log(value);
-    // router.push("/shop/service/success");
+    router.replace("../../customer/(tabs)/home");
   };
 
   return (
-    <View className="flex-1 bg-[#FAF8FF] mb-2">
-      <View className=" flex-1 justify-center items-center">{step}</View>
+    <ScreenLayout>
+      <View className="flex-1 bg-[#FAF8FF] mb-2">
+        <View className=" flex-1 justify-center items-center">{step}</View>
 
-      <View className="px-4">
-        <Button onPress={form.handleSubmit(onSubmit)}>
-          <Text className="text-center font-semibold text-xl text-white">
-            Next
-          </Text>
-        </Button>
-
-        {!isFirstStep && (
-          <Button variant={"outline"} onPress={() => prevStep()}>
-            <Text className="text-center font-semibold text-xl text-black">
-              Back
+        <View className="px-4">
+          <Button onPress={form.handleSubmit(onSubmit)}>
+            <Text className="text-center font-semibold text-xl text-white">
+              {isFinalStep ? "Proceed" : "Next"}
             </Text>
           </Button>
-        )}
+
+          {!isFirstStep && (
+            <Button variant={"outline"} onPress={() => prevStep()}>
+              <Text className="text-center font-semibold text-xl text-black">
+                Back
+              </Text>
+            </Button>
+          )}
+        </View>
       </View>
-    </View>
+    </ScreenLayout>
   );
 };
 

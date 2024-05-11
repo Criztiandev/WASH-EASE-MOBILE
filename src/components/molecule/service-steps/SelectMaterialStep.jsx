@@ -4,7 +4,7 @@ import { useController } from "react-hook-form";
 
 import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
-import MaterialItem from "./partials/MaterialItem";
+import MaterialItem from "../items/MaterialItem";
 import { stepAtom } from "../../../service/states/service.atoms";
 
 const MOCKDATA = [{ id: 0, title: "Regular Wash", price: 300 }];
@@ -45,20 +45,18 @@ const SelectMaterialStep = ({ form, name, initialData = [] }) => {
   }, []);
 
   return (
-    <>
-      <View className="flex-1  w-full mb-4">
-        <Text className="text-[24px] font-semibold text-center my-4">
-          Select Material
-        </Text>
+    <View className="flex-1 w-full mt-4 px-4">
+      <Text className="text-[24px] font-semibold text-center my-4">
+        Select Material
+      </Text>
 
-        <FlashList
-          data={MOCKDATA}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          estimatedItemSize={200}
-        />
-      </View>
-    </>
+      <FlashList
+        data={MOCKDATA}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        estimatedItemSize={200}
+      />
+    </View>
   );
 };
 

@@ -19,32 +19,27 @@ const RootLayout = () => {
         options={{
           title: "Details",
           headerRight: () => {
-            const [isSelected, setIsSelected] = useState(false);
             const { id } = useLocalSearchParams();
+
+            const handleSelect = () => {
+              Toast.show({
+                type: "success",
+                text1: "Selected Successfully",
+              });
+
+              router.push(`/shop/transaction/${id}`);
+            };
+
             return (
               <View className="flex-row space-x-2">
-                <IconButton
-                  icon={"message"}
-                  onPress={() => router.push(`/shop/choosen/message/${id}`)}
-                />
-                {!isSelected && (
-                  <IconButton
-                    icon={"check"}
-                    onPress={() =>
-                      Toast.show({
-                        type: "success",
-                        text1: "Selected Successfully",
-                      })
-                    }
-                  />
-                )}
+                <IconButton icon={"check"} onPress={handleSelect} />
               </View>
             );
           },
         }}
       />
       <Stack.Screen name="lists" />
-      <Stack.Screen name="service" options={{ title: "Service" }} />
+      <Stack.Screen name="service" options={{ headerShown: false }} />
     </Stack>
   );
 };

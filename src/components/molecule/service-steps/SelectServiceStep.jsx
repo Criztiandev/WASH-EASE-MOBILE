@@ -1,9 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text, StatusBar } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
-import ServiceItem from "./partials/ServiceItem";
+import ServiceItem from "../items/ServiceItem";
 import { stepAtom } from "../../../service/states/service.atoms";
+import ScreenLayout from "../../../layout/ScreenLayout";
 
 const MOCKDATA = [
   {
@@ -89,22 +90,20 @@ const SelectServiceStep = ({ form, name, initialData = [] }) => {
     [handleSelect, selected]
   );
   return (
-    <>
-      <View className="flex-1  w-full mb-4">
-        <View className="px-4">
-          <Text className="text-[24px] font-semibold text-center my-4 py-2 rounded-full">
-            Select Basic Service
-          </Text>
-        </View>
-
-        <FlashList
-          data={MOCKDATA}
-          renderItem={renderItem}
-          estimatedItemSize={200}
-          keyExtractor={(item) => item.id.toString()}
-        />
+    <View className="flex-1 w-full mt-4">
+      <View className="px-4">
+        <Text className="text-[24px] font-semibold text-center my-4 py-2 rounded-full">
+          Select Basic Service
+        </Text>
       </View>
-    </>
+
+      <FlashList
+        data={MOCKDATA}
+        renderItem={renderItem}
+        estimatedItemSize={200}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </View>
   );
 };
 

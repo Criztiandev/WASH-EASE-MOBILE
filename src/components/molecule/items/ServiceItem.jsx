@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { TouchableOpacity, View, Text, Modal } from "react-native";
-import InfoIcon from "../../../../assets/icons/info_icon.svg";
-import { cn } from "../../../../utils/dev.utils";
 import { Icon, IconButton, Portal } from "react-native-paper";
-import Button from "../../../atoms/Button";
+import InfoIcon from "../../../assets/icons/info_icon.svg";
+import { cn } from "../../../utils/dev.utils";
+import Button from "../../atoms/Button";
 
 const ServiceItem = ({
   id: serviceID,
