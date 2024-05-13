@@ -54,7 +54,9 @@ const RootScreen = () => {
               <HeroShopCard
                 {...item}
                 label={"View details"}
-                onNavigate={() => router.push(`/shop/details/${item.id}`)}
+                onNavigate={() =>
+                  router.push(`/shop/choosen/request/${item.id}`)
+                }
               />
             </View>
           )}

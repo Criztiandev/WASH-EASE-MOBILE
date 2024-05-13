@@ -9,7 +9,7 @@ const RootLayout = () => {
       <Stack.Screen
         name="request"
         options={{
-          title: "Request",
+          title: "Laundry Details",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
@@ -22,11 +22,6 @@ const RootLayout = () => {
             const { id } = useLocalSearchParams();
             return (
               <View className="flex-row items-center">
-                <TouchableOpacity
-                  onPress={() => router.push(`/shop/choosen/message/${id}`)}
-                  className="p-2 rounded-full mr-2">
-                  <Icon source={"message"} size={24} />
-                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => router.push(`/shop/choosen/details/${id}`)}
                   className="p-2 rounded-full mr-2">

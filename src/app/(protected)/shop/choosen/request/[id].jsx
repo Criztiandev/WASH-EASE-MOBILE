@@ -8,8 +8,11 @@ import ShopReviewTabs from "../../../../../components/views/tabs/ShopReviewTabs"
 import ShopServiceOfferTab from "../../../../../components/views/tabs/ShopServiceOfferTab";
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 import AboutTab from "../../../../../components/views/tabs/AboutTab";
-import { Avatar, IconButton } from "react-native-paper";
+import { Avatar, Icon, IconButton } from "react-native-paper";
 import RequestHeader from "../../../../../components/molecule/header/RequestHeader";
+import Button from "../../../../../components/atoms/Button";
+import ProfileCard from "../../../../../components/molecule/cards/ProfileCard";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Details = {
   name: "Shabu Houze",
@@ -53,7 +56,9 @@ const RequestScreen = () => {
 
   return (
     <View className="flex-1">
-      <ShopDetailsCover {...Details} />
+      <View className="px-4 flex-row justify-between items-center">
+        <Text className="text-xl font-bold mt-4">Laundry Status</Text>
+      </View>
 
       <View className="flex-1 m-4  border border-gray-300 bg-white rounded-[5px] p-4">
         <View className="flex-1">
@@ -61,8 +66,14 @@ const RequestScreen = () => {
         </View>
       </View>
 
-      <View className="p-4">
-        <RequestHeader id={id} name={"Geral Suarez"} status={"Online"} />
+      <View className="px-4 pb-4">
+        <ProfileCard name="Critian Jade Mitra Tuplano" role="Delivery Rider" />
+        <View></View>
+        <View>
+          <Button onPress={() => router.push(`/customer/message/${id}`)}>
+            Message
+          </Button>
+        </View>
       </View>
     </View>
   );
