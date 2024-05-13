@@ -13,7 +13,14 @@ const RootLayoutScreen = () => {
           headerLeft: () => (
             <View className="flex-row space-x-4 items-center">
               <TouchableOpacity
-                onPress={() => router.back()}
+                onPress={() => {
+                  try {
+                    router.back();
+                  } catch (e) {
+                    console.log("hi");
+                    console.log(e);
+                  }
+                }}
                 className="p-2 rounded-full mr-2">
                 <Icon source={"arrow-left"} size={24} />
               </TouchableOpacity>

@@ -42,6 +42,13 @@ const RootLayout = () => {
         name="order-details"
         options={{
           title: "Order Details",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="p-2 rounded-full mr-2">
+              <Icon source={"arrow-left"} size={24} />
+            </TouchableOpacity>
+          ),
         }}
       />
 
@@ -56,6 +63,19 @@ const RootLayout = () => {
         name="message"
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="review"
+        options={{
+          title: "Review",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="p-2 rounded-full mr-2">
+              <Icon source={"arrow-left"} size={24} />
+            </TouchableOpacity>
+          ),
         }}
       />
     </Stack>

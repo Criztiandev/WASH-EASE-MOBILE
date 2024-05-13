@@ -90,12 +90,10 @@ const SelectServiceStep = ({ form, name, initialData = [] }) => {
     [handleSelect, selected]
   );
   return (
-    <View className="flex-1 w-full mt-4">
-      <View className="px-4">
-        <Text className="text-[24px] font-semibold text-center my-4 py-2 rounded-full">
-          Select Basic Service
-        </Text>
-      </View>
+    <View className="flex-1  w-full mb-4">
+      <Text className="text-[24px] font-semibold text-center my-4">
+        Select Service
+      </Text>
 
       <FlashList
         data={MOCKDATA}

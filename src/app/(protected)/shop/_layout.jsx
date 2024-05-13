@@ -22,11 +22,6 @@ const RootLayout = () => {
             const { id } = useLocalSearchParams();
 
             const handleSelect = () => {
-              Toast.show({
-                type: "success",
-                text1: "Selected Successfully",
-              });
-
               router.push(`/shop/transaction/${id}`);
             };
 
@@ -39,7 +34,7 @@ const RootLayout = () => {
         }}
       />
       <Stack.Screen name="lists" />
-      <Stack.Screen name="service" options={{ headerShown: false }} />
+      <Stack.Screen name="service" options={{ title: "Transaction Mode" }} />
     </Stack>
   );
 };

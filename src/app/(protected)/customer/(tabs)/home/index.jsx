@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { Text } from "react-native-paper";
-import { View, FlatList, ScrollView } from "react-native";
+import React, { useMemo, useState } from "react";
+import { Text, View } from "react-native";
 
-import MapFrame from "../../../../../components/atoms/MapFrame";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
-
+import CalloutMap from "../../../../../components/organism/CalloutMap";
+import BottomSheet from "@gorhom/bottom-sheet";
 const MOCKDATA = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -43,25 +42,11 @@ const MOCKDATA = [
 ];
 
 const HomeScreen = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const renderSeparator = () => <View style={{ width: 8 }} />;
+  const snapPoints = useMemo(() => ["25%", "50%", "95%"], []);
 
   return (
     <ScreenLayout className="bg-[#f0f0f0]">
-      <ScrollView className="px-[16px] pt-[16px] space-y-4">
-        <Text className="text-2xl mb-4 font-bold">Welcome User!! 👋</Text>
-        <MapFrame />
-        {/* //TODO: Lalabas sa map ang shops  */}
-        <Text className="text-xl font-bold">Nearby Laundy Shop</Text>
-        <View className="flex-1">
-          <FlatList
-            horizontal
-            data={MOCKDATA}
-            ItemSeparatorComponent={renderSeparator}
-            renderItem={({ item }) => <HeroShopCard {...item} />}
-          />
-        </View>
-      </ScrollView>
+      <CalloutMap />
     </ScreenLayout>
   );
 };

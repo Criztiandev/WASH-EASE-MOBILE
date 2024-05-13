@@ -45,7 +45,7 @@ const SelectMaterialStep = ({ form, name, initialData = [] }) => {
   }, []);
 
   return (
-    <View className="flex-1 w-full mt-4 px-4">
+    <View className="flex-1  w-full mb-4">
       <Text className="text-[24px] font-semibold text-center my-4">
         Select Material
       </Text>

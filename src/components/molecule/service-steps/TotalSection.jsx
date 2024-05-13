@@ -39,7 +39,7 @@ const TotalSection = ({ form, payload }) => {
     const newSubtotal = quantitySubtotal + serviceSubTotal;
     const newTotal = newSubtotal;
     setTotal(newTotal);
-    form.setValue("total", newTotal);
+    form?.setValue("total", newTotal);
     setServiceAtom((prev) => ({ ...prev, total: newTotal }));
   }, []);
 

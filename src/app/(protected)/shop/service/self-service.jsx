@@ -25,13 +25,20 @@ const SelfServiceScreen = () => {
       "basic-material": [],
       dry: "",
       wash: "",
-      "payment-method": "",
+      "payment-method": "cash",
       "delivery-method": "self-service",
       total: 0,
     },
   });
 
-  const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
+  const {
+    step,
+    nextStep,
+    prevStep,
+    isFinalStep,
+    currentStepIndex,
+    isFirstStep,
+  } = useMultiform([
     <SelectWashMachineStep controller={form.control} name={"wash"} />,
     <SelectDryMachineStep controller={form.control} name={"dry"} />,
     <SelectServiceStep
@@ -46,10 +53,27 @@ const SelfServiceScreen = () => {
       initialData={form.getValues("basic-material")}
     />,
     <PaymentStep form={form} name="method" />,
-    <CheckOutStep form={form} />,
+    <CheckOutStep
+      total={form.getValues("total")}
+      method={form.getValues("payment-method")}
+    />,
   ]);
 
   const onSubmit = (value) => {
+    const isHasValue = form.getValues("basic-service");
+
+    if (
+      isHasValue === "" ||
+      isHasValue === null ||
+      (isHasValue?.length <= 0 && currentStepIndex === 2)
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Please Fill all the field to proceed",
+      });
+      return;
+    }
+
     if (!isFinalStep) {
       nextStep();
       return;
@@ -62,7 +86,7 @@ const SelfServiceScreen = () => {
     <View className="flex-1 bg-[#FAF8FF] mb-2">
       <View className=" flex-1 justify-center items-center">{step}</View>
 
-      <View className="px-4">
+      <View className="px-4 space-y-2">
         <Button onPress={form.handleSubmit(onSubmit)}>
           <Text className="text-center font-semibold text-xl text-white">
             {isFinalStep ? "Proceed" : "Next"}

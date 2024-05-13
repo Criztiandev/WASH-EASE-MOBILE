@@ -56,9 +56,9 @@ const RootScreen = () => {
             </DataTable>
             <Divider />
 
-            <ServiceTable title={"Service"} />
+            <ServiceTable title={"Service"} payload={[]} />
             <Divider />
-            <QuantityTable title={"Materials"} />
+            <QuantityTable title={"Materials"} payload={[]} />
             <Divider />
             <TotalSection payload={[]} />
           </View>

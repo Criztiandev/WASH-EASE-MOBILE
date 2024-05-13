@@ -7,6 +7,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Provider } from "jotai";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const queryClient = new QueryClient();
 
@@ -48,13 +49,15 @@ const _layout = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Provider>
-          <PaperProvider>
-            <AuthContextProvider>
-              <RootStackLayout />
-            </AuthContextProvider>
-          </PaperProvider>
-        </Provider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Provider>
+            <PaperProvider>
+              <AuthContextProvider>
+                <RootStackLayout />
+              </AuthContextProvider>
+            </PaperProvider>
+          </Provider>
+        </GestureHandlerRootView>
         <Toast />
       </QueryClientProvider>
     </>

@@ -10,7 +10,7 @@ const HomeScreen = () => {
       </Text>
 
       <TouchableOpacity
-        className="px-4 py-2 border rounded-[5px] h-[100px] justify-center items-center"
+        className="px-4 py-2 d  border-gray-300 border  bg-white rounded-[5px] h-[100px] justify-center items-center"
         onPress={() => {
           router.push("/shop/service/self-service");
         }}>
@@ -18,7 +18,7 @@ const HomeScreen = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        className="px-4 py-2 border rounded-[5px] h-[100px] justify-center items-center"
+        className="px-4 py-2 d  border-gray-300 border  bg-white rounded-[5px] h-[100px] justify-center items-center"
         onPress={() => router.push("/shop/service/full-service")}>
         <Text className="text-[22px] font-bold text-center">
           Pickup and Delivery
@@ -26,7 +26,7 @@ const HomeScreen = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        className="px-4 py-2 border rounded-[5px] h-[100px] justify-center items-center"
+        className="px-4 py-2 d  border-gray-300 border  bg-white rounded-[5px] h-[100px] justify-center items-center"
         onPress={() => router.push("/shop/service/full-service")}>
         <Text className="text-[22px] font-bold text-center">Pickup Only</Text>
       </TouchableOpacity>

@@ -2,8 +2,9 @@ import { View, FlatList } from "react-native";
 import { Searchbar } from "react-native-paper";
 import React, { useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import LaundryShopCardHorizontal from "../../../../../components/molecule/cards/LaundryShopCardHorizontal";
 import { FlashList } from "@shopify/flash-list";
+import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
+import { router } from "expo-router";
 
 const MOCKDATA = [
   {
@@ -79,9 +80,10 @@ const ShoplistScreen = () => {
             data={filteredData}
             estimatedItemSize={200}
             renderItem={({ item }) => (
-              <LaundryShopCardHorizontal
-                path={`/shop/details/${item.id}`}
+              <HeroShopCard
                 {...item}
+                label={"View details"}
+                onNavigate={() => router.push(`/shop/details/${item.id}`)}
               />
             )}
           />

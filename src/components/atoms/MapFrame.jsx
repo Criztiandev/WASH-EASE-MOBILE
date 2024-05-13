@@ -1,29 +1,27 @@
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import React from "react";
+import React, { useRef } from "react";
 import { cn } from "../../utils/dev.utils";
 import { Card } from "react-native-paper";
+import { Text, View } from "react-native";
 
-const INITIAL_REGION = {
-  latitude: 12.3667,
-  longitude: 123.6167,
-  latitudeDelta: 2,
-  longitudeDelta: 2,
+// Aniate camera to navigate
+
+// map ref current.animateCamera({center:location,zoom:10},{duration:10})
+
+const onRegionChange = (value) => {
+  console.log(value);
+};
+
+const onMarkerSelected = (marker) => {
+  console.log(marker);
 };
 
 const MapFrame = (props) => {
+  const mapRef = useRef();
   const defastyle = cn(
     "h-[300px] border rounded-[5px] bg-white",
     props.className
   );
-  return (
-    <Card className="h-[300px] bg-white">
-      <MapView
-        className="w-full h-full"
-        provider={PROVIDER_GOOGLE}
-        initialRegion={INITIAL_REGION}
-      />
-    </Card>
-  );
+  return <Card className="h-[300px] bg-white"></Card>;
 };
 
 export default MapFrame;
