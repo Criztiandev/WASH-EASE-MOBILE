@@ -1,7 +1,7 @@
 import { View, Dimensions, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
-import { Text } from "react-native-paper";
+import { Icon, Text } from "react-native-paper";
 
 import LocationIcon from "../../../assets/icons/location_icon.svg";
 import ClockIcon from "../../../assets/icons/clock_icon.svg";
@@ -46,7 +46,7 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
 
           <View className="flex-row items-center ">
             <View className="mr-2">
-              <ClockIcon className={"mr-2"} />
+              <Icon source={"information"} size={24} />
             </View>
             <Text className="text-[16px]">{details.schedule}</Text>
           </View>

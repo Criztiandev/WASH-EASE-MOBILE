@@ -11,6 +11,14 @@ const RootLayoutScreen = () => {
           title: "Details",
         }}
       />
+
+      <Stack.Screen
+        name="dashboard"
+        options={{
+          title: "Details",
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

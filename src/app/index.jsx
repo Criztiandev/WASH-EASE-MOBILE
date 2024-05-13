@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { Avatar } from "react-native-paper";
 import { useForm } from "react-hook-form";
 import InputField from "../components/atoms/InputField";
@@ -15,7 +15,6 @@ import { useMutation } from "@tanstack/react-query";
 import authApi from "../api/auth.api";
 import Toast from "react-native-toast-message";
 import { useAuthContext } from "../context/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 const RootScreen = () => {
