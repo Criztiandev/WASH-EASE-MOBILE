@@ -10,6 +10,7 @@ import Toast from "react-native-toast-message";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import accoutApi from "../../../../../api/accout.api";
+import ProfileCard from "../../../../../components/molecule/cards/ProfileCard";
 
 const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
@@ -76,22 +77,3 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
-
-const ProfileCard = () => {
-  return (
-    <>
-      <Text className="text-xl font-bold mb-2">Profile</Text>
-      <Card className="bg-white mb-4">
-        <Card.Content className="flex-row space-x-4">
-          <Avatar.Icon />
-          <View>
-            <Text className="text-lg font-bold">
-              Criztian Jade Mitra Tuplano
-            </Text>
-            <Text>Customer</Text>
-          </View>
-        </Card.Content>
-      </Card>
-    </>
-  );
-};

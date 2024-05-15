@@ -79,6 +79,8 @@ const SelfServiceScreen = () => {
       return;
     }
 
+    console.log(value);
+
     // router.push("/shop/service/success");
   };
 
