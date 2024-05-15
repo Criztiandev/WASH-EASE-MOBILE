@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Avatar, Card } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import NotificationIcon from "../../../../../assets/icons/notification_icon.svg";
@@ -37,7 +36,7 @@ const ProfileScreen = () => {
   };
   return (
     <ScreenLayout className="p-4 pt-6">
-      <ProfileCard />
+      <ProfileCard name={"Criztian"} role={"CUstomer"} />
 
       <TouchableOpacity
         onPress={() => {
