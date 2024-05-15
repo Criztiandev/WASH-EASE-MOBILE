@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  KeyboardAvoidingView,
-  ScrollView,
-} from "react-native";
+import { View, Text, KeyboardAvoidingView, ScrollView } from "react-native";
 import React from "react";
 import { Avatar } from "react-native-paper";
 import Button from "../../../../components/atoms/Button";

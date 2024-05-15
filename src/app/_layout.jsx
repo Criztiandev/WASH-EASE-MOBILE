@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
@@ -7,6 +7,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Provider } from "jotai";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import SplashScreen from "../../SplashScreen";
 
 const queryClient = new QueryClient();
 
@@ -45,20 +46,40 @@ const RootStackLayout = () => {
 };
 
 const _layout = () => {
+  const { getData } = useLocalStorage("splash");
+  const [isShowSpashScreen, setIsShowSplashScreen] = useState(true);
+
+  useEffect(() => {
+    const checkIsAlreadySplashScreen = async () => {
+      const payload = await getData();
+      if (payload && payload.isAlreadySplashed === true) {
+        setIsShowSplashScreen(false);
+      }
+    };
+
+    checkIsAlreadySplashScreen();
+  }, []);
+
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Provider>
-            <PaperProvider>
-              <AuthContextProvider>
-                <RootStackLayout />
-              </AuthContextProvider>
-            </PaperProvider>
-          </Provider>
-        </GestureHandlerRootView>
-        <Toast />
-      </QueryClientProvider>
+      {isShowSpashScreen ? (
+        <SplashScreen />
+      ) : (
+        <>
+          <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Provider>
+                <PaperProvider>
+                  <AuthContextProvider>
+                    <RootStackLayout />
+                  </AuthContextProvider>
+                </PaperProvider>
+              </Provider>
+            </GestureHandlerRootView>
+            <Toast />
+          </QueryClientProvider>
+        </>
+      )}
     </>
   );
 };
