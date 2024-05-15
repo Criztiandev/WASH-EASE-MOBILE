@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
 import Button from "./src/components/atoms/Button";
 import useMultiform from "./src/hooks/useMultiform";
 import useLocalStorage from "./src/hooks/useLocalStorage";
@@ -30,11 +30,11 @@ const SplashScreen = () => {
         justifyContent: "center",
         alignItems: "center",
         paddingHorizontal: 32,
-        gap: 64,
+        gap: 24,
       }}>
       {step}
 
-      <View style={{ width: "100%" }}>
+      <View style={{ width: "100%", marginTop: 24 }}>
         <Button onPress={handleNextStep}>Next</Button>
       </View>
     </View>
@@ -49,13 +49,12 @@ const IntroScreen = () => {
       <View style={{ gap: 16 }}>
         <Text style={{ fontSize: 32, fontWeight: "bold" }}>WELCOME TO</Text>
 
-        <View
-          style={{
-            width: 200,
-            height: 200,
-            borderWidth: 1,
-            borderRadius: 100,
-          }}></View>
+        <Image
+          style={{ width: 220, height: 220, borderRadius: 100 }}
+          source={require("./src/assets/images/SplashScreenLogo.png")}
+          contentFit="cover"
+          transition={1000}
+        />
       </View>
 
       <View style={{ gap: 16 }}>
@@ -80,13 +79,12 @@ const ServiceScreen = () => {
   return (
     <>
       <View style={{ gap: 16 }}>
-        <View
-          style={{
-            width: 200,
-            height: 200,
-            borderWidth: 1,
-            borderRadius: 100,
-          }}></View>
+        <Image
+          style={{ width: 360, height: 360 }}
+          source={require("./src/assets/images/service-splash.png")}
+          contentFit="cover"
+          transition={1000}
+        />
       </View>
 
       <View style={{ gap: 16 }}>
@@ -111,13 +109,12 @@ const LocationScreen = () => {
   return (
     <>
       <View style={{ gap: 16 }}>
-        <View
-          style={{
-            width: 200,
-            height: 200,
-            borderWidth: 1,
-            borderRadius: 100,
-          }}></View>
+        <Image
+          style={{ width: 360, height: 360 }}
+          source={require("./src/assets/images/location-splash.png")}
+          contentFit="cover"
+          transition={1000}
+        />
       </View>
 
       <View style={{ gap: 16 }}>
@@ -142,13 +139,12 @@ const DeliveryScreen = () => {
   return (
     <>
       <View style={{ gap: 16 }}>
-        <View
-          style={{
-            width: 200,
-            height: 200,
-            borderWidth: 1,
-            borderRadius: 100,
-          }}></View>
+        <Image
+          style={{ width: 360, height: 360 }}
+          source={require("./src/assets/images/delivery-splash.png")}
+          contentFit="cover"
+          transition={1000}
+        />
       </View>
 
       <View style={{ gap: 16 }}>
