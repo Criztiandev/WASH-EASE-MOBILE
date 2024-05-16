@@ -10,50 +10,54 @@ const MOCKDATA = [
   {
     id: 0,
     title: "Regular Wash",
-    price: "840",
-    description:
-      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+    price: 70,
+    description: `Description: 38 mins
+    Regular Clothes (Max of 7kgs)
+    Maong Pants & Thick Jackets (Max of 6kgs)`,
   },
   {
     id: 1,
-    title: "Wash Dis",
-    price: 400,
-    description:
-      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+    title: "Premium Wash",
+    price: 75,
+    description: `Description: 48 mins
+      Regular Clothes (Max of 7kgs)
+      Maong Pants & Thick Jackets (Max of 6kgs)`,
   },
   {
     id: 2,
-    title: "I Miss you",
-    price: 203,
-    description:
-      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+    title: "Regular Dry",
+    price: 70,
+    description: `Description: 38 mins
+     Regular Clothes (Max of 7kgs)
+     Maong Pants & Thick Jackets (Max of 6kgs)`,
   },
   {
     id: 3,
-    title: "Balik kana",
-    price: 300,
-    description: "Di mapigilang magising",
+    title: "Premium Dry",
+    price: 75,
+    description: `Description: 48 mins
+    Regular Clothes (Max of 7kgs)
+    Maong Pants & Thick Jackets (Max of 6kgs)`,
   },
   {
     id: 4,
-    title: "Sorry",
-    price: 500,
-    description:
-      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+    title: "Bedsheets/Curtains",
+    price: 55.0,
+    description: `Description: per kilo
+      ₱55.00/kg`,
   },
   {
     id: 5,
-    title: "Mahal",
-    price: 400,
-    description:
-      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+    title: "Blanket/Towel",
+    price: 55,
+    description: `Description: per kilo
+     ₱55.00/kg`,
   },
   {
     id: 6,
-    title: "Ikay Nasaktan bumalik kana sakin",
-    price: 402,
-    description:
-      "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
+    title: "Comforter",
+    price: 85,
+    description: "Per kilo",
   },
 ];
 

@@ -7,7 +7,7 @@ import { Redirect, useRouter } from "expo-router";
 const determineRoute = (role) => {
   const routes = {
     Customer: "/customer/home",
-    rider: "/rider/home",
+    Rider: "/rider/home",
   };
   return routes[role] || "/";
 };

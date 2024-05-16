@@ -79,9 +79,12 @@ const SelfServiceScreen = () => {
       return;
     }
 
-    console.log(value);
-
-    // router.push("/shop/service/success");
+    Toast.show({
+      type: "success",
+      text1: "Order Placed",
+      text2: "Thank you for using wash ease",
+    });
+    router.replace("../../customer/(tabs)/home");
   };
 
   return (

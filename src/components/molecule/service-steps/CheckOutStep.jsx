@@ -12,12 +12,12 @@ const CheckOutStep = ({ total, method }) => {
 
         <View className="flex-row space-x-2 justify-center  items-center mb-2">
           <Text className="text-lg font-bold">Transaction Date</Text>
-          <Text className="text-base">April 8, 2024</Text>
+          <Text className="text-base">April 17, 2024</Text>
         </View>
 
         <View className="flex-row space-x-2 justify-center  items-center">
           <Text className="text-lg font-bold">Estimiated Delivery Date</Text>
-          <Text className="text-base">April 9, 2024</Text>
+          <Text className="text-base">April 18, 2024</Text>
         </View>
 
         <View className="m-4 border border-gray-300 bg-white p-4 rounded-[5px]">

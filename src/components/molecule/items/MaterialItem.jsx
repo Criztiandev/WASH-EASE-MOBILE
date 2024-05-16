@@ -56,7 +56,7 @@ const MaterialItem = memo(
         )}
         onPress={handleSelect}>
         <View className=" max-h-[150px] py-4 px-2 flex-row ">
-          <View className="justify-between flex-row  flex-1">
+          <View className="justify-between flex-row  flex-1 px-4">
             {/* Details */}
             <View
               className="flex-row space-x-3 justify-between items-center"
@@ -69,7 +69,6 @@ const MaterialItem = memo(
                   </Badge>
                 </View>
               )}
-              <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
               <View>
                 <Text className="text-[18px] font-bold">{payload.title}</Text>
                 <Text className="text-[18px]">₱ {payload.price}.00</Text>

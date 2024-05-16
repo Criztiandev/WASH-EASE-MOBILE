@@ -18,7 +18,6 @@ import SelectMaterialStep from "../../../../components/molecule/service-steps/Se
 import SelectDryCleaningStep from "../../../../components/molecule/service-steps/SelectDryCleaningStep";
 import SelectIroningStep from "../../../../components/molecule/service-steps/SelectIroningStep";
 import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
-import ScreenLayout from "../../../../layout/ScreenLayout";
 import CheckOutStep from "../../../../components/molecule/service-steps/CheckOutStep";
 
 const Basic1 = [
@@ -183,7 +182,11 @@ const RootScreen = () => {
       return;
     }
 
-    console.log(value);
+    Toast.show({
+      type: "success",
+      text1: "Order Placed",
+      text2: "Thank you for using wash ease",
+    });
     router.replace("../../customer/(tabs)/home");
   };
 

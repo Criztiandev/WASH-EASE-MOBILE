@@ -14,6 +14,8 @@ const ServiceItem = ({
   const { title, price, description } = payload;
   const [checked, setChecked] = useState(isActive);
 
+  console.log(payload);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => setIsModalVisible((prev) => !prev);
 
@@ -42,7 +44,6 @@ const ServiceItem = ({
         onPress={handleChecked}>
         <View className=" max-h-[150px] py-4 px-2 flex-row justify-between ">
           <View className="flex-row space-x-3" style={{ flexShrink: 1 }}>
-            <View className="w-[64px] h-[64px] border rounded-[5px]"></View>
             <View style={{ flexShrink: 1 }}>
               <Text className="text-[18px] font-bold mb-1">{title}</Text>
               <Text className="text-[18px]">₱ {price}</Text>

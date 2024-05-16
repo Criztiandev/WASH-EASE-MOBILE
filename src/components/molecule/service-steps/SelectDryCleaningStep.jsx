@@ -7,7 +7,12 @@ import { useSetAtom } from "jotai";
 import MaterialItem from "../items/MaterialItem";
 import { stepAtom } from "../../../service/states/service.atoms";
 
-const MOCKDATA = [{ id: 0, title: "Regular Wash", price: 300 }];
+const MOCKDATA = [
+  { id: 0, title: "Dress", price: 280 },
+  { id: 1, title: "Gown", price: 500 },
+  { id: 2, title: "Suit", price: 250 },
+  { id: 3, title: "Barong", price: 250 },
+];
 
 const SelectDryCleaningStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });

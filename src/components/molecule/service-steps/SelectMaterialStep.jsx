@@ -6,8 +6,13 @@ import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
 import MaterialItem from "../items/MaterialItem";
 import { stepAtom } from "../../../service/states/service.atoms";
-
-const MOCKDATA = [{ id: 0, title: "Regular Wash", price: 300 }];
+("");
+const MOCKDATA = [
+  { id: 0, title: "Surf Wash", price: 70 },
+  { id: 1, title: "Zonrox", price: 70 },
+  { id: 2, title: "Champion", price: 70 },
+  { id: 3, title: "Downy", price: 75 },
+];
 
 const SelectMaterialStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
