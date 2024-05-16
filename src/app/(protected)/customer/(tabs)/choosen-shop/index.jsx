@@ -8,6 +8,7 @@ import ShopServiceDetailCard from "../../../../../components/molecule/ShopServic
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import Button from "../../../../../components/atoms/Button";
 import { router } from "expo-router";
+import { Searchbar } from "react-native-paper";
 
 const MOCKDATA = [
   {
@@ -46,6 +47,12 @@ const RootScreen = () => {
   return (
     <ScreenLayout>
       <Text className="text-2xl font-bold p-4">Selected Shops</Text>
+
+      <Searchbar
+        placeholder="Search"
+        className="bg-white mx-4"
+        onChangeText={() => console.log("hi")}
+      />
       <View className="flex-1 my-4">
         <FlashList
           data={MOCKDATA}

@@ -1,11 +1,9 @@
 import { router } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import HeroShopCard from "../molecule/cards/HeroShopCard";
+import { useEffect, useRef, useState } from "react";
+import { View, TouchableOpacity } from "react-native";
+
+import { WebView } from "react-native-webview";
 import { cn } from "../../utils/dev.utils";
-import MapViewDirections from "react-native-maps-directions";
-import { Icon } from "react-native-paper";
 
 const ShopDetails = {
   id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -58,13 +56,6 @@ const DestinationMap = ({ data, height }) => {
   const [selectedLaundry, setSelectedLaundry] = useState(null);
   const mapRef = useRef(null);
 
-  const handleMarkSelect = (location) => {
-    setSelectedLaundry({ id: location.id, name: location.id });
-  };
-  const handlRegionChange = (value) => {
-    console.log(value);
-  };
-
   useEffect(() => {
     mapRef.current?.animateCamera(
       { center: INITIAL_REGION, zoom: 10 },
@@ -73,45 +64,10 @@ const DestinationMap = ({ data, height }) => {
   }, []);
   return (
     <>
-      <View
-        className={cn(`${selectedLaundry && "h-[300]"}`)}
-        style={{ height: height }}>
-        <MapView
-          ref={mapRef}
-          className="w-full h-full"
-          provider={PROVIDER_GOOGLE}
-          initialRegion={INITIAL_REGION}
-          showsUserLocation
-          showsMyLocationButton
-          onRegionChangeComplete={handlRegionChange}>
-          <Marker
-            coordinate={origin}
-            onPress={() => handleMarkSelect(origin.id)}></Marker>
-          <Marker
-            coordinate={destination}
-            onPress={() => handleMarkSelect(destination.id)}></Marker>
-
-          <MapViewDirections origin={origin} destination={destination} />
-        </MapView>
-      </View>
-
-      {selectedLaundry && (
-        <>
-          <TouchableOpacity
-            className="flex-1"
-            onPress={() => router.push(`/shop/details/${selectedLaundry.id}`)}>
-            <HeroShopCard {...ShopDetails} label={"Accept"} />
-          </TouchableOpacity>
-
-          <View className="absolute top-0 right-0 mt-12 mr-4">
-            <TouchableOpacity
-              onPress={() => setSelectedLaundry(null)}
-              className="w-[36px] h-[36px]  rounded-full flex justify-center items-center bg-red-300">
-              <Icon source="close" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+      <WebView
+        source={{ uri: "https://reactnative.dev/" }}
+        style={{ flex: 1 }}
+      />
     </>
   );
 };
