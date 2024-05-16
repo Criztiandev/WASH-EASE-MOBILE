@@ -8,6 +8,9 @@ import { cn } from "../../../utils/dev.utils";
 import { useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { stepAtom } from "../../../service/states/service.atoms";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import useAuth from "../../../hooks/useAuth";
 
 const WASHMOCKDATA = [
   {
@@ -38,10 +41,22 @@ const WASHMOCKDATA = [
 ];
 
 const SelectWashMachineStep = ({ controller, name }) => {
+  const auth = useAuth();
+
   const setCurrentStep = useSetAtom(stepAtom);
   const { field } = useController({
     control: controller,
     name,
+  });
+
+  const payload = useQuery({
+    queryFn: async () => {
+      const data = await axios.get(
+        "https://washease.iamjohn.cloud/public/api/laundry-shop/machines"
+      );
+      console.log(data);
+    },
+    queryKey: ["selected-wash-machine"],
   });
 
   useEffect(() => {
@@ -51,6 +66,22 @@ const SelectWashMachineStep = ({ controller, name }) => {
       setCurrentStep("");
     };
   }, []);
+
+  if (payload.isLoading) {
+    return (
+      <View>
+        <Text className="text-xl font-bold">Loading...</Text>
+      </View>
+    );
+  }
+
+  if (payload.isError) {
+    return (
+      <View>
+        <Text className="text-xl">Internet connection problem...</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="">

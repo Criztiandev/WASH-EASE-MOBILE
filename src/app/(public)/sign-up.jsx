@@ -20,6 +20,7 @@ import AccountInfoStep from "../../components/molecule/signInSteps/AccountInfoSt
 import ScreenLayout from "../../layout/ScreenLayout";
 import { useMutation } from "@tanstack/react-query";
 
+import { Image } from "expo-image";
 import authApi from "../../api/auth.api";
 
 const RootScreen = () => {
@@ -95,7 +96,8 @@ const RootScreen = () => {
           return;
         }
       }
-      registrationMutation.mutate(compiledFormData);
+
+      registrationMutation.mutate({ ...compiledFormData, role: "Customer" });
       return;
     }
 
@@ -113,12 +115,20 @@ const RootScreen = () => {
   return (
     <ScreenLayout>
       <View className="flex-1 justify-center items-center">
-        <Avatar.Icon size={200} />
+        <Image
+          source={require("../../assets/images/logo.png")}
+          contentFit="cover"
+          transition={1000}
+          style={{ width: 200, height: 200 }}
+        />
+
         <View className=" w-full px-8 space-y-4">
           <View>{step}</View>
 
-          <View>
-            <Button onPress={handleSubmit(handleFormSubmit)}>
+          <View className="space-y-4">
+            <Button
+              onPress={handleSubmit(handleFormSubmit)}
+              disabled={registrationMutation.isPending}>
               {isFinalStep ? "Register" : "Next"}
             </Button>
 

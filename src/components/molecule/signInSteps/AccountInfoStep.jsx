@@ -24,14 +24,6 @@ const AccountInfoStep = ({ form, control, error }) => {
 
   return (
     <View>
-      <ProfileField label="Profile" onPick={handleImagePicked}>
-        <Text style={{ flexShrink: 1 }} className="">
-          {profileImage
-            ? profileImage.substr(0, 18) + "...."
-            : "No Image Choosen"}
-        </Text>
-      </ProfileField>
-
       <InputField
         controller={control}
         name="email"

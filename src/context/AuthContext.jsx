@@ -27,12 +27,6 @@ export const useAuthContext = () => {
 const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useAtom(AuthAtom);
   const { removeData } = useLocalStorage("auth");
-  const handleLogin = (value) => {
-    // setAuthState((prev) => ({
-    //   isAuthenticated: true,
-    //   role: "user",
-    // }));
-  };
 
   const handleLogout = async () => {
     try {
@@ -49,8 +43,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ authState, setAuthState, handleLogin, handleLogout }}>
+    <AuthContext.Provider value={{ authState, setAuthState, handleLogout }}>
       {children}
     </AuthContext.Provider>
   );

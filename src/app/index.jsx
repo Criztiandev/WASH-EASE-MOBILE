@@ -16,51 +16,11 @@ import authApi from "../api/auth.api";
 import Toast from "react-native-toast-message";
 import { useAuthContext } from "../context/AuthContext";
 import useLocalStorage from "../hooks/useLocalStorage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import useLoginForm from "../hooks/useLogin";
 
 const RootScreen = () => {
-  const { setAuthState } = useAuthContext();
-  const { storeData } = useLocalStorage("auth");
-  const {
-    control,
-    handleSubmit: onSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: signInDefaulValue,
-    resolver: zodResolver(SignInValidationSchema),
-  });
-
-  const loginMutation = useMutation({
-    mutationFn: async (value) => await authApi.login(value),
-    onSuccess: async ({ data }) => {
-      const { message, token, role, isAuthenticated } = data;
-      const payload = {
-        token: token,
-        isAuthenticated,
-        role,
-      };
-
-      Toast.show({
-        type: "success",
-        text1: message,
-      });
-
-      setAuthState(payload);
-      await storeData(payload);
-    },
-    onError: (error) => {
-      console.log(error.message);
-      Toast.show({
-        type: "error",
-        text1: error.message,
-      });
-    },
-  });
-
-  const handleSubmit = async (value) => {
-    await AsyncStorage.clear();
-    loginMutation.mutate(value);
-  };
+  const { authState, setAuthState } = useAuthContext();
+  const { control, onSubmitForm, errors } = useLoginForm();
 
   return (
     <ScreenLayout>
@@ -90,7 +50,7 @@ const RootScreen = () => {
             errorMsg={errors?.password?.message}
           />
 
-          <Button onPress={onSubmit(handleSubmit)}>Login</Button>
+          <Button onPress={onSubmitForm}>Login</Button>
 
           <View>
             <Text className="text-center text-primary">
