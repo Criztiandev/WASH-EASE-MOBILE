@@ -52,18 +52,19 @@ const _layout = () => {
   useEffect(() => {
     const checkIsAlreadySplashScreen = async () => {
       const payload = await getData();
+
       if (payload && payload.isAlreadySplashed === true) {
         setIsShowSplashScreen(false);
       }
     };
 
     checkIsAlreadySplashScreen();
-  }, []);
+  }, [isShowSpashScreen]);
 
   return (
     <>
       {isShowSpashScreen ? (
-        <SplashScreen />
+        <SplashScreen setState={setIsShowSplashScreen} />
       ) : (
         <>
           <QueryClientProvider client={queryClient}>

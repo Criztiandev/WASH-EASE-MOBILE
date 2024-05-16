@@ -5,7 +5,7 @@ import Button from "./src/components/atoms/Button";
 import useMultiform from "./src/hooks/useMultiform";
 import useLocalStorage from "./src/hooks/useLocalStorage";
 
-const SplashScreen = () => {
+const SplashScreen = ({ setState }) => {
   const { storeData } = useLocalStorage("splash");
   const { step, nextStep, isFinalStep } = useMultiform([
     <IntroScreen />,
@@ -17,6 +17,7 @@ const SplashScreen = () => {
   const handleNextStep = () => {
     if (isFinalStep) {
       storeData({ isAlreadySplashed: true });
+      setState(false);
       return;
     }
 

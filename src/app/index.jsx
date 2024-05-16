@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { Avatar } from "react-native-paper";
+import { Image } from "expo-image";
 import { useForm } from "react-hook-form";
 import InputField from "../components/atoms/InputField";
 import Button from "../components/atoms/Button";
@@ -16,6 +16,7 @@ import authApi from "../api/auth.api";
 import Toast from "react-native-toast-message";
 import { useAuthContext } from "../context/AuthContext";
 import useLocalStorage from "../hooks/useLocalStorage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RootScreen = () => {
   const { setAuthState } = useAuthContext();
@@ -56,14 +57,21 @@ const RootScreen = () => {
     },
   });
 
-  const handleSubmit = (value) => {
+  const handleSubmit = async (value) => {
+    await AsyncStorage.clear();
     loginMutation.mutate(value);
   };
 
   return (
     <ScreenLayout>
       <View className="flex-1 justify-center items-center">
-        <Avatar.Icon size={200} />
+        <Image
+          source={require("../assets/images/logo.png")}
+          contentFit="cover"
+          transition={1000}
+          style={{ width: 200, height: 200 }}
+        />
+
         <View className=" w-full px-8 space-y-4">
           <InputField
             label={"Email"}
@@ -74,7 +82,7 @@ const RootScreen = () => {
           />
 
           <InputField
-            secureTextEntry={true}
+            isPassword
             controller={control}
             name="password"
             label={"Password"}

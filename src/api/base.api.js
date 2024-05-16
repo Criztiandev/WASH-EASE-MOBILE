@@ -5,6 +5,6 @@ export const PublicBaseAxios = axios.create({
 });
 
 export const PrivateBaseAxios = axios.create({
-  baseURL: "https://aimoz.store/api/",
+  baseURL: "https://washease.iamjohn.cloud/public/api/",
   withCredentials: true,
 });
