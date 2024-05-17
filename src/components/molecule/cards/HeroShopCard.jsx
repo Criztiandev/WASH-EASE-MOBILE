@@ -36,7 +36,7 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
           {title}
         </Text>
 
-        <View className="opacity-50 flex-row space-x-4 items-center ">
+        <View className="opacity-50 space-y-2 ">
           <View className="flex-row items-center ">
             <View className="mr-2">
               <LocationIcon />
@@ -51,10 +51,6 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
             <Text className="text-[16px]">{details.schedule}</Text>
           </View>
         </View>
-        <Text className="opacity-60 ">
-          It’s also good practice to front load the most important information.
-          For example, if you’re using the bottom sheet to display a
-        </Text>
 
         {label && <Button onPress={onNavigate}>{label}</Button>}
       </View>

@@ -7,33 +7,95 @@ import { cn } from "../../utils/dev.utils";
 import Button from "../atoms/Button";
 import { Icon } from "react-native-paper";
 
-const ShopDetails = {
-  id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-  title: "Second Item",
-  image:
-    "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-  details: {
-    location: "Kahit Dito",
-    schedule: "4:00 - 4:00 PM",
+const ShopDetails = [
+  {
+    id: 0,
+    title: "M&L Laundry Hub Katuparan",
+    image:
+      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
+    details: {
+      location: "88 3rd St Taguig, Metro Manila",
+      schedule: "7:00 AM - 8:00 PM",
+    },
+    status: "open",
   },
-  status: "open",
-};
+  {
+    id: 1,
+    title: "M&L Laundry Hub Pinagsama",
+    image:
+      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
+    details: {
+      location: " Phase 2, Balai Magayon, Taguig, Metro Manila",
+      schedule: "7:00 AM - 7:00 PM",
+    },
+    status: "open",
+  },
+
+  {
+    id: 2,
+    title: "LABAsics Laundry House North Signal",
+    image:
+      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
+    details: {
+      location: "44 Sampaloc Extension, Taguig, Metro Manila",
+      schedule: ": 7:00 AM - 8:00 PM",
+    },
+    status: "open",
+  },
+
+  {
+    id: 3,
+    title: "Instawash Laundry Shop",
+    image:
+      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
+    details: {
+      location: " Unit A5 & A6, Block 10 Lot 11, Taguig",
+      schedule: ": 9:00 AM - 5:00 PM",
+    },
+    status: "close",
+  },
+];
 
 const INITIAL_REGION = {
-  latitude: 12.65898181054623,
-  latitudeDelta: 0.022982900224956637,
-  longitude: 123.89491824433206,
-  longitudeDelta: 0.027613677084445953,
+  latitude: 14.5181201482028,
+  latitudeDelta: 0.06634182547803924,
+  longitude: 121.04997357353568,
+  longitudeDelta: 0.05015898495912552,
 };
 
 const SampleMarker = [
   {
-    id: 123123123,
-    name: "Laundry Shop",
-    latitude: 12.65898181054623,
-    latitudeDelta: 0.022982900224956637,
-    longitude: 123.89491824433206,
-    longitudeDelta: 0.027613677084445953,
+    id: 0,
+    name: "M&L Laundry Hub Katuparan",
+    latitude: 14.529320997312857,
+    latitudeDelta: 0.0007312196869939669,
+    longitude: 121.0552984289825,
+    longitudeDelta: 0.0005977973341941833,
+  },
+  {
+    id: 1,
+    name: "M&L Laundry Hub Pinagsama",
+    latitude: 14.52404037436871,
+    latitudeDelta: 0.011132136239515589,
+    longitude: 121.04576015844941,
+    longitudeDelta: 0.011315234005451202,
+  },
+  {
+    id: 2,
+    name: "LABAsics Laundry House North Signal",
+    latitude: 14.522441280687332,
+    latitudeDelta: 0.008746672168784997,
+    longitude: 121.06050526723266,
+    longitudeDelta: 0.006326995790018941,
+  },
+
+  {
+    id: 3,
+    name: ". Instawash Laundry Shop",
+    latitude: 14.515856308904931,
+    latitudeDelta: 0.002146080292135366,
+    longitude: 121.04783803224564,
+    longitudeDelta: 0.0018922984600067139,
   },
 ];
 
@@ -42,13 +104,17 @@ const CalloutMap = () => {
   const mapRef = useRef(null);
 
   const handleMarkSelect = (location) => {
-    setSelectedLaundry({ id: location.id, name: location.id });
+    const payload = ShopDetails[location.id];
+
+    setSelectedLaundry(payload);
   };
-  const handlRegionChange = () => {};
+  const handlRegionChange = (value) => {
+    console.log(value);
+  };
 
   useEffect(() => {
     mapRef.current?.animateCamera(
-      { center: INITIAL_REGION, zoom: 10 },
+      { center: INITIAL_REGION, zoom: 15 },
       { duration: 30 }
     );
   }, []);
@@ -83,7 +149,7 @@ const CalloutMap = () => {
           <TouchableOpacity
             className="flex-1"
             onPress={() => router.push(`/shop/details/${selectedLaundry.id}`)}>
-            <HeroShopCard {...ShopDetails} />
+            <HeroShopCard {...selectedLaundry} />
           </TouchableOpacity>
 
           <View className="absolute top-0 right-0 mt-12 mr-4">
