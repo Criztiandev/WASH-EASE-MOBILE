@@ -4,7 +4,14 @@ import StarRating from "../../assets/icons/start_fill_icon.svg";
 import { Image } from "expo-image";
 import Badge from "../atoms/Badge";
 
-const ShopDetailsCover = ({ name, address, rating, stars, status }) => {
+const ShopDetailsCover = ({
+  title,
+  address,
+  details,
+  rating,
+  stars,
+  status,
+}) => {
   return (
     <View className="relative  p-0">
       <Image
@@ -22,7 +29,7 @@ const ShopDetailsCover = ({ name, address, rating, stars, status }) => {
         <View className="absolute bottom-0 m-4">
           <View className="space-y-1">
             <Text className="text-[22px] font-bold underline text-white">
-              {name}
+              {title}
             </Text>
             <Text className="text-white">{address}</Text>
           </View>

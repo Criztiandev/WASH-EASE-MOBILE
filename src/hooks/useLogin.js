@@ -34,6 +34,7 @@ const useLoginForm = () => {
       await storeData(payload);
     },
     onError: (error) => {
+      console.log(error);
       Toast.show({ type: "error", text1: error.message });
     },
   });

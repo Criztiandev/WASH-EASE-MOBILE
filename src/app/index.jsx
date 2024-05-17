@@ -1,25 +1,14 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import { useForm } from "react-hook-form";
 import InputField from "../components/atoms/InputField";
 import Button from "../components/atoms/Button";
 import { router } from "expo-router";
-import {
-  SignInValidationSchema,
-  signInDefaulValue,
-} from "../service/validation/auth/signIn.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import ScreenLayout from "../layout/ScreenLayout";
-import { useMutation } from "@tanstack/react-query";
-import authApi from "../api/auth.api";
-import Toast from "react-native-toast-message";
-import { useAuthContext } from "../context/AuthContext";
-import useLocalStorage from "../hooks/useLocalStorage";
+
 import useLoginForm from "../hooks/useLogin";
 
 const RootScreen = () => {
-  const { authState, setAuthState } = useAuthContext();
   const { control, onSubmitForm, errors } = useLoginForm();
 
   return (
