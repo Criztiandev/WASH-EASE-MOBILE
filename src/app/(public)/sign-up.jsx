@@ -39,9 +39,12 @@ const RootScreen = () => {
         text2: payload.data?.message,
       });
 
+      console.log(payload);
+
       router.replace("/");
     },
     onError: (error) => {
+      console.log(error);
       Toast.show({
         type: "error",
         text1: "Something went wrong",

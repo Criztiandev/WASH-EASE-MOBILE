@@ -65,7 +65,7 @@ const DestinationMap = ({ data, height }) => {
   return (
     <>
       <WebView
-        source={{ uri: "https://reactnative.dev/" }}
+        source={{ uri: "https://washease.online/private/map" }}
         style={{ flex: 1 }}
       />
     </>

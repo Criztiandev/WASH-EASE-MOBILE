@@ -1,69 +1,51 @@
+import React from "react";
 import { View, Text } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
 import { useController } from "react-hook-form";
-
 import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
 import MaterialItem from "../items/MaterialItem";
-import { stepAtom } from "../../../service/states/service.atoms";
-
-const MOCKDATA = [
-  { id: 0, title: "Dress", price: 280 },
-  { id: 1, title: "Gown", price: 500 },
-  { id: 2, title: "Suit", price: 250 },
-  { id: 3, title: "Barong", price: 250 },
-];
+import useStepManagement from "../../../hooks/useStepManagement";
+import useMultiSelect from "../../../hooks/useSingleSelect";
+import useFetchService from "../../../hooks/useFetchService";
+import LoadingScreen from "../../atoms/LoadingScreen";
+import ErrorScreen from "../../atoms/ErrorScreen";
 
 const SelectIroningStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
-  const [selectedItems, setSelectedItems] = useState(initialData);
-  const setCurrentStep = useSetAtom(stepAtom);
+  const { selected, handleSelect } = useMultiSelect(initialData, form, name);
+  useStepManagement({ name });
 
-  useEffect(() => {
-    form.setValue(name, selectedItems);
-  }, [selectedItems, form, name]);
+  const { data, isLoading, isError } = useFetchService({
+    filter: "Ironing",
+    name: "basic-ironing",
+  });
 
-  const renderItem = useCallback(
-    ({ item }) => (
-      <MaterialItem
-        field={field}
-        id={item.id}
-        payload={item}
-        onSelect={setSelectedItems}
-        isActive={selectedItems.some((current) => current.id === item.id)}
-        initialQuantity={
-          selectedItems.find((current) => current.id === item.id)?.quantity
-        }
-      />
-    ),
-    []
-  );
-  const keyExtractor = useCallback((item) => item.id.toString(), []);
-
-  // Check validation
-  useEffect(() => {
-    setCurrentStep(name);
-
-    return () => {
-      setCurrentStep("");
-    };
-  }, []);
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
 
   return (
-    <>
-      <View className="flex-1  w-full mb-4">
-        <Text className="text-[24px] font-semibold text-center my-4">
-          Select Ironing
-        </Text>
-
-        <FlashList
-          data={MOCKDATA}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          estimatedItemSize={200}
-        />
-      </View>
-    </>
+    <View className="flex-1 w-full mb-4">
+      <Text className="text-[24px] font-semibold text-center my-4">
+        Select Ironing
+      </Text>
+      <FlashList
+        data={data}
+        renderItem={({ item }) => (
+          <MaterialItem
+            field={field}
+            id={item.id}
+            payload={item}
+            isActive={selected.some((current) => current?.id === item?.id)}
+            onSelect={handleSelect}
+            initialQuantity={
+              selected.find((current) => current?.id === item?.id)?.quantity
+            }
+          />
+        )}
+        keyExtractor={(item) => item?.id.toString()}
+        estimatedItemSize={200}
+      />
+    </View>
   );
 };
 

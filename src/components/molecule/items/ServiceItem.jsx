@@ -11,10 +11,8 @@ const ServiceItem = ({
   onSelect,
   isActive = false,
 }) => {
-  const { title, price, description } = payload;
+  const { service_name: title, price, description } = payload;
   const [checked, setChecked] = useState(isActive);
-
-  console.log(payload);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => setIsModalVisible((prev) => !prev);
@@ -68,18 +66,9 @@ const ServiceItem = ({
 
           <View className="px-4 space-y-4">
             <Text className="text-base">{description}</Text>
-            <View className="flex-row items-center space-x-2">
-              <Icon source={"clock"} size={24} />
-              <Text className="text-base">30 Minutes</Text>
-            </View>
-
-            <View className="flex-row items-center space-x-2">
-              <Icon source={"weight-kilogram"} size={24} />
-              <Text className="text-base">Max 7Kgs</Text>
-            </View>
           </View>
 
-          <View className="absolute bottom-0 w-full  px-4">
+          <View className="absolute bottom-0 w-full  px-4 mb-4">
             <Button className={"w-full"} onPress={handleChecked}>
               Select
             </Button>

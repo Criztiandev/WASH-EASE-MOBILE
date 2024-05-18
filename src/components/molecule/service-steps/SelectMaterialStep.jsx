@@ -1,68 +1,52 @@
+import React from "react";
 import { View, Text } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
 import { useController } from "react-hook-form";
-
 import { FlashList } from "@shopify/flash-list";
 import { useSetAtom } from "jotai";
 import MaterialItem from "../items/MaterialItem";
-import { stepAtom } from "../../../service/states/service.atoms";
-("");
-const MOCKDATA = [
-  { id: 0, title: "Surf Wash", price: 70 },
-  { id: 1, title: "Zonrox", price: 70 },
-  { id: 2, title: "Champion", price: 70 },
-  { id: 3, title: "Downy", price: 75 },
-];
+import useStepManagement from "../../../hooks/useStepManagement";
+import useMultiSelect from "../../../hooks/useSingleSelect";
+import useFetchService from "../../../hooks/useFetchService";
+import LoadingScreen from "../../atoms/LoadingScreen";
+import ErrorScreen from "../../atoms/ErrorScreen";
 
-const SelectMaterialStep = ({ form, name, initialData = [] }) => {
+const SelectIroningStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
-  const [selectedItems, setSelectedItems] = useState(initialData);
-  const setCurrentStep = useSetAtom(stepAtom);
+  const { selected, handleSelect } = useMultiSelect(initialData, form, name);
+  useStepManagement({ name });
 
-  useEffect(() => {
-    form.setValue(name, selectedItems);
-  }, [selectedItems, form, name]);
+  const { data, isLoading, isError } = useFetchService({
+    filter: "Material",
+    name: "basic-material",
+  });
 
-  const renderItem = useCallback(
-    ({ item }) => (
-      <MaterialItem
-        field={field}
-        id={item.id}
-        payload={item}
-        onSelect={setSelectedItems}
-        isActive={selectedItems.some((current) => current.id === item.id)}
-        initialQuantity={
-          selectedItems.find((current) => current.id === item.id)?.quantity
-        }
-      />
-    ),
-    []
-  );
-  const keyExtractor = useCallback((item) => item.id.toString(), []);
-
-  // Check validation
-  useEffect(() => {
-    setCurrentStep(name);
-
-    return () => {
-      setCurrentStep("");
-    };
-  }, []);
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
 
   return (
-    <View className="flex-1  w-full mb-4">
+    <View className="flex-1 w-full mb-4">
       <Text className="text-[24px] font-semibold text-center my-4">
         Select Material
       </Text>
-
       <FlashList
-        data={MOCKDATA}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
+        data={data}
+        renderItem={({ item }) => (
+          <MaterialItem
+            field={field}
+            id={item.id}
+            payload={item}
+            isActive={selected.some((current) => current?.id === item?.id)}
+            onSelect={handleSelect}
+            initialQuantity={
+              selected.find((current) => current?.id === item?.id)?.quantity
+            }
+          />
+        )}
+        keyExtractor={(item) => item?.id.toString()}
         estimatedItemSize={200}
       />
     </View>
   );
 };
 
-export default SelectMaterialStep;
+export default SelectIroningStep;

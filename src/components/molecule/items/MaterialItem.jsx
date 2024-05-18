@@ -70,8 +70,13 @@ const MaterialItem = memo(
                 </View>
               )}
               <View>
-                <Text className="text-[18px] font-bold">{payload.title}</Text>
-                <Text className="text-[18px]">₱ {payload.price}.00</Text>
+                <Text className="text-[18px] font-bold">
+                  {payload.service_name}
+                </Text>
+                <View className="flex-row items-center space-x-2">
+                  <Text className="text-[18px]">₱ {payload.price}.00</Text>
+                  <Text className="text-[14px]">{payload?.description}</Text>
+                </View>
               </View>
             </View>
 
