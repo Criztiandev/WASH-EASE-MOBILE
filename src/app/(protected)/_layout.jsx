@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React, { useEffect } from "react";
 import { Slot, Stack, useRouter } from "expo-router";
 import { useAtomValue } from "jotai";

@@ -32,7 +32,7 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
         className="h-[110px] rounded-t-md flex-1"
       />
       <View className="p-5 space-y-4">
-        <Text variant="titleLarge" className="font-bold">
+        <Text variant="titleLarge" className="font-bold capitalize">
           {title}
         </Text>
 
@@ -41,14 +41,21 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
             <View className="mr-2">
               <LocationIcon />
             </View>
-            <Text className="text-[16px]">{details.location}</Text>
+            <Text className="text-[16px] capitalize">{details.location}</Text>
           </View>
 
           <View className="flex-row items-center ">
             <View className="mr-2">
               <Icon source={"information"} size={24} />
             </View>
-            <Text className="text-[16px]">{details.schedule}</Text>
+            <Text className="text-[16px]">{details?.schedule || "N/A"}</Text>
+          </View>
+
+          <View className="flex-row items-center ">
+            <View className="mr-2">
+              <Icon source={"information"} size={24} />
+            </View>
+            <Text className="text-[16px]">{details?.contact || "N/A"}</Text>
           </View>
         </View>
 

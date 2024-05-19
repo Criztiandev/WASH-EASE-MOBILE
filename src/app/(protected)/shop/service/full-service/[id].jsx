@@ -1,50 +1,56 @@
 import { View, Text } from "react-native";
 import { useForm } from "react-hook-form";
+
 import { useAtomValue } from "jotai";
+
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 
-import { stepAtom } from "../../../../service/states/service.atoms";
-import useMultiform from "../../../../hooks/useMultiform";
+import { stepAtom } from "../../../../../service/states/service.atoms";
 
-import Button from "../../../../components/atoms/Button";
+// Components
+import Button from "../../../../../components/atoms/Button";
+import useMultiform from "../../../../../hooks/useMultiform";
 
-//Steps
-import SelectWashMachineStep from "../../../../components/molecule/service-steps/SelectWashMachineStep";
-import SelectDryMachineStep from "../../../../components/molecule/service-steps/SelectDryMachineStep";
-import SelectServiceStep from "../../../../components/molecule/service-steps/SelectServiceStep";
-import SelectMaterialStep from "../../../../components/molecule/service-steps/SelectMaterialStep";
-import PaymentStep from "../../../../components/molecule/service-steps/PaymentStep";
-import CheckOutStep from "../../../../components/molecule/service-steps/CheckOutStep";
+// Steps
+import SelectMaterialStep from "../../../../../components/molecule/service-steps/SelectMaterialStep";
+import SelectDryCleaningStep from "../../../../../components/molecule/service-steps/SelectDryCleaningStep";
+import SelectIroningStep from "../../../../../components/molecule/service-steps/SelectIroningStep";
+import PaymentStep from "../../../../../components/molecule/service-steps/PaymentStep";
+import CheckOutStep from "../../../../../components/molecule/service-steps/CheckOutStep";
+import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
 
-const SelfServiceScreen = () => {
+const RootScreen = () => {
   const currentStep = useAtomValue(stepAtom);
   const form = useForm({
     defaultValues: {
       "basic-service": [],
+      "basic-cleaning": [],
+      "basic-ironing": [],
       "basic-material": [],
-      dry: "",
-      wash: "",
-      "payment-method": "cash",
-      "delivery-method": "self-service",
+      "payment-method": "",
+      "delivery-method": "",
       total: 0,
     },
   });
 
-  const {
-    step,
-    nextStep,
-    prevStep,
-    isFinalStep,
-    currentStepIndex,
-    isFirstStep,
-  } = useMultiform([
-    <SelectWashMachineStep controller={form.control} name={"wash"} />,
-    <SelectDryMachineStep controller={form.control} name={"dry"} />,
+  const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
     <SelectServiceStep
       form={form}
       name={"basic-service"}
       initialData={form.getValues("basic-service")}
+    />,
+
+    <SelectDryCleaningStep
+      form={form}
+      name={"basic-cleaning"}
+      initialData={form.getValues("basic-cleaning")}
+    />,
+
+    <SelectIroningStep
+      form={form}
+      name={"basic-ironing"}
+      initialData={form.getValues("basic-ironing")}
     />,
 
     <SelectMaterialStep
@@ -62,11 +68,7 @@ const SelfServiceScreen = () => {
   const onSubmit = (value) => {
     const isHasValue = form.getValues("basic-service");
 
-    if (
-      isHasValue === "" ||
-      isHasValue === null ||
-      (isHasValue?.length <= 0 && currentStepIndex === 2)
-    ) {
+    if (isHasValue === "" || isHasValue === null || isHasValue?.length <= 0) {
       Toast.show({
         type: "error",
         text1: "Please Fill all the field to proceed",
@@ -91,9 +93,9 @@ const SelfServiceScreen = () => {
     <View className="flex-1 bg-[#FAF8FF] mb-2">
       <View className=" flex-1 justify-center items-center">{step}</View>
 
-      <View className="px-4 space-y-2">
+      <View className="px-4  space-y-2">
         <Button onPress={form.handleSubmit(onSubmit)}>
-          <Text className="text-center font-semibold text-xl text-white">
+          <Text className="text-center font-semibold text-xl text-white ">
             {isFinalStep ? "Proceed" : "Next"}
           </Text>
         </Button>
@@ -110,4 +112,4 @@ const SelfServiceScreen = () => {
   );
 };
 
-export default SelfServiceScreen;
+export default RootScreen;

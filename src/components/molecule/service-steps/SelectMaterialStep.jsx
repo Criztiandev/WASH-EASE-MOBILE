@@ -10,7 +10,7 @@ import useFetchService from "../../../hooks/useFetchService";
 import LoadingScreen from "../../atoms/LoadingScreen";
 import ErrorScreen from "../../atoms/ErrorScreen";
 
-const SelectIroningStep = ({ form, name, initialData = [] }) => {
+const SelectMaterialStep = ({ form, name, initialData = [] }) => {
   const { field } = useController({ control: form.control, name });
   const { selected, handleSelect } = useMultiSelect(initialData, form, name);
   useStepManagement({ name });
@@ -49,4 +49,4 @@ const SelectIroningStep = ({ form, name, initialData = [] }) => {
   );
 };
 
-export default SelectIroningStep;
+export default SelectMaterialStep;

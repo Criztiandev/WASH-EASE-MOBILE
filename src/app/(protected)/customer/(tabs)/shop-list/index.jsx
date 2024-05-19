@@ -1,82 +1,52 @@
 import { View, FlatList } from "react-native";
 import { Searchbar } from "react-native-paper";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import { FlashList } from "@shopify/flash-list";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
-
-const MOCKDATA = [
-  {
-    id: 0,
-    title: "M&L Laundry Hub Katuparan",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: "88 3rd St Taguig, Metro Manila",
-      schedule: "7:00 AM - 8:00 PM",
-    },
-    status: "open",
-  },
-  {
-    id: 1,
-    title: "M&L Laundry Hub Pinagsama",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: " Phase 2, Balai Magayon, Taguig, Metro Manila",
-      schedule: "7:00 AM - 7:00 PM",
-    },
-    status: "open",
-  },
-
-  {
-    id: 2,
-    title: "LABAsics Laundry House North Signal",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: "44 Sampaloc Extension, Taguig, Metro Manila",
-      schedule: ": 7:00 AM - 8:00 PM",
-    },
-    status: "open",
-  },
-
-  {
-    id: 3,
-    title: "Instawash Laundry Shop",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: " Unit A5 & A6, Block 10 Lot 11, Taguig",
-      schedule: ": 9:00 AM - 5:00 PM",
-    },
-    status: "close",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
+import useSearch from "../../../../../hooks/useSearch";
 
 const ShoplistScreen = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(MOCKDATA);
-
-  const onChangeSearch = (query) => {
-    setSearchQuery(query);
-    filterData(query);
-  };
-
-  const filterData = (searchText) => {
-    const formattedQuery = searchText.toLowerCase();
-    const filteredData = MOCKDATA.filter((item) => {
-      return (
-        item.title.toLowerCase().includes(formattedQuery) ||
-        item.details.location.toLowerCase().includes(formattedQuery) ||
-        item.details.schedule.toLowerCase().includes(formattedQuery) ||
-        item.status.toLowerCase().includes(formattedQuery)
+  const { data, isLoading, isError } = useQuery({
+    queryFn: async () => {
+      const result = await axios.get(
+        "https://washease.online/api/get-all-laundry-shops"
       );
-    });
 
-    setFilteredData(filteredData);
-  };
+      const _payload = result.data["laundry_shops"].data;
+      const transformedPayload = _payload.map((item) => ({
+        id: item.id,
+        title: item["laundry_shop_name"],
+        image:
+          "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
+        details: {
+          location: item["address"],
+          contact: item["phone_number"],
+          schedule:
+            item["laundry_shop_open_hours"] === null
+              ? "N/A"
+              : item["laundry_shop_open_hours"],
+        },
+        status: item["is_shop_closed"] === 0 ? "close" : "active",
+      }));
+
+      return transformedPayload;
+    },
+    queryKey: ["shops-lists"],
+  });
+
+  const { searchQuery, setSearchQuery, filteredData } = useSearch(
+    data,
+    "title"
+  );
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
 
   return (
     <ScreenLayout>
@@ -85,7 +55,8 @@ const ShoplistScreen = () => {
           <Searchbar
             placeholder="Search"
             className="bg-white"
-            onChangeText={() => console.log("hi")}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
         </View>
         <View className="flex-1">
