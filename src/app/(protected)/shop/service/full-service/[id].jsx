@@ -1,13 +1,13 @@
 import { View, Text } from "react-native";
 import Button from "../../../../../components/atoms/Button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 import { useForm } from "react-hook-form";
 
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 
 // Components
@@ -29,6 +29,7 @@ const FullServiceScreen = () => {
   const { authState } = useAuthContext();
   const currentStep = useAtomValue(stepAtom);
   const { id } = useLocalSearchParams();
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
@@ -45,6 +46,40 @@ const FullServiceScreen = () => {
 
   const { data, isError, isLoading } = useFetchLaundryData(id);
   const userPayload = useFetchUserData(authState?.user_id);
+
+  const serviceMutation = useMutation({
+    mutationFn: async (value) => {
+      const authToken = authState.token; // Replace with your actual auth token
+      const result = await axios.post(
+        "https://washease.online/api/laundry_shop/transactions",
+        value,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json", // Ensure Content-Type is set if needed
+          },
+        }
+      );
+      return result.data;
+    },
+
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Order Placed",
+        text2: "Thank you for using wash ease",
+      });
+      router.replace("/customer/home");
+    },
+    onError: (error) => {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+        text2: "Thank you for your patience",
+      });
+      console.log(error);
+    },
+  });
 
   const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
     <TransactionModeStep
@@ -115,7 +150,7 @@ const FullServiceScreen = () => {
     }
 
     const finalPayload = transformedFinalPayload(id, value, userPayload);
-    console.log(finalPayload);
+    serviceMutation.mutate(finalPayload);
 
     Toast.show({
       type: "success",
@@ -224,6 +259,8 @@ const isServiceValid = (value, step, flagedStep) => {
 
 const transformedFinalPayload = (id, value, credentials) => {
   //transform the data into this format
+  const date = new Date();
+  const currentDate = date.toISOString().split("T")[0];
 
   const transformedBasicIroning = transformItems(value["basic-ironing"]);
   const transformedBasicCleaning = transformItems(value["basic-cleaning"]);
@@ -242,14 +279,16 @@ const transformedFinalPayload = (id, value, credentials) => {
 
   return {
     customer_id: credentials.id,
-    laundry_shop_id: id,
+    machine_id: 2,
+    laundry_shop_id: Number(id),
     customer_name: `${credentials.firstName} ${credentials.lastName}`,
     customer_address: "N/A",
     customer_type: credentials.role,
-    delivery_fee: value["delivery-method"] === "rush" ? 200 : 0,
     service_avail: serviceAvail,
     service_type: value["transaction-method"],
-    payment_status: value["payment_method"] || "CASH",
+    delivery_fee: value["delivery-method"] === "rush" ? 200 : 0,
+    delivery_date: currentDate,
+    payment_method: value["payment_method"] || "CASH",
     total_bill: value["total"],
     status: "PENDING",
   };

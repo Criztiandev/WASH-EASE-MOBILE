@@ -284,10 +284,10 @@ const transformedFinalPayload = (id, value, credentials) => {
     customer_type: credentials.role,
     service_avail: serviceAvail,
     service_type: value["transaction-method"],
+    delivery_fee: 0,
+    delivery_date: currentDate,
     payment_method: value["payment_method"] || "CASH",
     total_bill: value["total"],
-    delivery_date: currentDate,
-    delivery_fee: 0,
     status: "PENDING",
   };
 };

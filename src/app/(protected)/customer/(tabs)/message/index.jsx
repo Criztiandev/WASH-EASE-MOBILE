@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import LaundryShopCardVertical from "../../../../../components/molecule/cards/LaundryShopCardVertical";
 import MessageCard from "../../../../../components/molecule/cards/MessageCard";
+
 const MOCKDATA = [
   {
     id: 0,
@@ -160,16 +160,37 @@ const MOCKDATA = [
 ];
 
 const RootScreen = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState(MOCKDATA);
+
+  const onChangeSearch = (query) => {
+    setSearchQuery(query);
+    if (query === "") {
+      setFilteredData(MOCKDATA);
+    } else {
+      setFilteredData(
+        MOCKDATA.filter((item) =>
+          item.fullName.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
+  };
+
   const id = 123123;
   return (
     <ScreenLayout>
       <View className="px-2 flex-1">
         <Text className="text-2xl pt-4 px-4 font-bold">Message</Text>
-        <Searchbar className="bg-white my-4" placeholder="Search" />
+        <Searchbar
+          className="bg-white my-4"
+          placeholder="Search"
+          value={searchQuery}
+          onChangeText={onChangeSearch}
+        />
 
         <View className="flex-1">
           <FlashList
-            data={MOCKDATA}
+            data={filteredData}
             renderItem={({ item }) => (
               <MessageCard
                 path={`/customer/message/${id}`}
@@ -178,7 +199,7 @@ const RootScreen = () => {
               />
             )}
             estimatedItemSize={200}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
           />
         </View>
       </View>

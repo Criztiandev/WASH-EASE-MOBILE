@@ -7,13 +7,22 @@ import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
 import { useAuthContext } from "../../../../../context/AuthContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import accoutApi from "../../../../../api/accout.api";
 import ProfileCard from "../../../../../components/molecule/cards/ProfileCard";
+import axios from "axios";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 const ProfileScreen = () => {
+  const { authState } = useAuthContext();
   const { id } = useLocalSearchParams();
   const { handleLogout } = useAuthContext();
+
+  const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
 
   const logoutMutation = useMutation({
     mutationFn: async () => await accoutApi.logout(),
@@ -36,7 +45,10 @@ const ProfileScreen = () => {
   };
   return (
     <ScreenLayout className="p-4 pt-6">
-      <ProfileCard name={"Criztian"} role={"CUstomer"} />
+      <ProfileCard
+        name={`${data?.firstName} ${data?.lastName}`}
+        role={`${data?.role}`}
+      />
 
       <TouchableOpacity
         onPress={() => {
@@ -76,3 +88,24 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
+
+const useFetchUserData = (id) => {
+  return useQuery({
+    queryFn: async () => {
+      const result = await axios.get(`
+      https://washease.online/api/get-customer-details/${id}`);
+
+      const { first_name, last_name, email, phone_number, role } = result.data;
+
+      return {
+        id: id,
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phoneNumer: phone_number,
+        role,
+      };
+    },
+    queryKey: [`user-profile-${id}`],
+  });
+};

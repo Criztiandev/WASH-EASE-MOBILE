@@ -11,7 +11,7 @@ import { stepAtom } from "../../../service/states/service.atoms";
 
 const PaymentStep = ({ form, name }) => {
   const [isGCash, setIsGcash] = useState(false);
-  const [isFullService, setIsFullService] = useState(false);
+  const [isFullService, setIsFullService] = useState(true);
   const setCurrentStep = useSetAtom(stepAtom);
   const deliveryMethod = form.watch("delivery-method");
   const paymentMethod = form.watch("payment-method");
@@ -26,6 +26,7 @@ const PaymentStep = ({ form, name }) => {
   }, []);
 
   useEffect(() => {
+    console.log(transactionMethod);
     setIsGcash(paymentMethod === "gcash");
     if (transactionMethod === "self_serivce") {
       setIsFullService(false);

@@ -13,18 +13,14 @@ import RequestHeader from "../../../../../components/molecule/header/RequestHead
 import Button from "../../../../../components/atoms/Button";
 import ProfileCard from "../../../../../components/molecule/cards/ProfileCard";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
-const Details = {
-  name: "Shabu Houze",
-  address: "Biringan Leyte",
-  rating: 5.0,
-  about:
-    "Toast notifications are nifty tools that can be used to display information without using a lot of screen space. They’re used to display non-critical pieces of information that are supplementary in nature. In most instances, Toast notifications don’t require the user to take any action. Occasionally, there will be a close button or even an action button, but those are not present in the most common use cases.",
-  opening: "5 AM - 6 PM",
-  status: "Open",
-};
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuthContext } from "../../../../../context/AuthContext";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 const RequestScreen = () => {
+  const { authState } = useAuthContext();
   const { id } = useLocalSearchParams();
   const timeline = [
     {
@@ -53,6 +49,35 @@ const RequestScreen = () => {
       description: "Successfully delivered.",
     },
   ];
+  const statusMap = {
+    PENDING: "Order Confirmed",
+    PROCESSING: "In Process",
+    "READY FOR PICKUP": "Pickup Arranged",
+    COMPLETED: "Delivered",
+  };
+
+  const {
+    data: payload,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: async () => {
+      const result = await axios.get(
+        `https://washease.online/api/laundry-shop/transactions/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        }
+      );
+
+      return result.data;
+    },
+    queryKey: [`shop-transaction-details-${id}`],
+  });
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
 
   return (
     <View className="flex-1">
@@ -70,9 +95,16 @@ const RequestScreen = () => {
         <ProfileCard name="Critian Jade Mitra Tuplano" role="Delivery Rider" />
         <View></View>
         <View>
-          <Button onPress={() => router.push(`/customer/message/${id}`)}>
-            Message
-          </Button>
+          {payload?.data?.status === "COMPLETED" ? (
+            <Button disabled>Completed</Button>
+          ) : (
+            <Button
+              onPress={() =>
+                router.push(`/customer/message/${payload.data?.rider_id || 2}`)
+              }>
+              Message
+            </Button>
+          )}
         </View>
       </View>
     </View>
