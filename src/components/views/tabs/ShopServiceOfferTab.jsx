@@ -6,10 +6,16 @@ import ShopServiceDetailCard from "../../molecule/ShopServiceDetailCard";
 const ShopServiceOfferTab = ({ data }) => {
   return (
     <View style={{ flex: 1 }}>
-      {data.lenth > 0 ? (
+      {data.length > 0 ? (
         <FlashList
           data={data}
-          renderItem={({ item }) => <ShopServiceDetailCard {...item} />}
+          renderItem={({ item }) => (
+            <ShopServiceDetailCard
+              title={item?.service_name}
+              price={item?.price}
+              timer={item?.service_category_id + 3}
+            />
+          )}
           keyExtractor={(item) => item.id}
           estimatedItemSize={200}
         />

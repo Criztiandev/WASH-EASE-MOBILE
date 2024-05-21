@@ -1,5 +1,5 @@
-import { View, FlatList, Text } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { View, FlatList, Text, Modal } from "react-native";
+import { IconButton, Searchbar } from "react-native-paper";
 import React, { useMemo, useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import { FlashList } from "@shopify/flash-list";
@@ -13,6 +13,7 @@ import useSearch from "../../../../../hooks/useSearch";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ShoplistScreen = () => {
+  const [isShowModal, setIsShowModal] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryFn: async () => {
       const result = await axios.get(
@@ -40,6 +41,7 @@ const ShoplistScreen = () => {
       return transformedPayload;
     },
     queryKey: ["shops-lists"],
+    refetchInterval: 800,
   });
 
   const { searchQuery, setSearchQuery, filteredData } = useSearch(
@@ -61,12 +63,20 @@ const ShoplistScreen = () => {
     <ScreenLayout>
       <View className="flex-1">
         <View className="px-4 my-4">
-          <Searchbar
-            placeholder="Search"
-            className="bg-white"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
+          <View className="flex-row">
+            <Searchbar
+              placeholder="Search"
+              className="bg-white w-[85%]"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+
+            <IconButton
+              icon={"filter"}
+              className="bg-white w-[52px] h-[52px] rounded-full"
+              onPress={() => setIsShowModal((prev) => !prev)}
+            />
+          </View>
         </View>
         <View className="flex-1">
           <FlashList
@@ -82,6 +92,16 @@ const ShoplistScreen = () => {
           />
         </View>
       </View>
+
+      <Modal animationType="slide" visible={isShowModal}>
+        <View className="p-4 flex-row justify-between items-center">
+          <Text className="text-[32px] font-bold">Filter</Text>
+          <IconButton
+            icon={"close"}
+            onPress={() => setIsShowModal((prev) => !prev)}
+          />
+        </View>
+      </Modal>
     </ScreenLayout>
   );
 };

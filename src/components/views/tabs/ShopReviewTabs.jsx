@@ -6,10 +6,16 @@ import CustomerReviewCard from "../../molecule/cards/CustomerReviewCard";
 const ShopReviewTabs = ({ data }) => {
   return (
     <View style={{ flex: 1 }}>
-      {data.lenth > 0 ? (
+      {data.length > 0 ? (
         <FlashList
           data={data}
-          renderItem={({ item }) => <CustomerReviewCard {...item} />}
+          renderItem={({ item }) => (
+            <CustomerReviewCard
+              name={`Customer ${item?.customer_id}`}
+              rating={item?.rating_count}
+              comment={item?.rating_comment}
+            />
+          )}
           keyExtractor={(item) => item.id}
           estimatedItemSize={200}
         />

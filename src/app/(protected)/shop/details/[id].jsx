@@ -36,6 +36,7 @@ const ShopDetails = () => {
       return laundryDetails;
     },
     queryKey: [`shop-details-${shopID}`],
+    refetchInterval: 800,
   });
 
   if (isLoading) return <LoadingScreen />;

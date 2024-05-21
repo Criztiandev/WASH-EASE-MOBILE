@@ -35,19 +35,23 @@ const RootScreen = () => {
     }
   }, [payload]);
 
-  useEffect(() => {
-    (async () => {
-      const result = await getData();
-      if (result) {
-        setAuthState(result);
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const result = await getData();
+  //     if (result) {
+  //       setAuthState(result);
+  //       setIsLoggedIn(true);
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //   })();
+  // }, []);
 
-  if (isLoggedIn) return <LoadingScreen />;
+  // useEffect(() => {
+  //   removeData();
+  //   storage.removeData();
+  // }, []);
+
   if (isPending) return <LoadingScreen />;
   return (
     <ScreenLayout>
