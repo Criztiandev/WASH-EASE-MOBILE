@@ -13,6 +13,9 @@ const PaymentStep = ({ form, name }) => {
   const [isGCash, setIsGcash] = useState(false);
   const [isFullService, setIsFullService] = useState(false);
   const setCurrentStep = useSetAtom(stepAtom);
+  const deliveryMethod = form.watch("delivery-method");
+  const paymentMethod = form.watch("payment-method");
+  const transactionMethod = form.watch("transaction-method");
 
   useEffect(() => {
     setCurrentStep(name);
@@ -23,47 +26,45 @@ const PaymentStep = ({ form, name }) => {
   }, []);
 
   useEffect(() => {
-    const paymentMethod = form.watch("payment-method");
-    const deliveryMethod = form.watch("delivery-method");
-
     setIsGcash(paymentMethod === "gcash");
-
-    if (deliveryMethod !== "self-service") {
-      setIsFullService(true);
+    if (transactionMethod === "self_serivce") {
+      setIsFullService(false);
     }
-  }, [form.watch("payment-method"), form.watch("delivery-method")]);
+  }, [paymentMethod, transactionMethod]);
 
   return (
     <View className="flex-1  w-full mt-4">
-      <Text
-        className="text-2xl font-bold m-4 text-center mb-2"
-        variant="titleLarge">
-        Order Details
-      </Text>
+      <ScrollView>
+        <Text
+          className="text-2xl font-bold m-4 text-center mb-2"
+          variant="titleLarge">
+          Order Details
+        </Text>
 
-      <View className=" rounded-[5px] m-4 border border-gray-300">
-        <Picker
-          selectedValue={form.getValues("payment-method")}
-          onValueChange={(value) => form.setValue("payment-method", value)}>
-          <Picker.Item label="Choose Payment Method" value="" />
-          <Picker.Item label="Cash" value="cash" />
-          <Picker.Item label="Gcash" value="gcash" />
-        </Picker>
-      </View>
-
-      {isFullService && (
         <View className=" rounded-[5px] m-4 border border-gray-300">
           <Picker
-            selectedValue={form.getValues("delivery-method")}
-            onValueChange={(value) => form.setValue("delivery-method", value)}>
-            <Picker.Item label="Choose Develivery Method" value="" />
-            <Picker.Item label="Standard" value="standard" />
-            <Picker.Item label="Rush" value="rush" />
+            selectedValue={form.getValues("payment-method")}
+            onValueChange={(value) => form.setValue("payment-method", value)}>
+            <Picker.Item label="Choose Payment Method" value="" />
+            <Picker.Item label="Cash" value="CASH" />
+            <Picker.Item label="Gcash" value="G-CASH" />
           </Picker>
         </View>
-      )}
 
-      <ScrollView>
+        {isFullService && (
+          <View className=" rounded-[5px] m-4 border border-gray-300">
+            <Picker
+              selectedValue={form.getValues("delivery-method")}
+              onValueChange={(value) =>
+                form.setValue("delivery-method", value)
+              }>
+              <Picker.Item label="Choose Develivery Method" value="" />
+              <Picker.Item label="Standard" value="standard" />
+              <Picker.Item label="Rush" value="rush" />
+            </Picker>
+          </View>
+        )}
+
         {isGCash && (
           <View className="flex justify-center items-center space-y-2">
             <View className="w-[200px] h-[200px] border rounded-[5px] mx-auto"></View>
@@ -74,16 +75,10 @@ const PaymentStep = ({ form, name }) => {
 
         <View className="px-4">
           {Object.keys(form.getValues()).map((key) => {
-            const serviceKey = [
-              "basic-service",
-              "basic-cleaning",
-              "basic-ironing",
-            ];
+            const serviceKey = ["basic-service"];
             if (serviceKey.includes(key)) {
               const titleMap = {
                 "basic-service": "Service",
-                "basic-cleaning": "Cleaning",
-                "basic-ironing": "Ironing",
               };
 
               return (
@@ -99,11 +94,17 @@ const PaymentStep = ({ form, name }) => {
           <Divider />
 
           {Object.keys(form.getValues()).map((key) => {
-            const expectedKey = ["basic-material"];
+            const expectedKey = [
+              "basic-material",
+              "basic-cleaning",
+              "basic-ironing",
+            ];
 
             if (expectedKey.includes(key)) {
               const titleMap = {
                 "basic-material": "Service",
+                "basic-cleaning": "Cleaning",
+                "basic-ironing": "Ironing",
               };
               return (
                 <QuantityTable
@@ -115,7 +116,11 @@ const PaymentStep = ({ form, name }) => {
             }
           })}
           <Divider />
-          <TotalSection payload={form.getValues()} form={form} />
+          <TotalSection
+            mode={deliveryMethod}
+            payload={form.getValues()}
+            form={form}
+          />
         </View>
       </ScrollView>
     </View>

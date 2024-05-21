@@ -4,8 +4,6 @@ import { DataTable } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 
 const QuantityTable = ({ title, payload = [] }) => {
-  console.log(payload[0]["item_name"]);
-
   return (
     <DataTable className="min-h-[64px]">
       <DataTable.Header>

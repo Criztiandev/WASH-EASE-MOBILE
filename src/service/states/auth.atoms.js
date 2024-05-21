@@ -7,3 +7,5 @@ export const AuthAtom = atomWithStorage("auth", {
   isAuthenticated: false,
   role: "N/A",
 });
+
+export const UserDetailsAtom = atom(null);

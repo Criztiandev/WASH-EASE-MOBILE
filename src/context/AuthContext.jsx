@@ -1,8 +1,9 @@
 import { useAtom } from "jotai";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { AuthAtom } from "../service/states/auth.atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useRouter } from "expo-router";
 
 const getData = async () => {
   try {
@@ -27,6 +28,7 @@ export const useAuthContext = () => {
 const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useAtom(AuthAtom);
   const { removeData } = useLocalStorage("auth");
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -36,7 +38,10 @@ const AuthContextProvider = ({ children }) => {
         isAuthenticated: false,
         token: null,
         role: "N/A",
+        UID: null,
       });
+
+      router.replace("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }

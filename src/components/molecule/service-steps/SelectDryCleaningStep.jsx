@@ -1,27 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { useController } from "react-hook-form";
 import { FlashList } from "@shopify/flash-list";
-import { useSetAtom } from "jotai";
 import MaterialItem from "../items/MaterialItem";
 import useStepManagement from "../../../hooks/useStepManagement";
-import useMultiSelect from "../../../hooks/useSingleSelect";
-import useFetchService from "../../../hooks/useFetchService";
-import LoadingScreen from "../../atoms/LoadingScreen";
-import ErrorScreen from "../../atoms/ErrorScreen";
 
-const SelectDryCleaningStep = ({ form, name, initialData = [] }) => {
+const SelectDryCleaningStep = ({
+  form,
+  name,
+  initialData = [],
+  renderItems,
+}) => {
+  const [selected, setSelected] = useState(initialData || []);
   const { field } = useController({ control: form.control, name });
-  const { selected, handleSelect } = useMultiSelect(initialData, form, name);
   useStepManagement({ name });
 
-  const { data, isLoading, isError } = useFetchService({
-    filter: "Dry Cleaning",
-    name: "basic-drying",
-  });
-
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
+  useEffect(() => {
+    form.setValue("basic-cleaning", selected);
+  }, [selected, form, name]);
 
   return (
     <View className="flex-1 w-full mb-4">
@@ -29,14 +25,15 @@ const SelectDryCleaningStep = ({ form, name, initialData = [] }) => {
         Select Dry Cleaning
       </Text>
       <FlashList
-        data={data}
+        data={renderItems}
         renderItem={({ item }) => (
           <MaterialItem
             field={field}
             id={item.id}
             payload={item}
             isActive={selected.some((current) => current?.id === item?.id)}
-            onSelect={handleSelect}
+            selected={selected}
+            onSelect={setSelected}
             initialQuantity={
               selected.find((current) => current?.id === item?.id)?.quantity
             }

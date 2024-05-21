@@ -1,8 +1,26 @@
 import { View, Text } from "react-native";
 import React from "react";
 import ScreenLayout from "../../../layout/ScreenLayout";
+import { useAuthContext } from "../../../context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import LoadingScreen from "../../atoms/LoadingScreen";
+import ErrorScreen from "../../atoms/ErrorScreen";
 
 const CheckOutStep = ({ total, method }) => {
+  const currentDate = new Date();
+  const nextDate = new Date();
+  nextDate.setDate(currentDate.getDate() + 1);
+
+  const options = { year: "numeric", month: "long", day: "numeric" };
+
+  const formattedCurrentDate = currentDate.toLocaleDateString("en-US", options);
+  const formattedNextDate = nextDate.toLocaleDateString("en-US", options);
+  const { authState } = useAuthContext();
+
+  const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
   return (
     <ScreenLayout>
       <View className="flex-1 ">
@@ -12,25 +30,25 @@ const CheckOutStep = ({ total, method }) => {
 
         <View className="flex-row space-x-2 justify-center  items-center mb-2">
           <Text className="text-lg font-bold">Transaction Date</Text>
-          <Text className="text-base">April 17, 2024</Text>
+          <Text className="text-base">{formattedCurrentDate}</Text>
         </View>
 
         <View className="flex-row space-x-2 justify-center  items-center">
           <Text className="text-lg font-bold">Estimiated Delivery Date</Text>
-          <Text className="text-base">April 18, 2024</Text>
+          <Text className="text-base">{formattedNextDate}</Text>
         </View>
 
         <View className="m-4 border border-gray-300 bg-white p-4 rounded-[5px]">
           <Text className="text-lg font-bold">Personal Info</Text>
           <Text className="text-base font-semibold opacity-50">
-            Name: Taylor Swift
+            Name: {data.firstName} {data.lastName}
           </Text>
 
           <Text className="text-base font-semibold opacity-50">
-            Address: Brgy. Katuparan, Taguig City
+            Address: {data?.address || "N/A"}
           </Text>
           <Text className="text-base font-semibold opacity-50">
-            Phone number: 09588667858
+            Phone number: {data.phoneNumer}
           </Text>
         </View>
 
@@ -71,3 +89,24 @@ const CheckOutStep = ({ total, method }) => {
 };
 
 export default CheckOutStep;
+
+const useFetchUserData = (id) => {
+  return useQuery({
+    queryFn: async () => {
+      const result = await axios.get(`
+      https://washease.online/api/get-customer-details/${id}`);
+
+      const { first_name, last_name, email, phone_number, role } = result.data;
+
+      return {
+        id: id,
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phoneNumer: phone_number,
+        role,
+      };
+    },
+    queryKey: [`user-${id}`],
+  });
+};

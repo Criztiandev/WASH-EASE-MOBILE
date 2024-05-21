@@ -21,15 +21,7 @@ const HomeScreen = () => {
       <TouchableOpacity
         className="px-4 py-2 d  border-gray-300 border  bg-white rounded-[5px] h-[100px] justify-center items-center"
         onPress={() => router.push(`/shop/service/full-service/${id}`)}>
-        <Text className="text-[22px] font-bold text-center">
-          Pickup and Delivery
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        className="px-4 py-2 d  border-gray-300 border  bg-white rounded-[5px] h-[100px] justify-center items-center"
-        onPress={() => router.push("/shop/service/full-service")}>
-        <Text className="text-[22px] font-bold text-center">Pickup Only</Text>
+        <Text className="text-[22px] font-bold text-center">Full Service</Text>
       </TouchableOpacity>
     </View>
   );

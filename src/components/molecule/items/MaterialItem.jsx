@@ -13,8 +13,8 @@ const MaterialItem = memo(
   }) => {
     const preparedPayload = {
       id: payload.id,
-      item_name: payload["item_name"],
-      price: payload["item_price"],
+      item_name: payload["item_name"] || payload["service_name"],
+      price: payload["item_price"] || payload["price"],
     };
 
     const [checked, setChecked] = useState(isActive);
@@ -77,11 +77,12 @@ const MaterialItem = memo(
               )}
               <View>
                 <Text className="text-[18px] font-bold">
-                  {payload.item_name}
+                  {preparedPayload.item_name}
                 </Text>
                 <View className="flex-row items-center space-x-2">
-                  <Text className="text-[18px]">₱ {payload.item_price}.00</Text>
-                  <Text className="text-[14px]">{payload?.description}</Text>
+                  <Text className="text-[18px]">
+                    ₱ {preparedPayload.price}.00
+                  </Text>
                 </View>
               </View>
             </View>

@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import InputField from "../components/atoms/InputField";
 import Button from "../components/atoms/Button";
@@ -7,10 +7,48 @@ import { router } from "expo-router";
 import ScreenLayout from "../layout/ScreenLayout";
 
 import useLoginForm from "../hooks/useLogin";
+import LoadingScreen from "../components/atoms/LoadingScreen";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { useAuthContext } from "../context/AuthContext";
 
 const RootScreen = () => {
-  const { control, onSubmitForm, errors } = useLoginForm();
+  const { setAuthState } = useAuthContext();
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { getData, storeData } = useLocalStorage("auth");
+  const {
+    isPending,
+    data: payload,
+    control,
+    onSubmitForm,
+    errors,
+  } = useLoginForm();
 
+  useEffect(() => {
+    if (payload && payload?.data) {
+      const { data } = payload;
+      storeData(data);
+      setAuthState(data);
+      if (data && data.isAuthenticated) {
+        const currentRole = data?.role.toLowerCase();
+        router.replace(`${currentRole}/home`);
+      }
+    }
+  }, [payload]);
+
+  useEffect(() => {
+    (async () => {
+      const result = await getData();
+      if (result) {
+        setAuthState(result);
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    })();
+  }, []);
+
+  if (isLoggedIn) return <LoadingScreen />;
+  if (isPending) return <LoadingScreen />;
   return (
     <ScreenLayout>
       <View className="flex-1 justify-center items-center">
@@ -39,7 +77,9 @@ const RootScreen = () => {
             errorMsg={errors?.password?.message}
           />
 
-          <Button onPress={onSubmitForm}>Login</Button>
+          <Button onPress={onSubmitForm} disabled={isPending}>
+            {isPending ? "Loading..." : "Login"}
+          </Button>
 
           <View>
             <Text className="text-center text-primary">

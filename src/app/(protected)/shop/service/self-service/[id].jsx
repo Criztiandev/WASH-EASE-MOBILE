@@ -24,8 +24,10 @@ import SelectWashMachineStep from "../../../../../components/molecule/service-st
 import SelectDryMachineStep from "../../../../../components/molecule/service-steps/SelectDryMachineStep";
 import { useAtomValue } from "jotai";
 import { stepAtom } from "../../../../../service/states/service.atoms";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 const SelfServiceScreen = () => {
+  const { authState } = useAuthContext();
   const currentStep = useAtomValue(stepAtom);
   const { id } = useLocalSearchParams();
 
@@ -35,50 +37,15 @@ const SelfServiceScreen = () => {
       dry: 0,
       "basic-service": [],
       "basic-material": [],
-      "payment-method": "",
-      "delivery-method": "",
+      "payment-method": "cash",
+      "delivery-method": "standard",
+      "transaction-method": "self_serivce",
       total: 0,
     },
   });
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: [`laundry-${id}`],
-    queryFn: async () => {
-      const response = await axios.get(
-        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
-      );
-      const basePayload = response.data;
-
-      const washMachine = basePayload["washing_machine"].filter(
-        (item) => item["machine_type"] === "Washing Machine"
-      );
-      const dryMachine = basePayload["washing_machine"].filter(
-        (item) => item["machine_type"] === "Drying"
-      );
-
-      const basicService = basePayload["data"].filter(
-        (item) =>
-          item.service_category.service_category_name === "Basic Services"
-      );
-      const basicIroning = basePayload["data"].filter(
-        (item) => item.service_category.service_category_name === "Ironing"
-      );
-      const basicDryCleaning = basePayload["data"].filter(
-        (item) => item.service_category.service_category_name === "Dry Cleaning"
-      );
-
-      const transformedPayload = {
-        "basic-service": basicService,
-        "basic-material": basePayload["selling_items"],
-        "basic-dryCleaning": basicDryCleaning,
-        "basic-ironing": basicIroning,
-        wash: washMachine,
-        dry: dryMachine,
-      };
-
-      return transformedPayload;
-    },
-  });
+  const { data, isError, isLoading } = useFetchLaundryData(id);
+  const userPayload = useFetchUserData(authState?.user_id);
 
   const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
     <SelectWashMachineStep
@@ -113,14 +80,9 @@ const SelfServiceScreen = () => {
   ]);
 
   const onSubmit = (value) => {
-    console.log(currentStep);
-    const isHasValue = form.getValues("basic-service");
+    const currentValue = form.getValues(currentStep);
 
-    if (
-      isHasValue === "" ||
-      isHasValue === null ||
-      (isHasValue?.length <= 0 && currentStep === "basic-service")
-    ) {
+    if (isServiceValid(currentValue, currentStep, ["basic-service"])) {
       Toast.show({
         type: "error",
         text1: "Please Fill all the field to proceed",
@@ -129,67 +91,11 @@ const SelfServiceScreen = () => {
     }
 
     if (!isFinalStep) {
-      console.log(value);
-
       nextStep();
       return;
     }
 
-    //transform the data into this format
-    console.log(value);
-
-    const transformedBasicMaterial = value["basic-material"].map((item) => ({
-      service: item.id,
-      service_name: item.item_name,
-      service_price: item.price,
-      quantity: item.quantity || 0,
-    }));
-
-    const transformedBasicService = value["basic-service"].map((item) => ({
-      service: item.id,
-      service_name: item.title,
-      service_price: item.price,
-      quantity: 1,
-    }));
-
-    const transformedWash = [
-      {
-        service: value["wash"],
-        service_name: "Washing Machine",
-        service_price: "N/A",
-        quantity: 1,
-      },
-    ];
-
-    const transformedDry = [
-      {
-        service: value["dry"],
-        service_name: "Drying Machine",
-        service_price: "N/A",
-        quantity: 1,
-      },
-    ];
-
-    const serviceAvail = [
-      ...transformedBasicMaterial,
-      ...transformedBasicService,
-      ...transformedWash,
-      ...transformedDry,
-    ];
-
-    const finalPayload = {
-      customer_id: 0,
-      laundry_shop_id: id,
-      customer_name: "",
-      customer_address: "",
-      customer_type: "",
-      delivery_fee: value["delivery-method"] === "rush" ? 500 : 0,
-      service_avail: serviceAvail,
-      payment_status: value["payment_method"] || "Cash",
-      status: "PENDING",
-      total_bill: value["total"],
-    };
-
+    const finalPayload = transformedFinalPayload(id, value, userPayload.data);
     console.log(finalPayload);
 
     Toast.show({
@@ -199,6 +105,9 @@ const SelfServiceScreen = () => {
     });
     // router.replace("../../customer/(tabs)/home");
   };
+
+  if (isLoading || userPayload.isLoading) return <LoadingScreen />;
+  if (isError || userPayload.isError) return <ErrorScreen />;
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
@@ -227,3 +136,128 @@ const SelfServiceScreen = () => {
 };
 
 export default SelfServiceScreen;
+
+const useFetchLaundryData = (id) => {
+  return useQuery({
+    queryKey: [`laundry-${id}`],
+    queryFn: async () => {
+      const response = await axios.get(
+        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
+      );
+      const basePayload = response.data;
+
+      const washMachine = basePayload["washing_machine"].filter(
+        (item) => item["machine_type"] === "Washing Machine"
+      );
+      const dryMachine = basePayload["washing_machine"].filter(
+        (item) => item["machine_type"] === "Drying"
+      );
+
+      const basicService = basePayload["data"].filter(
+        (item) =>
+          item.service_category.service_category_name === "Basic Services"
+      );
+
+      const transformedPayload = {
+        "basic-service": basicService,
+        "basic-material": basePayload["selling_items"],
+        wash: washMachine,
+        dry: dryMachine,
+      };
+
+      return transformedPayload;
+    },
+  });
+};
+
+const useFetchUserData = (id) => {
+  return useQuery({
+    queryFn: async () => {
+      const result = await axios.get(`
+      https://washease.online/api/get-customer-details/${id}`);
+
+      const { first_name, last_name, email, phone_number, role } = result.data;
+
+      return {
+        id: id,
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phoneNumer: phone_number,
+        role,
+      };
+    },
+    queryKey: [`user-${id}`],
+  });
+};
+
+const transformItems = (items, itemNameKey = "item_name") =>
+  items.map((item) => ({
+    service: item.id,
+    service_name: item[itemNameKey],
+    service_price: item.price,
+    quantity: item.quantity || 0,
+  }));
+
+const transformService = (id, serviceName, servicePrice) => {
+  return [
+    {
+      service: id,
+      service_name: serviceName,
+      service_price: servicePrice,
+      quantity: 1,
+    },
+  ];
+};
+
+const isServiceValid = (value, step, flagedStep) => {
+  return (
+    value === "" ||
+    value === null ||
+    (Array.isArray(value) && value.length <= 0 && flagedStep.includes(step))
+  );
+};
+
+const transformedFinalPayload = (id, value, credentials) => {
+  //transform the data into this format
+
+  console.log(credentials);
+
+  const transformedWashMachine = transformService(
+    value["wash"],
+    "Washing Machine",
+    "N/A"
+  );
+  const transformeDryMachine = transformService(
+    value["dry"],
+    "Washing Machine",
+    "N/A"
+  );
+  const transformedBasicMaterial = transformItems(value["basic-material"]);
+
+  const transformedBasicService = transformItems(
+    value["basic-service"],
+    "title"
+  );
+
+  const serviceAvail = [
+    ...transformedBasicMaterial,
+    ...transformedBasicService,
+    ...transformedWashMachine,
+    ...transformeDryMachine,
+  ];
+
+  return {
+    customer_id: credentials.id,
+    laundry_shop_id: id,
+    customer_name: `${credentials.firstName} ${credentials.lastName}`,
+    customer_address: "N/A",
+    customer_type: credentials.role,
+    delivery_fee: 0,
+    service_avail: serviceAvail,
+    service_type: value["transaction-method"],
+    payment_status: value["payment_method"] || "CASH",
+    total_bill: value["total"],
+    status: "PENDING",
+  };
+};

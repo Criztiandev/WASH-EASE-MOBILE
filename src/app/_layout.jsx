@@ -8,31 +8,24 @@ import { Provider } from "jotai";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SplashScreen from "../../SplashScreen";
-import AnimatedSplash from "react-native-animated-splash-screen";
 
 const queryClient = new QueryClient();
 
 const RootStackNavigator = () => {
-  const { authState, setAuthState } = useAuthContext();
-  const router = useRouter();
+  const { setAuthState } = useAuthContext();
   const { getData } = useLocalStorage("auth");
-  const rootPath = "/";
+  const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const storedAuthData = await getData();
-      if (storedAuthData && storedAuthData?.isAuthenticated) {
-        setAuthState(storedAuthData);
+    (async () => {
+      const result = await getData();
 
-        const currentRole = storedAuthData?.role.toLowerCase();
+      if (result && result.isAuthenticated) {
+        const currentRole = result?.role.toLowerCase();
         router.replace(`${currentRole}/home`);
-      } else {
-        router.replace(rootPath);
       }
-    };
-
-    checkAuth();
-  }, []);
+    })();
+  }, [getData]);
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -43,7 +36,7 @@ const RootStackNavigator = () => {
 
 const AppLayout = () => {
   const { getData } = useLocalStorage("splash");
-  const [isShowSplashScreen, setIsShowSplashScreen] = useState(true);
+  const [isShowSplashScreen, setIsShowSplashScreen] = useState(false);
 
   useEffect(() => {
     const checkIsAlreadySplashScreen = async () => {
@@ -51,6 +44,8 @@ const AppLayout = () => {
 
       if (payload?.isAlreadySplashed) {
         setIsShowSplashScreen(false);
+      } else {
+        setIsShowSplashScreen(true);
       }
     };
 

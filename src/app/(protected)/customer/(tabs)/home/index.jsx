@@ -2,6 +2,7 @@ import ScreenLayout from "../../../../../layout/ScreenLayout";
 import CalloutMap from "../../../../../components/organism/CalloutMap";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 const HomeScreen = () => {
   const [location, setLocation] = useState(null);

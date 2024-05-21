@@ -7,7 +7,7 @@ import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 import { useForm } from "react-hook-form";
 
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import Toast from "react-native-toast-message";
 
 // Components
@@ -20,12 +20,13 @@ import SelectIroningStep from "../../../../../components/molecule/service-steps/
 import PaymentStep from "../../../../../components/molecule/service-steps/PaymentStep";
 import CheckOutStep from "../../../../../components/molecule/service-steps/CheckOutStep";
 import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
-import SelectWashMachineStep from "../../../../../components/molecule/service-steps/SelectWashMachineStep";
-import SelectDryMachineStep from "../../../../../components/molecule/service-steps/SelectDryMachineStep";
 import { useAtomValue } from "jotai";
 import { stepAtom } from "../../../../../service/states/service.atoms";
+import TransactionModeStep from "../../../../../components/molecule/service-steps/TransactionModeStep";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 const FullServiceScreen = () => {
+  const { authState } = useAuthContext();
   const currentStep = useAtomValue(stepAtom);
   const { id } = useLocalSearchParams();
 
@@ -35,68 +36,46 @@ const FullServiceScreen = () => {
       "basic-cleaning": [],
       "basic-ironing": [],
       "basic-material": [],
-      "payment-method": "",
-      "delivery-method": "",
+      "payment-method": "cash",
+      "delivery-method": "standard",
+      "transaction-method": "",
       total: 0,
     },
   });
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: [`laundry-${id}`],
-    queryFn: async () => {
-      const response = await axios.get(
-        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
-      );
-      const basePayload = response.data;
-
-      const washMachine = basePayload["washing_machine"].filter(
-        (item) => item["machine_type"] === "Washing Machine"
-      );
-      const dryMachine = basePayload["washing_machine"].filter(
-        (item) => item["machine_type"] === "Drying"
-      );
-
-      const basicService = basePayload["data"].filter(
-        (item) =>
-          item.service_category.service_category_name === "Basic Services"
-      );
-      const basicIroning = basePayload["data"].filter(
-        (item) => item.service_category.service_category_name === "Ironing"
-      );
-      const basicDryCleaning = basePayload["data"].filter(
-        (item) => item.service_category.service_category_name === "Dry Cleaning"
-      );
-
-      const transformedPayload = {
-        "basic-service": basicService,
-        "basic-material": basePayload["selling_items"],
-        "basic-dryCleaning": basicDryCleaning,
-        "basic-ironing": basicIroning,
-        wash: washMachine,
-        dry: dryMachine,
-      };
-
-      return transformedPayload;
-    },
-  });
+  const { data, isError, isLoading } = useFetchLaundryData(id);
+  const userPayload = useFetchUserData(authState?.user_id);
 
   const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
-    <SelectWashMachineStep
-      controller={form.control}
-      name={"wash"}
-      renderItems={data?.wash}
+    <TransactionModeStep
+      form={form}
+      name={"transaction-method"}
+      initialData={form.getValues("transaction-method")}
+      renderItems={[
+        { id: 0, title: "Pick only" },
+        { id: 1, title: "Pick up and Delivery" },
+      ]}
     />,
 
-    <SelectDryMachineStep
-      controller={form.control}
-      name={"dry"}
-      renderItems={data?.dry}
-    />,
     <SelectServiceStep
       form={form}
       name={"basic-service"}
       initialData={form.getValues("basic-service")}
       renderItems={data?.["basic-service"]}
+    />,
+
+    <SelectDryCleaningStep
+      form={form}
+      name={"basic-cleaning"}
+      initialData={form.getValues("basic-cleaning")}
+      renderItems={data?.["basic-cleaning"]}
+    />,
+
+    <SelectIroningStep
+      form={form}
+      name={"basic-ironing"}
+      initialData={form.getValues("basic-ironing")}
+      renderItems={data?.["basic-ironing"]}
     />,
 
     <SelectMaterialStep
@@ -105,7 +84,9 @@ const FullServiceScreen = () => {
       initialData={form.getValues("basic-material")}
       renderItems={data?.["basic-material"]}
     />,
+
     <PaymentStep form={form} name="method" />,
+
     <CheckOutStep
       total={form.getValues("total")}
       method={form.getValues("payment-method")}
@@ -113,13 +94,13 @@ const FullServiceScreen = () => {
   ]);
 
   const onSubmit = (value) => {
-    console.log(currentStep);
-    const isHasValue = form.getValues("basic-service");
+    const currentValue = form.getValues(currentStep);
 
     if (
-      isHasValue === "" ||
-      isHasValue === null ||
-      (isHasValue?.length <= 0 && currentStep === "basic-service")
+      isServiceValid(currentValue, currentStep, [
+        "basic-service",
+        "transaction-method",
+      ])
     ) {
       Toast.show({
         type: "error",
@@ -129,67 +110,11 @@ const FullServiceScreen = () => {
     }
 
     if (!isFinalStep) {
-      console.log(value);
-
       nextStep();
       return;
     }
 
-    //transform the data into this format
-    console.log(value);
-
-    const transformedBasicMaterial = value["basic-material"].map((item) => ({
-      service: item.id,
-      service_name: item.item_name,
-      service_price: item.price,
-      quantity: item.quantity || 0,
-    }));
-
-    const transformedBasicService = value["basic-service"].map((item) => ({
-      service: item.id,
-      service_name: item.title,
-      service_price: item.price,
-      quantity: 1,
-    }));
-
-    const transformedWash = [
-      {
-        service: value["wash"],
-        service_name: "Washing Machine",
-        service_price: "N/A",
-        quantity: 1,
-      },
-    ];
-
-    const transformedDry = [
-      {
-        service: value["dry"],
-        service_name: "Drying Machine",
-        service_price: "N/A",
-        quantity: 1,
-      },
-    ];
-
-    const serviceAvail = [
-      ...transformedBasicMaterial,
-      ...transformedBasicService,
-      ...transformedWash,
-      ...transformedDry,
-    ];
-
-    const finalPayload = {
-      customer_id: 0,
-      laundry_shop_id: id,
-      customer_name: "",
-      customer_address: "",
-      customer_type: "",
-      delivery_fee: value["delivery-method"] === "rush" ? 500 : 0,
-      service_avail: serviceAvail,
-      payment_status: value["payment_method"] || "Cash",
-      status: "PENDING",
-      total_bill: value["total"],
-    };
-
+    const finalPayload = transformedFinalPayload(id, value, userPayload);
     console.log(finalPayload);
 
     Toast.show({
@@ -200,8 +125,8 @@ const FullServiceScreen = () => {
     // router.replace("../../customer/(tabs)/home");
   };
 
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
+  if (isLoading || userPayload.isLoading) return <LoadingScreen />;
+  if (isError || userPayload.isError) return <ErrorScreen />;
 
   return (
     <View className="flex-1 bg-[#FAF8FF] mb-2">
@@ -227,3 +152,105 @@ const FullServiceScreen = () => {
 };
 
 export default FullServiceScreen;
+
+const useFetchLaundryData = (id) => {
+  return useQuery({
+    queryKey: [`laundry-${id}`],
+    queryFn: async () => {
+      const response = await axios.get(
+        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
+      );
+      const basePayload = response.data;
+
+      const basicService = basePayload["data"].filter(
+        (item) =>
+          item.service_category.service_category_name === "Basic Services"
+      );
+      const basicIroning = basePayload["data"].filter(
+        (item) => item.service_category.service_category_name === "Ironing"
+      );
+      const basicDryCleaning = basePayload["data"].filter(
+        (item) => item.service_category.service_category_name === "Dry Cleaning"
+      );
+
+      const transformedPayload = {
+        "basic-service": basicService,
+        "basic-material": basePayload["selling_items"],
+        "basic-cleaning": basicDryCleaning,
+        "basic-ironing": basicIroning,
+      };
+
+      return transformedPayload;
+    },
+  });
+};
+
+const useFetchUserData = (id) => {
+  return useQuery({
+    queryFn: async () => {
+      const result = await axios.get(`
+      https://washease.online/api/get-customer-details/${id}`);
+
+      const { first_name, last_name, email, phone_number, role } = result.data;
+
+      return {
+        id: id,
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phoneNumer: phone_number,
+        role,
+      };
+    },
+    queryKey: [`user-${id}`],
+  });
+};
+
+const transformItems = (items, itemNameKey = "item_name") =>
+  items.map((item) => ({
+    service: item.id,
+    service_name: item[itemNameKey],
+    service_price: item.price,
+    quantity: item.quantity || 0,
+  }));
+
+const isServiceValid = (value, step, flagedStep) => {
+  return (
+    value === "" ||
+    value === null ||
+    (Array.isArray(value) && value.length <= 0 && flagedStep.includes(step))
+  );
+};
+
+const transformedFinalPayload = (id, value, credentials) => {
+  //transform the data into this format
+
+  const transformedBasicIroning = transformItems(value["basic-ironing"]);
+  const transformedBasicCleaning = transformItems(value["basic-cleaning"]);
+  const transformedBasicMaterial = transformItems(value["basic-material"]);
+  const transformedBasicService = transformItems(
+    value["basic-service"],
+    "title"
+  );
+
+  const serviceAvail = [
+    ...transformedBasicMaterial,
+    ...transformedBasicService,
+    ...transformedBasicIroning,
+    ...transformedBasicCleaning,
+  ];
+
+  return {
+    customer_id: credentials.id,
+    laundry_shop_id: id,
+    customer_name: `${credentials.firstName} ${credentials.lastName}`,
+    customer_address: "N/A",
+    customer_type: credentials.role,
+    delivery_fee: value["delivery-method"] === "rush" ? 200 : 0,
+    service_avail: serviceAvail,
+    service_type: value["transaction-method"],
+    payment_status: value["payment_method"] || "CASH",
+    total_bill: value["total"],
+    status: "PENDING",
+  };
+};

@@ -11,9 +11,6 @@ import {
 } from "../service/validation/auth/signIn.validation";
 
 const useLoginForm = () => {
-  const { setAuthState } = useAuthContext();
-  const { storeData } = useLocalStorage("auth");
-
   const {
     control,
     handleSubmit,
@@ -26,12 +23,9 @@ const useLoginForm = () => {
   const loginMutation = useMutation({
     mutationFn: async (value) => await authApi.login(value),
     onSuccess: async ({ data }) => {
-      const { message, token, role, isAuthenticated } = data;
-      const payload = { token, isAuthenticated, role };
+      const { message } = data;
 
       Toast.show({ type: "success", text1: message });
-      setAuthState(payload);
-      await storeData(payload);
     },
     onError: (error) => {
       console.log(error);
@@ -43,7 +37,7 @@ const useLoginForm = () => {
     loginMutation.mutate(value);
   });
 
-  return { control, errors, onSubmitForm };
+  return { ...loginMutation, control, errors, onSubmitForm };
 };
 
 export default useLoginForm;
