@@ -14,6 +14,26 @@ import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
+const useFetchUserData = (id) => {
+  return useQuery({
+    queryKey: [`user-profile-${id}`],
+    queryFn: async () => {
+      const result = await axios.get(
+        `https://washease.online/api/get-customer-details/${id}`
+      );
+      const { first_name, last_name, email, phone_number, role } = result.data;
+      return {
+        id,
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phoneNumber: phone_number,
+        role,
+      };
+    },
+  });
+};
+
 const ProfileScreen = () => {
   const { authState } = useAuthContext();
   const { id } = useLocalSearchParams();
@@ -21,18 +41,13 @@ const ProfileScreen = () => {
 
   const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
 
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
-
   const logoutMutation = useMutation({
     mutationFn: async () => await accoutApi.logout(),
-
     onSuccess: () => {
       Toast.show({
         type: "success",
         text1: "Logout Successfully",
       });
-
       handleLogout();
     },
     onError: (error) => {
@@ -41,8 +56,12 @@ const ProfileScreen = () => {
   });
 
   const onLogout = () => {
-    logoutMutation.mutate({});
+    logoutMutation.mutate();
   };
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
+
   return (
     <ScreenLayout className="p-4 pt-6">
       <ProfileCard
@@ -54,8 +73,8 @@ const ProfileScreen = () => {
         onPress={() => {
           router.push(`/account/details/${id}`);
         }}>
-        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <AccountIcon width={32} height={32} className="" />
+        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <AccountIcon width={32} height={32} />
           <Text className="text-lg font-bold">Account Information</Text>
         </View>
       </TouchableOpacity>
@@ -64,8 +83,8 @@ const ProfileScreen = () => {
         onPress={() => {
           router.push(`/account/notification/${id}`);
         }}>
-        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <NotificationIcon width={32} height={32} className="" />
+        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Notification</Text>
         </View>
       </TouchableOpacity>
@@ -74,8 +93,8 @@ const ProfileScreen = () => {
         onPress={() => {
           router.push(`/account/transaction/${id}`);
         }}>
-        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <NotificationIcon width={32} height={32} className="" />
+        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Transaction History</Text>
         </View>
       </TouchableOpacity>
@@ -88,24 +107,3 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
-
-const useFetchUserData = (id) => {
-  return useQuery({
-    queryFn: async () => {
-      const result = await axios.get(`
-      https://washease.online/api/get-customer-details/${id}`);
-
-      const { first_name, last_name, email, phone_number, role } = result.data;
-
-      return {
-        id: id,
-        firstName: first_name,
-        lastName: last_name,
-        email,
-        phoneNumer: phone_number,
-        role,
-      };
-    },
-    queryKey: [`user-profile-${id}`],
-  });
-};
