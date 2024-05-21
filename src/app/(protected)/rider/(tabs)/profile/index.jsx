@@ -1,38 +1,80 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Avatar, Card } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import NotificationIcon from "../../../../../assets/icons/notification_icon.svg";
 import AccountIcon from "../../../../../assets/icons/account_icon.svg";
 import Button from "../../../../../components/atoms/Button";
 import Toast from "react-native-toast-message";
-import { useSetAtom } from "jotai";
-import { AuthRole } from "../../../../../service/states/auth.atoms";
+import { useAuthContext } from "../../../../../context/AuthContext";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import accoutApi from "../../../../../api/accout.api";
+import ProfileCard from "../../../../../components/molecule/cards/ProfileCard";
+import axios from "axios";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
+
+const useFetchUserData = (id) => {
+  return useQuery({
+    queryKey: [`user-profile-${id}`],
+    queryFn: async () => {
+      const result = await axios.get(
+        `https://washease.online/api/get-customer-details/${id}`
+      );
+      const { first_name, last_name, email, phone_number, role } = result.data;
+      return {
+        id,
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phoneNumber: phone_number,
+        role,
+      };
+    },
+  });
+};
 
 const ProfileScreen = () => {
+  const { authState } = useAuthContext();
   const { id } = useLocalSearchParams();
-  const setAuthAtom = useSetAtom(AuthRole);
+  const { handleLogout } = useAuthContext();
 
-  const handleLogout = () => {
-    Toast.show({
-      type: "success",
-      text1: "Logout Successfully",
-    });
+  const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
 
-    router.push("/auth/sign-in");
-    setAuthAtom("");
+  const logoutMutation = useMutation({
+    mutationFn: async () => await accoutApi.logout(),
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Logout Successfully",
+      });
+      handleLogout();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const onLogout = () => {
+    logoutMutation.mutate();
   };
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
+
   return (
     <ScreenLayout className="p-4 pt-6">
-      <ProfileCard />
+      <ProfileCard
+        name={`${data?.firstName} ${data?.lastName}`}
+        role={`${data?.role}`}
+      />
 
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/details/${id}`);
         }}>
-        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <AccountIcon width={32} height={32} className="" />
+        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <AccountIcon width={32} height={32} />
           <Text className="text-lg font-bold">Account Information</Text>
         </View>
       </TouchableOpacity>
@@ -41,8 +83,8 @@ const ProfileScreen = () => {
         onPress={() => {
           router.push(`/account/notification/${id}`);
         }}>
-        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <NotificationIcon width={32} height={32} className="" />
+        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Notification</Text>
         </View>
       </TouchableOpacity>
@@ -51,36 +93,17 @@ const ProfileScreen = () => {
         onPress={() => {
           router.push(`/account/transaction/${id}`);
         }}>
-        <View className=" flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <NotificationIcon width={32} height={32} className="" />
+        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
+          <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Transaction History</Text>
         </View>
       </TouchableOpacity>
 
       <View className="my-4">
-        <Button onPress={handleLogout}>Logout</Button>
+        <Button onPress={onLogout}>Logout</Button>
       </View>
     </ScreenLayout>
   );
 };
 
 export default ProfileScreen;
-
-const ProfileCard = () => {
-  return (
-    <>
-      <Text className="text-xl font-bold mb-2">Profile</Text>
-      <Card className="bg-white mb-4">
-        <Card.Content className="flex-row space-x-4">
-          <Avatar.Icon />
-          <View>
-            <Text className="text-lg font-bold">
-              Criztian Jade Mitra Tuplano
-            </Text>
-            <Text>Customer</Text>
-          </View>
-        </Card.Content>
-      </Card>
-    </>
-  );
-};
