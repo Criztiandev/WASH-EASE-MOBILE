@@ -4,13 +4,11 @@ import React from "react";
 import { Icon, Text } from "react-native-paper";
 
 import LocationIcon from "../../../assets/icons/location_icon.svg";
-import ClockIcon from "../../../assets/icons/clock_icon.svg";
 import { cva } from "class-variance-authority";
 import { cn } from "../../../utils/dev.utils";
 import Badge from "../../atoms/Badge";
 
 import Button from "../../atoms/Button";
-import { router } from "expo-router";
 const statusFlag = cva("right-0 m-2", {
   variants: {
     status: {
@@ -41,7 +39,7 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
             <View className="mr-2">
               <LocationIcon />
             </View>
-            <Text className="text-[16px] capitalize">{details.location}</Text>
+            <Text className="text-[16px] capitalize">{details?.location}</Text>
           </View>
 
           <View className="flex-row items-center ">

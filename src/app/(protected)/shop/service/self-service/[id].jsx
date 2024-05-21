@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import Button from "../../../../../components/atoms/Button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
@@ -79,6 +79,42 @@ const SelfServiceScreen = () => {
     />,
   ]);
 
+  const serviceMutation = useMutation({
+    mutationFn: async (value) => {
+      console.log(value);
+
+      const authToken = authState.token; // Replace with your actual auth token
+      const result = await axios.post(
+        "https://washease.online/api/laundry_shop/transactions",
+        value,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json", // Ensure Content-Type is set if needed
+          },
+        }
+      );
+      return result.data;
+    },
+
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Order Placed",
+        text2: "Thank you for using wash ease",
+      });
+      router.replace("/customer/home");
+    },
+    onError: (error) => {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+        text2: "Thank you for your patience",
+      });
+      console.log(error);
+    },
+  });
+
   const onSubmit = (value) => {
     const currentValue = form.getValues(currentStep);
 
@@ -96,14 +132,7 @@ const SelfServiceScreen = () => {
     }
 
     const finalPayload = transformedFinalPayload(id, value, userPayload.data);
-    console.log(finalPayload);
-
-    Toast.show({
-      type: "success",
-      text1: "Order Placed",
-      text2: "Thank you for using wash ease",
-    });
-    // router.replace("../../customer/(tabs)/home");
+    serviceMutation.mutate(finalPayload);
   };
 
   if (isLoading || userPayload.isLoading) return <LoadingScreen />;
@@ -210,18 +239,17 @@ const transformService = (id, serviceName, servicePrice) => {
   ];
 };
 
-const isServiceValid = (value, step, flagedStep) => {
+const isServiceValid = (value, step) => {
   return (
     value === "" ||
     value === null ||
-    (Array.isArray(value) && value.length <= 0 && flagedStep.includes(step))
+    (Array.isArray(value) && value.length <= 0 && step === "basic-service")
   );
 };
 
 const transformedFinalPayload = (id, value, credentials) => {
-  //transform the data into this format
-
-  console.log(credentials);
+  const date = new Date();
+  const currentDate = date.toISOString().split("T")[0];
 
   const transformedWashMachine = transformService(
     value["wash"],
@@ -249,15 +277,17 @@ const transformedFinalPayload = (id, value, credentials) => {
 
   return {
     customer_id: credentials.id,
-    laundry_shop_id: id,
+    machine_id: 2,
+    laundry_shop_id: Number(id),
     customer_name: `${credentials.firstName} ${credentials.lastName}`,
     customer_address: "N/A",
     customer_type: credentials.role,
-    delivery_fee: 0,
     service_avail: serviceAvail,
     service_type: value["transaction-method"],
-    payment_status: value["payment_method"] || "CASH",
+    payment_method: value["payment_method"] || "CASH",
     total_bill: value["total"],
+    delivery_date: currentDate,
+    delivery_fee: 0,
     status: "PENDING",
   };
 };

@@ -6,6 +6,11 @@ import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
 import { Searchbar } from "react-native-paper";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuthContext } from "../../../../../context/AuthContext";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 const MOCKDATA = [
   {
@@ -57,6 +62,25 @@ const MOCKDATA = [
 ];
 
 const RootScreen = () => {
+  const { authState } = useAuthContext();
+
+  const { data, isLoading, isError } = useQuery({
+    queryFn: async () => {
+      console.log(authState["user_id"]);
+
+      const result = await axios.get(
+        `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
+      );
+      return result?.data || [];
+    },
+    queryKey: [`choosen-shop-${authState["user_id"]}`],
+  });
+
+  const laundaryIDs = data.map((items) => items.laundry_shop_id);
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
+
   return (
     <ScreenLayout>
       <Text className="text-2xl font-bold p-4">Selected Shops</Text>
@@ -67,22 +91,29 @@ const RootScreen = () => {
         onChangeText={() => console.log("hi")}
       />
       <View className="flex-1 my-4">
-        <FlashList
-          data={MOCKDATA}
-          renderItem={({ item }) => (
-            <View className="">
-              <HeroShopCard
-                {...item}
-                label={"View details"}
-                onNavigate={() =>
-                  router.push(`/shop/choosen/request/${item.id}`)
-                }
-              />
-            </View>
-          )}
-          estimatedItemSize={200}
-          keyExtractor={(item) => item.id}
-        />
+        {data?.length > 0 ? (
+          <FlashList
+            data={data}
+            renderItem={({ item }) => (
+              <View className="">
+                <HeroShopCard
+                  label={"View details"}
+                  onNavigate={() =>
+                    router.push(`/shop/choosen/request/${item.id}`)
+                  }
+                />
+              </View>
+            )}
+            estimatedItemSize={200}
+            keyExtractor={(item) => item.id}
+          />
+        ) : (
+          <View className="flex-1 justify-center items-center">
+            <Text className="text-[24px] font-bold opacity-50">
+              No Tranasction available
+            </Text>
+          </View>
+        )}
       </View>
     </ScreenLayout>
   );
