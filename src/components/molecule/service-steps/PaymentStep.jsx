@@ -57,8 +57,8 @@ const PaymentStep = ({ form, name }) => {
             selectedValue={form.getValues("delivery-method")}
             onValueChange={(value) => form.setValue("delivery-method", value)}>
             <Picker.Item label="Choose Develivery Method" value="" />
-            <Picker.Item label="Pick up" value="pick-up" />
-            <Picker.Item label="Delivery" value="delivery" />
+            <Picker.Item label="Standard" value="standard" />
+            <Picker.Item label="Rush" value="rush" />
           </Picker>
         </View>
       )}

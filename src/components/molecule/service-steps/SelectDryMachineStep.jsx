@@ -6,37 +6,30 @@ import { Text } from "react-native-paper";
 import { ToggleButton } from "react-native-paper";
 import { cn } from "../../../utils/dev.utils";
 import { useAuthContext } from "../../../context/AuthContext";
-import useFetchMachine from "../../../hooks/useFetchMachine";
-import LoadingScreen from "../../atoms/LoadingScreen";
-import ErrorScreen from "../../atoms/ErrorScreen";
 import useStepManagement from "../../../hooks/useStepManagement";
 
-const SelectDryMachineStep = ({ controller, name }) => {
-  const { authState } = useAuthContext();
+const SelectDryMachineStep = ({ controller, name, renderItems }) => {
   const { field } = useController({ control: controller, name });
-  const { data, isLoading, isError } = useFetchMachine({
-    name: "select-dry-machine",
-    token: authState?.token,
-  });
-  useStepManagement({ name: name });
-
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
-
-  const WashingMachineData = data.filter(
-    (machine) => machine["machine_type"] === "Drying"
-  );
+  useStepManagement({ name });
 
   return (
     <View className="">
-      <Header />
+      {renderItems?.length > 0 ? (
+        <Header />
+      ) : (
+        <View>
+          <Text className="text-[24px] font-bold">
+            No Available Dry Machine
+          </Text>
+        </View>
+      )}
 
       <ToggleButton.Row
         onValueChange={field?.onChange}
         value={field.value}
         style={{ flexWrap: "wrap", gap: 16, justifyContent: "center" }}>
-        {WashingMachineData &&
-          WashingMachineData.map(({ machine_name, ...field }) => (
+        {renderItems &&
+          renderItems.map(({ machine_name, ...field }) => (
             <MachineToggleButton
               key={field.id}
               {...field}

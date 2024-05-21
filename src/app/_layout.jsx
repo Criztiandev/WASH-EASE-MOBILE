@@ -8,35 +8,31 @@ import { Provider } from "jotai";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SplashScreen from "../../SplashScreen";
+import AnimatedSplash from "react-native-animated-splash-screen";
 
 const queryClient = new QueryClient();
 
-const RootStackLayout = () => {
+const RootStackNavigator = () => {
   const { authState, setAuthState } = useAuthContext();
   const router = useRouter();
   const { getData } = useLocalStorage("auth");
+  const rootPath = "/";
 
   useEffect(() => {
     const checkAuth = async () => {
       const storedAuthData = await getData();
-      if (storedAuthData && storedAuthData.isAuthenticated) {
+      if (storedAuthData && storedAuthData?.isAuthenticated) {
         setAuthState(storedAuthData);
-        return;
+
+        const currentRole = storedAuthData?.role.toLowerCase();
+        router.replace(`${currentRole}/home`);
       } else {
-        router.replace("/");
+        router.replace(rootPath);
       }
     };
 
     checkAuth();
   }, []);
-
-  useEffect(() => {
-    if (authState.isAuthenticated) {
-      router.replace("/(protected)");
-    } else {
-      router.replace("/");
-    }
-  }, [authState.isAuthenticated]);
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -45,44 +41,42 @@ const RootStackLayout = () => {
   );
 };
 
-const _layout = () => {
+const AppLayout = () => {
   const { getData } = useLocalStorage("splash");
-  const [isShowSpashScreen, setIsShowSplashScreen] = useState(true);
+  const [isShowSplashScreen, setIsShowSplashScreen] = useState(true);
 
   useEffect(() => {
     const checkIsAlreadySplashScreen = async () => {
       const payload = await getData();
 
-      if (payload && payload.isAlreadySplashed === true) {
+      if (payload?.isAlreadySplashed) {
         setIsShowSplashScreen(false);
       }
     };
 
     checkIsAlreadySplashScreen();
-  }, [isShowSpashScreen]);
+  }, [getData]);
 
   return (
     <>
-      {isShowSpashScreen ? (
+      {isShowSplashScreen ? (
         <SplashScreen setState={setIsShowSplashScreen} />
       ) : (
-        <>
-          <QueryClientProvider client={queryClient}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <Provider>
-                <PaperProvider>
-                  <AuthContextProvider>
-                    <RootStackLayout />
-                  </AuthContextProvider>
-                </PaperProvider>
-              </Provider>
-            </GestureHandlerRootView>
-            <Toast />
-          </QueryClientProvider>
-        </>
+        <QueryClientProvider client={queryClient}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Provider>
+              <PaperProvider>
+                <AuthContextProvider>
+                  <RootStackNavigator />
+                </AuthContextProvider>
+              </PaperProvider>
+            </Provider>
+          </GestureHandlerRootView>
+          <Toast />
+        </QueryClientProvider>
       )}
     </>
   );
 };
 
-export default _layout;
+export default AppLayout;

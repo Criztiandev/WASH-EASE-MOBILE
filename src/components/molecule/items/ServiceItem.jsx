@@ -22,7 +22,7 @@ const ServiceItem = ({
       const newValue = !prev;
       onSelect(newValue, {
         id: payload.id,
-        title: payload.title,
+        title: payload.service_name,
         price: payload.price,
       });
       return newValue;

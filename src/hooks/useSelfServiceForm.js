@@ -8,22 +8,8 @@ import SelectServiceStep from "../components/molecule/service-steps/SelectServic
 import SelectMaterialStep from "../components/molecule/service-steps/SelectMaterialStep";
 import PaymentStep from "../components/molecule/service-steps/PaymentStep";
 import CheckOutStep from "../components/molecule/service-steps/CheckOutStep";
-import { useQueries, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
-// Function to fetch initial data (example, replace with your own logic)
-const fetchInitialData = async ({ id }) => {
-  const response = await axios.post(
-    "https://washease.online/api/get-basic-services-by-laundry-shops",
-    { laundry_shop_id: 2 }
-  );
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
-
-const useSelfServiceForm = ({ id }) => {
+const useSelfServiceForm = ({ selected, payloadData }) => {
   const form = useForm({
     defaultValues: {
       "basic-service": [],
@@ -36,23 +22,13 @@ const useSelfServiceForm = ({ id }) => {
     },
   });
 
-  const { data, error, isLoading } = useQuery({
-    queryFn: async () => {
-      const payload = await fetchInitialData(id);
-
-      console.log(payload);
-      return [];
-    },
-    queryKey: [`laundry-${id}`],
-  });
-
   const steps = [
     { component: SelectWashMachineStep, name: "wash" },
     { component: SelectDryMachineStep, name: "dry" },
     { component: SelectServiceStep, name: "basic-service" },
     { component: SelectMaterialStep, name: "basic-material" },
-    { component: PaymentStep, name: "method" },
-    { component: CheckOutStep, name: "checkout" },
+    { component: PaymentStep, name: "total" },
+    { component: CheckOutStep, name: "total" },
   ];
 
   const {
@@ -69,22 +45,25 @@ const useSelfServiceForm = ({ id }) => {
         controller={form.control}
         name={name}
         form={form}
-        initialData={data ? data[name] : null} // Pass initial data to each step
+        initialData={form.getValues(name)} // Pass initial data to each step
+        renderItems={payloadData && payloadData[name]} // Pass initial data to each step
       />
     ))
   );
 
   const onSubmit = (values) => {
-    if (
-      !values["basic-service"] ||
-      (values["basic-service"].length <= 0 && currentStepIndex === 2)
-    ) {
-      Toast.show({
-        type: "error",
-        text1: "Please fill all the fields to proceed",
-      });
-      return;
-    }
+    console.log(values);
+
+    // if (
+    //   !values["basic-service"] ||
+    //   (values["basic-service"].length <= 0 && currentStepIndex === 2)
+    // ) {
+    //   Toast.show({
+    //     type: "error",
+    //     text1: "Please fill all the fields to proceed",
+    //   });
+    //   return;
+    // }
 
     if (!isFinalStep) {
       nextStep();
@@ -106,9 +85,6 @@ const useSelfServiceForm = ({ id }) => {
     isFirstStep,
     isFinalStep,
     prevStep,
-    data,
-    error,
-    isLoading,
   };
 };
 

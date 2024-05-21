@@ -1,51 +1,25 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
 import { FlashList } from "@shopify/flash-list";
 import CustomerReviewCard from "../../molecule/cards/CustomerReviewCard";
 
-const MockDate = [
-  {
-    id: "123213123",
-    name: "John Die",
-    rating: "3.2",
-    date: "April 3, 2024",
-    comment: "Fast service and clean clothes! Loved it!",
-  },
-
-  {
-    id: "1232123123",
-    name: "Jane Doe",
-    rating: "3.2",
-    date: "April 3, 2024",
-    comment: "Fast service and clean clothes! Loved it!",
-  },
-
-  {
-    id: "12322313123",
-    name: "Doe Die",
-    rating: "3.2",
-    date: "April 3, 2024",
-    comment: "Fast service and clean clothes! Loved it!",
-  },
-
-  {
-    id: "123223313123",
-    name: "Doe Die",
-    rating: "3.2",
-    date: "April 3, 2024",
-    comment: "Fast service and clean clothes! Loved it!",
-  },
-];
-
-const ShopReviewTabs = () => {
+const ShopReviewTabs = ({ data }) => {
   return (
     <View style={{ flex: 1 }}>
-      <FlashList
-        data={MockDate}
-        renderItem={({ item }) => <CustomerReviewCard {...item} />}
-        keyExtractor={(item) => item.id}
-        estimatedItemSize={200}
-      />
+      {data.lenth > 0 ? (
+        <FlashList
+          data={data}
+          renderItem={({ item }) => <CustomerReviewCard {...item} />}
+          keyExtractor={(item) => item.id}
+          estimatedItemSize={200}
+        />
+      ) : (
+        <View className="flex-1 justify-center items-center px-4">
+          <Text className="text-center text-[24px] opacity-50 font-bold">
+            No reviews
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

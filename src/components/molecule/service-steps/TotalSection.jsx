@@ -20,7 +20,7 @@ const TotalSection = ({ form, payload }) => {
       if (!payload[service]) return acc; // Continue the accumulation without changing if no data for the service
 
       const innerTotal = payload[service].reduce((innerAcc, item) => {
-        return innerAcc + parseFloat(item.price); // Ensure price is a number
+        return innerAcc + parseFloat(item?.price); // Ensure price is a number
       }, 0);
       return acc + innerTotal;
     }, 0);
@@ -29,7 +29,7 @@ const TotalSection = ({ form, payload }) => {
       if (!payload[quantity]) return acc; // Continue the accumulation without changing if no data for the service
 
       const innerTotal = payload[quantity]?.reduce((innerAcc, item) => {
-        const result = item.price * item.quantity;
+        const result = item?.price * item?.quantity;
         return innerAcc + result;
       }, 0);
 

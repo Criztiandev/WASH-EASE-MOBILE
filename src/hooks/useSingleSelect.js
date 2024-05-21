@@ -4,8 +4,12 @@ const useMultiSelect = (initialData, form, name) => {
   const [selected, setSelected] = useState(initialData || []);
 
   const handleSelect = useCallback((checked, value) => {
+    if (value === undefined) return;
+
     setSelected((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked
+        ? [...prev, value]
+        : prev.filter((item) => item.title !== value.title)
     );
   }, []);
 

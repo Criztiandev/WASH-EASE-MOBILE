@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { Icon } from "react-native-paper";
+import { Icon, IconButton } from "react-native-paper";
 
 const RootLayout = () => {
   return (
@@ -22,11 +22,15 @@ const RootLayout = () => {
             const { id } = useLocalSearchParams();
             return (
               <View className="flex-row items-center">
-                <TouchableOpacity
+                <IconButton
+                  icon="star"
+                  onPress={() => router.push(`/shop/choosen/review/${id}`)}
+                />
+
+                <IconButton
+                  icon="information"
                   onPress={() => router.push(`/shop/choosen/details/${id}`)}
-                  className="p-2 rounded-full mr-2">
-                  <Icon source={"information"} size={24} />
-                </TouchableOpacity>
+                />
               </View>
             );
           },

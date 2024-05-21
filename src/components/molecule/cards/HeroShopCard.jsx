@@ -24,7 +24,7 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
   const statusStyle = cn(statusFlag({ status }));
 
   return (
-    <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+    <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow">
       <Image
         source={image}
         contentFit="cover"

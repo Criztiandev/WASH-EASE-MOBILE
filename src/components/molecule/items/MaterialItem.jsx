@@ -11,6 +11,12 @@ const MaterialItem = memo(
     isActive = false,
     initialQuantity = 0,
   }) => {
+    const preparedPayload = {
+      id: payload.id,
+      item_name: payload["item_name"],
+      price: payload["item_price"],
+    };
+
     const [checked, setChecked] = useState(isActive);
     const [quantity, setQuantity] = useState(initialQuantity);
 
@@ -29,7 +35,7 @@ const MaterialItem = memo(
           // if checked and doesnt exist, create instance
           if (!exist) {
             setQuantity((prev) => prev + 1);
-            return [...prev, { ...payload, quantity: 1 }];
+            return [...prev, { ...preparedPayload, quantity: 1 }];
           }
 
           // if checked and exist, find the item and update its quantity
@@ -71,10 +77,10 @@ const MaterialItem = memo(
               )}
               <View>
                 <Text className="text-[18px] font-bold">
-                  {payload.service_name}
+                  {payload.item_name}
                 </Text>
                 <View className="flex-row items-center space-x-2">
-                  <Text className="text-[18px]">₱ {payload.price}.00</Text>
+                  <Text className="text-[18px]">₱ {payload.item_price}.00</Text>
                   <Text className="text-[14px]">{payload?.description}</Text>
                 </View>
               </View>

@@ -4,6 +4,8 @@ import { DataTable } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 
 const QuantityTable = ({ title, payload = [] }) => {
+  console.log(payload[0]["item_name"]);
+
   return (
     <DataTable className="min-h-[64px]">
       <DataTable.Header>
@@ -28,11 +30,11 @@ const QuantityTable = ({ title, payload = [] }) => {
             data={payload}
             renderItem={({ item }) => (
               <DataTable.Row style={{ justifyContent: "flex-start" }}>
-                <DataTable.Cell className="justify-start" numeric>
-                  <Text className="opacity-75">{item.title}</Text>
+                <DataTable.Cell className="justify-start">
+                  <Text className="opacity-75">{item["item_name"]}</Text>
                 </DataTable.Cell>
-                <DataTable.Cell numeric>{item.quantity}</DataTable.Cell>
-                <DataTable.Cell numeric>₱ {item.price}</DataTable.Cell>
+                <DataTable.Cell numeric>{item?.quantity}</DataTable.Cell>
+                <DataTable.Cell numeric>₱ {item?.price}</DataTable.Cell>
               </DataTable.Row>
             )}
             estimatedItemSize={200}

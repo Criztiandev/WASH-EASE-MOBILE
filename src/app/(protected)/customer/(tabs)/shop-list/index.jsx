@@ -1,4 +1,4 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { Searchbar } from "react-native-paper";
 import React, { useMemo, useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
@@ -10,6 +10,7 @@ import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import useSearch from "../../../../../hooks/useSearch";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ShoplistScreen = () => {
   const { data, isLoading, isError } = useQuery({
@@ -19,13 +20,14 @@ const ShoplistScreen = () => {
       );
 
       const _payload = result.data["laundry_shops"].data;
+
       const transformedPayload = _payload.map((item) => ({
         id: item.id,
         title: item["laundry_shop_name"],
         image:
           "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
         details: {
-          location: item["address"],
+          location: item?.["address"] || "N/A",
           contact: item["phone_number"],
           schedule:
             item["laundry_shop_open_hours"] === null
@@ -45,7 +47,14 @@ const ShoplistScreen = () => {
     "title"
   );
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading)
+    return (
+      <SafeAreaView className="flex-1 ">
+        <View className="flex-1 bg-[##feca57] justify-center items-center">
+          <Text>Loading..</Text>
+        </View>
+      </SafeAreaView>
+    );
   if (isError) return <ErrorScreen />;
 
   return (
