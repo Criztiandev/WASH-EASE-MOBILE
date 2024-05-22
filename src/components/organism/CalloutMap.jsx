@@ -114,97 +114,12 @@ function calculateCoordinates(coord) {
   };
 }
 
-const ShopDetails = [
-  {
-    id: 0,
-    title: "M&L Laundry Hub Katuparan",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: "88 3rd St Taguig, Metro Manila",
-      schedule: "7:00 AM - 8:00 PM",
-    },
-    status: "open",
-  },
-  {
-    id: 1,
-    title: "M&L Laundry Hub Pinagsama",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: " Phase 2, Balai Magayon, Taguig, Metro Manila",
-      schedule: "7:00 AM - 7:00 PM",
-    },
-    status: "open",
-  },
-
-  {
-    id: 2,
-    title: "LABAsics Laundry House North Signal",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: "44 Sampaloc Extension, Taguig, Metro Manila",
-      schedule: ": 7:00 AM - 8:00 PM",
-    },
-    status: "open",
-  },
-
-  {
-    id: 3,
-    title: "Instawash Laundry Shop",
-    image:
-      "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-    details: {
-      location: " Unit A5 & A6, Block 10 Lot 11, Taguig",
-      schedule: ": 9:00 AM - 5:00 PM",
-    },
-    status: "close",
-  },
-];
-
 const INITIAL_REGION = {
   latitude: 14.529320997312857,
   latitudeDelta: 0.0007312196869939669,
   longitude: 121.0552984289825,
   longitudeDelta: 0.0005977973341941833,
 };
-
-const SampleMarker = [
-  {
-    id: 0,
-    name: "M&L Laundry Hub Katuparan",
-    latitude: 14.529320997312857,
-    latitudeDelta: 0.0007312196869939669,
-    longitude: 121.0552984289825,
-    longitudeDelta: 0.0005977973341941833,
-  },
-  {
-    id: 1,
-    name: "M&L Laundry Hub Pinagsama",
-    latitude: 14.52404037436871,
-    latitudeDelta: 0.011132136239515589,
-    longitude: 121.04576015844941,
-    longitudeDelta: 0.011315234005451202,
-  },
-  {
-    id: 2,
-    name: "LABAsics Laundry House North Signal",
-    latitude: 14.522441280687332,
-    latitudeDelta: 0.008746672168784997,
-    longitude: 121.06050526723266,
-    longitudeDelta: 0.006326995790018941,
-  },
-
-  {
-    id: 3,
-    name: ". Instawash Laundry Shop",
-    latitude: 14.515856308904931,
-    latitudeDelta: 0.002146080292135366,
-    longitude: 121.04783803224564,
-    longitudeDelta: 0.0018922984600067139,
-  },
-];
 
 const CalloutMap = ({ data = [] }) => {
   console.log(data);
@@ -221,10 +136,26 @@ const CalloutMap = ({ data = [] }) => {
   }, []);
 
   const handleMarkSelect = (location) => {
-    const payload = ShopDetails[location.id];
-    setSelectedLaundry(payload);
+    const _payload = data?.find((items) => items.id === location.id);
+
+    const transformedPayload = {
+      id: _payload?.id,
+      title: _payload?.laundry_shop_name || "Untitled Name",
+      image:
+        "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
+      details: {
+        location:
+          _payload?.laundry_shop_address ||
+          " Unit A5 & A6, Block 10 Lot 11, Taguig",
+        schedule: ": 9:00 AM - 5:00 PM",
+      },
+      status: _payload?.status,
+    };
+
+    setSelectedLaundry(transformedPayload);
   };
   const handlRegionChange = (value) => {
+    console.log(selectedLaundry);
     // console.log(value);
   };
 
