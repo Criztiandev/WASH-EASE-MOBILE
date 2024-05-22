@@ -12,28 +12,43 @@ import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
+import useRatingFilter from "../../../../../hooks/useRatingFilter";
+import useCombinedFilter from "../../../../../hooks/useCombineFilter";
 
 const ShoplistScreen = () => {
+  const [flag, setFlag] = useState("all");
   const [isShowModal, setIsShowModal] = useState(false);
-  const [ratingFilter, setRatingFilter] = useState(0);
   const [servicePrice, setServicePrice] = useState(0);
+  const [ratingFilter, setRatingFilter] = useState(0);
+
   const { data, isLoading, isError } = useQuery({
     queryFn: async () => {
       const result = await axios.get(
         "https://washease.online/api/get-all-laundry-shops"
       );
 
-      return result.data?.laundry_shops?.data || [];
+      const transformedData = result.data?.laundry_shops?.data?.map(
+        (items) => ({
+          ...items,
+          avarageRating:
+            items.shops_rating.reduce((sum, rating) => sum + rating, 0) /
+            items.shops_rating.length,
+        })
+      );
+
+      return transformedData || [];
     },
     queryKey: ["shops-lists"],
     refetchInterval: 500,
   });
 
-  const { searchQuery, setSearchQuery, filteredData } = useSearch(
+  const { searchQuery, setSearchQuery, filteredData } = useCombinedFilter(
     data,
     "laundry_shop_name",
     ratingFilter
   );
+
+  console.log(ratingFilter);
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
@@ -63,7 +78,7 @@ const ShoplistScreen = () => {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          {filteredData.length > 0 ? (
+          {filteredData?.length > 0 ? (
             <FlashList
               data={filteredData}
               keyExtractor={(item) => item.id.toString()}
@@ -74,7 +89,7 @@ const ShoplistScreen = () => {
                     title={item?.laundry_shop_name}
                     details={{
                       location: item?.laundry_shop_address || "N/Ar",
-                      schedule: item?.laundry_shop_open_hours || "N/A",
+                      schedule: item?.avarageRating || "N/A",
                       contact: item?.phone_number || "N/A",
                     }}
                     label="View details"

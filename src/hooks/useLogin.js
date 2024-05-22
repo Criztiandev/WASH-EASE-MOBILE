@@ -24,8 +24,6 @@ const useLoginForm = () => {
     mutationFn: async (value) => await authApi.login(value),
     onSuccess: async ({ data }) => {
       const { message } = data;
-
-      Toast.show({ type: "success", text1: message });
     },
     onError: (error) => {
       console.log(error);
