@@ -6,7 +6,7 @@ import CustomerReviewCard from "../../molecule/cards/CustomerReviewCard";
 const ShopReviewTabs = ({ data }) => {
   return (
     <View style={{ flex: 1 }}>
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <FlashList
           data={data}
           renderItem={({ item }) => (

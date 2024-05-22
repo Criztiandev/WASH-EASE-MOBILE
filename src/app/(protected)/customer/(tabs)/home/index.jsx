@@ -7,24 +7,24 @@ import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
-const fetchLaundryShops = async () => {
-  try {
-    const response = await axios.get(
-      "https://washease.online/api/get-all-laundry-shops"
-    );
-    return response.data.laundry_shops.data;
-  } catch (error) {
-    throw new Error("Failed to fetch laundry shops");
-  }
-};
-
 const HomeScreen = () => {
+  const [MapRender, setMapRender] = useState(false);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["laundry-shops"],
-    queryFn: fetchLaundryShops,
+  const laundryQuery = useQuery({
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          "https://washease.online/api/get-all-laundry-shops"
+        );
+        return response.data.laundry_shops.data;
+      } catch (error) {
+        console.error("Error fetching laundry shops:", error);
+        throw new Error("Failed to fetch laundry shops");
+      }
+    },
+    queryKey: ["home-laundry-shop"],
   });
 
   useEffect(() => {
@@ -44,13 +44,24 @@ const HomeScreen = () => {
     })();
   }, []);
 
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
-  if (errorMsg) return <ErrorScreen message={errorMsg} />;
+  useEffect(() => {
+    if (laundryQuery?.isFetched) {
+      setMapRender(true);
+    }
+  }, [laundryQuery?.isFetched]);
+
+  if (laundryQuery.isLoading) return <LoadingScreen />;
+  if (laundryQuery.isError) {
+    console.log(laundryQuery.error);
+    return <ErrorScreen message={laundryQuery.error.message} />; // Pass error message to ErrorScreen
+  }
+  if (errorMsg) return <ErrorScreen message={errorMsg} />; // Pass error message to ErrorScreen
+
+  console.log(laundryQuery.data);
 
   return (
     <ScreenLayout className="bg-[#f0f0f0]">
-      <CalloutMap data={data} currentRegion={location?.coords} />
+      {MapRender && <CalloutMap data={laundryQuery?.data} />}
     </ScreenLayout>
   );
 };

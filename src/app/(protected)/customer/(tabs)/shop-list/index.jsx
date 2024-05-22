@@ -26,12 +26,12 @@ const ShoplistScreen = () => {
       return result.data?.laundry_shops?.data || [];
     },
     queryKey: ["shops-lists"],
-    refetchInterval: 800,
+    refetchInterval: 500,
   });
 
   const { searchQuery, setSearchQuery, filteredData } = useSearch(
     data,
-    "title",
+    "laundry_shop_name",
     ratingFilter
   );
 
@@ -42,7 +42,7 @@ const ShoplistScreen = () => {
     <ScreenLayout>
       <View style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: 4, marginTop: 4 }}>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row" }} className="m-4">
             <Searchbar
               placeholder="Search"
               style={{ backgroundColor: "white", width: "85%" }}
@@ -67,13 +67,22 @@ const ShoplistScreen = () => {
             <FlashList
               data={filteredData}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <HeroShopCard
-                  {...item}
-                  label="View details"
-                  onNavigate={() => router.push(`/shop/details/${item.id}`)}
-                />
-              )}
+              renderItem={({ item }) => {
+                return (
+                  <HeroShopCard
+                    image="https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    title={item?.laundry_shop_name}
+                    details={{
+                      location: item?.laundry_shop_address || "N/Ar",
+                      schedule: item?.laundry_shop_open_hours || "N/A",
+                      contact: item?.phone_number || "N/A",
+                    }}
+                    label="View details"
+                    onNavigate={() => router.push(`/shop/details/${item.id}`)}
+                  />
+                );
+              }}
+              estimatedItemSize={200}
             />
           ) : (
             <View
@@ -134,12 +143,11 @@ const ShoplistScreen = () => {
 
           <View className="my-4">
             <Button onPress={() => setIsShowModal((prev) => !prev)}>
-              Filter
+              <Text>Filter</Text>
             </Button>
           </View>
         </View>
       </Modal>
-      ;
     </ScreenLayout>
   );
 };
