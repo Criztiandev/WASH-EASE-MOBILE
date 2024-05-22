@@ -1,18 +1,17 @@
-import { View, FlatList, Text, Modal } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Modal } from "react-native";
 import { IconButton, Searchbar } from "react-native-paper";
-import React, { useMemo, useState } from "react";
-import ScreenLayout from "../../../../../layout/ScreenLayout";
-import { FlashList } from "@shopify/flash-list";
-import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
-import { router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import useSearch from "../../../../../hooks/useSearch";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../../../../../components/atoms/Button";
+import ScreenLayout from "../../../../../layout/ScreenLayout";
+import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
+import { router } from "expo-router";
+import { FlashList } from "@shopify/flash-list";
 
 const ShoplistScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -24,45 +23,11 @@ const ShoplistScreen = () => {
         "https://washease.online/api/get-all-laundry-shops"
       );
 
-      const _payload = result.data["laundry_shops"].data;
-
-      console.log(_payload);
-
-      const transformedPayload = _payload.map((item) => {
-        const averageRating =
-          item["shops_rating"].length > 0
-            ? item["shops_rating"].reduce(
-                (sum, rating) => sum + rating.rating_count,
-                0
-              ) / item["shops_rating"].length
-            : 0;
-
-        return {
-          id: item.id,
-          title: item["laundry_shop_name"],
-          image:
-            "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-          details: {
-            location: item?.["address"] || "N/A",
-            contact: item["phone_number"],
-            schedule:
-              item["laundry_shop_open_hours"] === null
-                ? "N/A"
-                : item["laundry_shop_open_hours"],
-          },
-          averageRating: Math.round(averageRating * 10) / 10, // round to one decimal place
-          status: item["is_shop_closed"] === 0 ? "close" : "active",
-        };
-      });
-
-      return transformedPayload;
+      return result.data?.laundry_shops?.data || [];
     },
     queryKey: ["shops-lists"],
     refetchInterval: 800,
   });
-
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
 
   const { searchQuery, setSearchQuery, filteredData } = useSearch(
     data,
@@ -70,46 +35,58 @@ const ShoplistScreen = () => {
     ratingFilter
   );
 
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorScreen />;
+
   return (
     <ScreenLayout>
-      <View className="flex-1">
-        <View className="px-4 my-4">
-          <View className="flex-row">
+      <View style={{ flex: 1 }}>
+        <View style={{ paddingHorizontal: 4, marginTop: 4 }}>
+          <View style={{ flexDirection: "row" }}>
             <Searchbar
               placeholder="Search"
-              className="bg-white w-[85%]"
+              style={{ backgroundColor: "white", width: "85%" }}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
 
             <IconButton
-              icon={"filter"}
-              className="bg-white w-[52px] h-[52px] rounded-full"
+              icon="filter"
+              style={{
+                backgroundColor: "white",
+                width: 52,
+                height: 52,
+                borderRadius: 26,
+              }}
               onPress={() => setIsShowModal((prev) => !prev)}
             />
           </View>
         </View>
-        <View className="flex-1">
-          {filteredData?.length > 0 ? (
+        <View style={{ flex: 1 }}>
+          {filteredData.length > 0 ? (
             <FlashList
               data={filteredData}
-              estimatedItemSize={200}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <HeroShopCard
                   {...item}
-                  label={"View details"}
+                  label="View details"
                   onNavigate={() => router.push(`/shop/details/${item.id}`)}
                 />
               )}
             />
           ) : (
-            <View className="flex-1 justify-center items-center">
-              <Text className="text-[32px] opacity-50">No Result</Text>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+              <Text style={{ fontSize: 32, opacity: 0.5 }}>No Result</Text>
             </View>
           )}
         </View>
       </View>
-
       <Modal animationType="slide" visible={isShowModal}>
         <View className="p-4 flex-row justify-between items-center">
           <Text className="text-[32px] font-bold">Filter</Text>
@@ -162,6 +139,7 @@ const ShoplistScreen = () => {
           </View>
         </View>
       </Modal>
+      ;
     </ScreenLayout>
   );
 };

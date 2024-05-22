@@ -1,16 +1,25 @@
 import { useState, useMemo } from "react";
 
-const useSearch = (data, searchField, ratingFilter) => {
+const useSearch = (data, searchKey, ratingFilter) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredData = useMemo(() => {
     if (!data) return [];
-    return data.filter(
-      (item) =>
-        item[searchField].toLowerCase().includes(searchQuery.toLowerCase()) &&
-        item.averageRating >= ratingFilter
-    );
-  }, [data, searchQuery, searchField, ratingFilter]);
+
+    let result = data;
+
+    if (searchQuery) {
+      result = result.filter((item) =>
+        item[searchKey].toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (ratingFilter > 0) {
+      result = result.filter((item) => item.averageRating >= ratingFilter);
+    }
+
+    return result;
+  }, [data, searchQuery, ratingFilter, searchKey]);
 
   return { searchQuery, setSearchQuery, filteredData };
 };

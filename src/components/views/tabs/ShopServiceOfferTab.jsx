@@ -11,6 +11,7 @@ const ShopServiceOfferTab = ({ data }) => {
           data={data}
           renderItem={({ item }) => (
             <ShopServiceDetailCard
+              cover={""}
               title={item?.service_name}
               price={item?.price}
               timer={item?.service_category_id + 3}

@@ -8,6 +8,7 @@ import TransactionItem from "../items/TransactionItem";
 import { useController } from "react-hook-form";
 
 const TransactionModeStep = ({ form, name, initialData = [], renderItems }) => {
+  const [selected, setSelected] = useState("");
   useStepManagement({ name });
 
   const handleSelect = (value) => {

@@ -1,118 +1,10 @@
 import { router } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import HeroShopCard from "../molecule/cards/HeroShopCard";
 import { cn } from "../../utils/dev.utils";
-import Button from "../atoms/Button";
 import { Icon } from "react-native-paper";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import LoadingScreen from "../atoms/LoadingScreen";
-import ErrorScreen from "../atoms/ErrorScreen";
-
-function generateRandomCoord() {
-  // Calculate min and max latitude and longitude to create a bounding box
-  const startA = {
-    latitude: 14.51791390637404,
-    latitudeDelta: 0.025037045796684865,
-    longitude: 121.03191526606679,
-    longitudeDelta: 0.01575428992509842,
-  };
-  const startB = {
-    latitude: 14.549215147855762,
-    latitudeDelta: 0.013386962762849564,
-    longitude: 121.06690099462867,
-    longitudeDelta: 0.008424483239664937,
-  };
-  const startC = {
-    latitude: 14.542305668939488,
-    latitudeDelta: 0.005912698039141517,
-    longitude: 121.07642250135541,
-    longitudeDelta: 0.0037212297320223797,
-  };
-  const startD = {
-    latitude: 14.498049376211195,
-    latitudeDelta: 0.022147109284967215,
-    longitude: 121.05647491291165,
-    longitudeDelta: 0.013336949050426483,
-  };
-
-  const minLat = Math.min(
-    startA.latitude,
-    startB.latitude,
-    startC.latitude,
-    startD.latitude
-  );
-  const maxLat = Math.max(
-    startA.latitude,
-    startB.latitude,
-    startC.latitude,
-    startD.latitude
-  );
-  const minLon = Math.min(
-    startA.longitude,
-    startB.longitude,
-    startC.longitude,
-    startD.longitude
-  );
-  const maxLon = Math.max(
-    startA.longitude,
-    startB.longitude,
-    startC.longitude,
-    startD.longitude
-  );
-
-  // Generate random latitude and longitude within the bounding box
-  const latitude = minLat + Math.random() * (maxLat - minLat);
-  const longitude = minLon + Math.random() * (maxLon - minLon);
-
-  // Calculate average latitudeDelta and longitudeDelta
-  const averageLatitudeDelta =
-    (startA.latitudeDelta +
-      startB.latitudeDelta +
-      startC.latitudeDelta +
-      startD.latitudeDelta) /
-    4;
-  const averageLongitudeDelta =
-    (startA.longitudeDelta +
-      startB.longitudeDelta +
-      startC.longitudeDelta +
-      startD.longitudeDelta) /
-    4;
-
-  // Return the generated coordinate
-  return {
-    latitude: latitude,
-    longitude: longitude,
-    latitudeDelta: averageLatitudeDelta,
-    longitudeDelta: averageLongitudeDelta,
-  };
-}
-
-function calculateCoordinates(coord) {
-  if (!coord) return;
-
-  const accuracy = coord.accuracy;
-  const latitude = coord.latitude;
-  const longitude = coord.longitude;
-
-  // Earth's radius in meters
-  const earthRadius = 6378137;
-
-  // Calculate latitudeDelta and longitudeDelta in degrees
-  const latitudeDelta = (accuracy * 2) / (earthRadius * (Math.PI / 180));
-  const longitudeDelta =
-    (accuracy * 2) /
-    (earthRadius * Math.cos(latitude * (Math.PI / 180)) * (Math.PI / 180));
-
-  return {
-    latitude: latitude,
-    latitudeDelta: latitudeDelta,
-    longitude: longitude,
-    longitudeDelta: longitudeDelta,
-  };
-}
 
 const ShopDetails = [
   {
@@ -163,6 +55,13 @@ const ShopDetails = [
   },
 ];
 
+const INITIAL_ROUTE = {
+  latitude: 14.529320997312857,
+  latitudeDelta: 0.0007312196869939669,
+  longitude: 121.0552984289825,
+  longitudeDelta: 0.0005977973341941833,
+};
+
 const SampleMarker = [
   {
     id: 0,
@@ -206,7 +105,7 @@ const CalloutMap = ({ data, currentRegion }) => {
 
   useEffect(() => {
     mapRef.current?.animateCamera(
-      { center: calculateCoordinates(currentRegion), zoom: 15 },
+      { center: INITIAL_ROUTE, zoom: 15 },
       { duration: 30 }
     );
   }, []);
@@ -218,17 +117,6 @@ const CalloutMap = ({ data, currentRegion }) => {
   const handlRegionChange = (value) => {
     // console.log(value);
   };
-
-  useEffect(() => {
-    if (data) {
-      const generateShopCoords = data?.map((items) => ({
-        id: items.id,
-        name: items.laundry_shop_name,
-        ...generateRandomCoord(),
-      }));
-      setPayload(generateShopCoords);
-    }
-  }, [data]);
 
   return (
     <>

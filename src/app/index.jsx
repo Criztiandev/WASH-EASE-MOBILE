@@ -7,13 +7,11 @@ import { router } from "expo-router";
 import ScreenLayout from "../layout/ScreenLayout";
 
 import useLoginForm from "../hooks/useLogin";
-import LoadingScreen from "../components/atoms/LoadingScreen";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useAuthContext } from "../context/AuthContext";
 
 const RootScreen = () => {
   const { setAuthState } = useAuthContext();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { getData, storeData } = useLocalStorage("auth");
   const {
     isPending,
@@ -26,33 +24,18 @@ const RootScreen = () => {
   useEffect(() => {
     if (payload && payload?.data) {
       const { data } = payload;
-      storeData(data);
-      setAuthState(data);
+
       if (data && data.isAuthenticated) {
         const currentRole = data?.role.toLowerCase();
+
+        storeData(data);
+        setAuthState(data);
+
         router.replace(`${currentRole}/home`);
       }
     }
   }, [payload]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const result = await getData();
-  //     if (result) {
-  //       setAuthState(result);
-  //       setIsLoggedIn(true);
-  //     } else {
-  //       setIsLoggedIn(false);
-  //     }
-  //   })();
-  // }, []);
-
-  // useEffect(() => {
-  //   removeData();
-  //   storage.removeData();
-  // }, []);
-
-  if (isPending) return <LoadingScreen />;
   return (
     <ScreenLayout>
       <View className="flex-1 justify-center items-center">
