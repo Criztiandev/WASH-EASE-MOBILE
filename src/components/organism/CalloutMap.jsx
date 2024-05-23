@@ -4,12 +4,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import HeroShopCard from "../molecule/cards/HeroShopCard";
 import { cn } from "../../utils/dev.utils";
-import Button from "../atoms/Button";
 import { Icon } from "react-native-paper";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import LoadingScreen from "../atoms/LoadingScreen";
-import ErrorScreen from "../atoms/ErrorScreen";
 
 function generateRandomCoord() {
   // Calculate min and max latitude and longitude to create a bounding box

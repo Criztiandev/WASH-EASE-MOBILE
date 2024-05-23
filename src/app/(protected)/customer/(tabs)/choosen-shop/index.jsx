@@ -20,6 +20,9 @@ const RootScreen = () => {
       const result = await axios.get(
         `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
       );
+
+      console.log(result.data);
+
       return result?.data || [];
     },
     queryKey: [`choosen-shop-${authState["user_id"]}`],
@@ -56,12 +59,14 @@ const RootScreen = () => {
                   label={"View details"}
                   title={item.service_type || "N/A"}
                   details={{
-                    location: item.customer_address,
+                    location: item.customer_address || item?.status,
                     schedule: item.total_bill,
                   }}
                   status={item.payment_status || "N/A"}
                   onNavigate={() =>
-                    router.push(`/shop/choosen/request/${item.laundry_shop_id}`)
+                    router.push(
+                      `/shop/choosen/request/${item.laundry_shop_id || 7}`
+                    )
                   }
                 />
               </View>

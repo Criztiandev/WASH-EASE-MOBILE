@@ -1,75 +1,108 @@
 import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { View, TouchableOpacity } from "react-native";
-
-import { WebView } from "react-native-webview";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import HeroShopCard from "../molecule/cards/HeroShopCard";
 import { cn } from "../../utils/dev.utils";
-
-const ShopDetails = {
-  id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-  title: "Second Item",
-  image:
-    "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-  details: {
-    location: "Kahit Dito",
-    schedule: "4:00 - 4:00 PM",
-  },
-  status: "open",
-};
+import { Icon } from "react-native-paper";
+import MapViewDirections from "react-native-maps-directions";
 
 const INITIAL_REGION = {
-  latitude: 12.65898181054623,
-  latitudeDelta: 0.022982900224956637,
-  longitude: 123.89491824433206,
-  longitudeDelta: 0.027613677084445953,
+  latitude: 14.529320997312857,
+  latitudeDelta: 0.0007312196869939669,
+  longitude: 121.0552984289825,
+  longitudeDelta: 0.0005977973341941833,
 };
 
 const SampleMarker = [
   {
-    id: 123123123,
-    name: "Laundry Shop",
-    latitude: 12.65898181054623,
-    latitudeDelta: 0.022982900224956637,
-    longitude: 123.89491824433206,
-    longitudeDelta: 0.027613677084445953,
+    id: 0,
+    name: "M&L Laundry Hub Katuparan",
+    latitude: 14.529320997312857,
+    latitudeDelta: 0.0007312196869939669,
+    longitude: 121.0552984289825,
+    longitudeDelta: 0.0005977973341941833,
+  },
+  {
+    id: 1,
+    name: "M&L Laundry Hub Pinagsama",
+    latitude: 14.52404037436871,
+    latitudeDelta: 0.011132136239515589,
+    longitude: 121.04576015844941,
+    longitudeDelta: 0.011315234005451202,
+  },
+  {
+    id: 2,
+    name: "LABAsics Laundry House North Signal",
+    latitude: 14.522441280687332,
+    latitudeDelta: 0.008746672168784997,
+    longitude: 121.06050526723266,
+    longitudeDelta: 0.006326995790018941,
+  },
+
+  {
+    id: 3,
+    name: ". Instawash Laundry Shop",
+    latitude: 14.515856308904931,
+    latitudeDelta: 0.002146080292135366,
+    longitude: 121.04783803224564,
+    longitudeDelta: 0.0018922984600067139,
   },
 ];
 
-const origin = {
-  id: 123123123,
-  name: "Laundry Shop",
-  latitude: 12.65898181054623,
-  latitudeDelta: 0.022982900224956637,
-  longitude: 123.89491824433206,
-  longitudeDelta: 0.027613677084445953,
-};
-const destination = {
-  id: 123123123,
-  name: "Pilar",
-  latitude: 12.939630417092333,
-  latitudeDelta: 0.04322934503153775,
-  longitude: 123.6828438565135,
-  longitudeDelta: 0.03045715391638737,
-};
-
-const DestinationMap = ({ data, height }) => {
+const CalloutMap = ({ data = [] }) => {
+  const [payload, setPayload] = useState([]);
   const [selectedLaundry, setSelectedLaundry] = useState(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
     mapRef.current?.animateCamera(
-      { center: INITIAL_REGION, zoom: 10 },
+      { center: INITIAL_REGION, zoom: 12 },
       { duration: 30 }
     );
   }, []);
+
+  const handlRegionChange = (value) => {
+    console.log(selectedLaundry);
+    // console.log(value);
+  };
+
   return (
     <>
-      <WebView
-        source={{ uri: "https://washease.online/private/map" }}
-        style={{ flex: 1 }}
-      />
+      <View className={cn(`${selectedLaundry && "h-[400]"}`)}>
+        <MapView
+          ref={mapRef}
+          className="w-full h-full"
+          provider={PROVIDER_GOOGLE}
+          initialRegion={INITIAL_REGION}
+          showsUserLocation
+          showsMyLocationButton
+          onRegionChangeComplete={handlRegionChange}>
+          <Marker coordinate={SampleMarker[0]}>
+            <Callout>
+              <View>
+                <Text>Origin</Text>
+              </View>
+            </Callout>
+          </Marker>
+
+          <Marker coordinate={SampleMarker[1]}>
+            <Callout>
+              <View>
+                <Text>Destination</Text>
+              </View>
+            </Callout>
+          </Marker>
+          <MapViewDirections
+            origin={SampleMarker[0]}
+            destination={SampleMarker[1]}
+            apikey="AIzaSyBg9D7q8d6tXOBcRZ3TyAKIbgHRxOwpLn4"
+            strokeWidth={3}
+          />
+        </MapView>
+      </View>
     </>
   );
 };
 
-export default DestinationMap;
+export default CalloutMap;

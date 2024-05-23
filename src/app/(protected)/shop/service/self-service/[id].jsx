@@ -15,8 +15,6 @@ import useMultiform from "../../../../../hooks/useMultiform";
 
 // Steps
 import SelectMaterialStep from "../../../../../components/molecule/service-steps/SelectMaterialStep";
-import SelectDryCleaningStep from "../../../../../components/molecule/service-steps/SelectDryCleaningStep";
-import SelectIroningStep from "../../../../../components/molecule/service-steps/SelectIroningStep";
 import PaymentStep from "../../../../../components/molecule/service-steps/PaymentStep";
 import CheckOutStep from "../../../../../components/molecule/service-steps/CheckOutStep";
 import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
@@ -81,8 +79,6 @@ const SelfServiceScreen = () => {
 
   const serviceMutation = useMutation({
     mutationFn: async (value) => {
-      console.log(value);
-
       const authToken = authState.token; // Replace with your actual auth token
       const result = await axios.post(
         "https://washease.online/api/laundry_shop/transactions",
@@ -97,7 +93,9 @@ const SelfServiceScreen = () => {
       return result.data;
     },
 
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
+
       Toast.show({
         type: "success",
         text1: "Order Placed",

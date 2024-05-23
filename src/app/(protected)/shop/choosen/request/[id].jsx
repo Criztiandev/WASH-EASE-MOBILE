@@ -6,13 +6,11 @@ import Timeline from "react-native-timeline-flatlist";
 
 import Button from "../../../../../components/atoms/Button";
 import ProfileCard from "../../../../../components/molecule/cards/ProfileCard";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
-import MapView, { Marker } from "react-native-maps";
 
 const timeline = [
   {
@@ -48,6 +46,8 @@ const RequestScreen = () => {
   const mapRef = useRef(null);
   const intervalRef = useRef(null);
 
+  console.log(id);
+
   const {
     data: payload,
     isLoading,
@@ -64,7 +64,7 @@ const RequestScreen = () => {
         }
       );
 
-      return result.data;
+      return result?.data || [];
     },
     queryKey: [`shop-transaction-details-${id}`],
   });
@@ -94,10 +94,6 @@ const RequestScreen = () => {
   }, []);
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) {
-    console.log(error);
-    return <ErrorScreen />;
-  }
 
   return (
     <View className="flex-1">
@@ -108,6 +104,11 @@ const RequestScreen = () => {
       <View className="flex-1 m-4  border border-gray-300 bg-white rounded-[5px] p-4">
         <View className="flex-1">
           <Timeline data={timeline} />
+
+          <Button
+            onPress={() => router.push(`/shop/choosen/track-rider/${id || 7}`)}>
+            Track
+          </Button>
         </View>
       </View>
 
@@ -120,7 +121,7 @@ const RequestScreen = () => {
           ) : (
             <Button
               onPress={() =>
-                router.push(`/customer/message/${payload.data?.rider_id || 2}`)
+                router.push(`/customer/message/${payload?.data?.rider_id || 7}`)
               }>
               Message
             </Button>
