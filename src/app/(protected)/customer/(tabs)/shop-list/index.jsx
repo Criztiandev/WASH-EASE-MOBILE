@@ -27,14 +27,12 @@ const ShoplistScreen = () => {
         "https://washease.online/api/get-all-laundry-shops"
       );
 
-      const transformedData = result.data?.laundry_shops?.data?.map(
-        (items) => ({
-          ...items,
-          avarageRating:
-            items.shops_rating.reduce((sum, rating) => sum + rating, 0) /
-            items.shops_rating.length,
-        })
-      );
+      const transformedData = result.data?.laundry_shops?.map((items) => ({
+        ...items,
+        avarageRating:
+          items.shops_rating.reduce((sum, rating) => sum + rating, 0) /
+          items.shops_rating.length,
+      }));
 
       return transformedData || [];
     },
@@ -47,8 +45,6 @@ const ShoplistScreen = () => {
     "laundry_shop_name",
     ratingFilter
   );
-
-  console.log(ratingFilter);
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
@@ -105,7 +101,8 @@ const ShoplistScreen = () => {
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Text style={{ fontSize: 32, opacity: 0.5 }}>No Result</Text>
             </View>
           )}
@@ -125,7 +122,8 @@ const ShoplistScreen = () => {
           <View className="border border-gray-300 rounded-[5px]">
             <Picker
               selectedValue={ratingFilter}
-              onValueChange={(value) => setRatingFilter(value)}>
+              onValueChange={(value) => setRatingFilter(value)}
+            >
               <Picker.Item label="Select Rating" value={0} />
               <Picker.Item label="1 star" value={1} />
               <Picker.Item label="2 star" value={2} />
@@ -141,7 +139,8 @@ const ShoplistScreen = () => {
           <View className="border border-gray-300 rounded-[5px]">
             <Picker
               selectedValue={servicePrice}
-              onValueChange={(value) => setServicePrice(value)}>
+              onValueChange={(value) => setServicePrice(value)}
+            >
               <Picker.Item label="Select Rating" value={0} />
               <Picker.Item label="100" value={100} />
               <Picker.Item label="200" value={200} />

@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const signInDefaulValue = {
-  email: "",
-  password: "",
+  email: "kuqykuz@mailinator.com",
+  password: "rider@123",
 };
 
 export const SignInValidationSchema = z.object({

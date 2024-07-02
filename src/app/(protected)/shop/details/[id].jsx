@@ -25,50 +25,59 @@ const ShopDetails = () => {
 
   const { isLoading, isError, data } = useQuery({
     queryFn: async () => {
-      console.log(shopID);
-      const result = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops"
+      const response = await axios.get(
+        "https://washease.online/api/get-all-laundry-shops",
+        {
+          headers: {
+            Authorization:
+              "Bearer 11|x0SPQs9C9Ycu0UDA5gBslV2JVHOMMQVZiJGpsdgY89e5c0b0",
+          },
+        }
       );
-      const laundryDetails = result.data?.laundry_shops?.data?.find(
+
+      const laundryDetails = response.data?.laundry_shops_location?.find(
         ({ id: currentID }) => currentID === Number(shopID)
       );
 
-      return laundryDetails;
+      if (!laundryDetails) return [];
+
+      const { laundry_location, laundry_shops } = laundryDetails;
+
+      return {
+        details: { ...laundry_location },
+        ratings: laundry_shops?.shops_rating || [],
+        services: laundry_shops?.shop_services || [],
+      };
     },
     queryKey: [`shop-details-${shopID}`],
-    refetchInterval: 800,
   });
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
 
-  console.log(data);
+  const { details, rating, services } = data;
 
   const renderScene = SceneMap({
     about: () => (
       <AboutTab
-        about="The Place is full of shenanigans"
-        address={data?.address}
-        opening={data?.laundry_shop_open_hours || "N/A"}
+        about="Details is not available"
+        address={details?.laundry_shop_address}
+        opening={details?.laundry_shop_open_hours || "N/A"}
       />
     ),
-    reviews: () => <ShopReviewTabs data={data?.shops_rating} />,
+    reviews: () => <ShopReviewTabs data={rating} />,
     service: () => (
-      <ShopServiceOfferTab
-        data={data?.shop_services}
-        id={shopID}
-        status={true}
-      />
+      <ShopServiceOfferTab data={services} id={shopID} status={true} />
     ),
   });
 
   return (
     <View className="flex-1">
       <ShopDetailsCover
-        title={data?.laundry_shop_name}
-        phoneNumber={data?.phone_number}
-        rating={data?.shops_rating?.length || 0}
-        status={data?.is_shop_closed === 0 ? "Closed" : "Open"}
+        title={details?.laundry_shop_name}
+        phoneNumber={details?.phone_number}
+        rating={rating?.length || 0}
+        status={details?.is_shop_closed === 0 ? "Closed" : "Open"}
       />
       <View className="flex-1">
         <TabView

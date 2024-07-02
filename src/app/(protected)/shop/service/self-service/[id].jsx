@@ -80,6 +80,7 @@ const SelfServiceScreen = () => {
   const serviceMutation = useMutation({
     mutationFn: async (value) => {
       const authToken = authState.token; // Replace with your actual auth token
+
       const result = await axios.post(
         "https://washease.online/api/laundry_shop/transactions",
         value,
@@ -138,6 +139,8 @@ const SelfServiceScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
+
+  console.log(data);
 
   return (
     <View className="flex-1 bg-[#FAF8FF] mb-2">

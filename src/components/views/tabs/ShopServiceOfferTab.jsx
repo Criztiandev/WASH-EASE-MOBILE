@@ -6,7 +6,7 @@ import ShopServiceDetailCard from "../../molecule/ShopServiceDetailCard";
 const ShopServiceOfferTab = ({ data }) => {
   return (
     <View style={{ flex: 1 }}>
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <FlashList
           data={data}
           renderItem={({ item }) => (

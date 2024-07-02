@@ -1,67 +1,99 @@
 import React, { useEffect, useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import CalloutMap from "../../../../../components/organism/CalloutMap";
-import * as Location from "expo-location";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
+import * as Location from "expo-location";
 
 const HomeScreen = () => {
-  const [MapRender, setMapRender] = useState(false);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [longitudeDelta, setLongitudeDelta] = useState(null);
+  const [latitudeDelta, setLatitudeDelta] = useState(null);
+  const distance = 100; // in kilometers
 
   const laundryQuery = useQuery({
     queryFn: async () => {
-      try {
-        const response = await axios.get(
-          "https://washease.online/api/get-all-laundry-shops"
-        );
-        return response.data.laundry_shops.data;
-      } catch (error) {
-        console.error("Error fetching laundry shops:", error);
-        throw new Error("Failed to fetch laundry shops");
-      }
+      const response = await axios.get(
+        "https://washease.online/api/get-all-laundry-shops"
+      );
+      const { laundry_shops_location } = response.data;
+
+      // transform coordinatiopn
+
+      const transformedPayload = laundry_shops_location?.map((shops) => {
+        const { latitude, longitude } = shops;
+        const longitudeDelta =
+          distance / (111 * Math.cos(latitude * (Math.PI / 180)));
+        const latitudeDelta = distance / 111;
+
+        return {
+          ...shops,
+          coords: {
+            latitude: Number(latitude) || 0,
+            latitudeDelta: Number(latitudeDelta) || 0,
+            longitude: Number(longitude) || 0,
+            longitudeDelta: Number(longitudeDelta) || 0,
+          },
+        };
+      });
+
+      return transformedPayload;
     },
     queryKey: ["home-laundry-shop"],
   });
 
   useEffect(() => {
     (async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          setErrorMsg("Permission to access location was denied");
-          return;
-        }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
 
-        const location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
-      } catch (error) {
-        setErrorMsg("Failed to get current location");
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+
+      if (location) {
+        const { latitude } = location.coords;
+
+        // Calculate the longitude delta
+        const longitudeDelta =
+          distance / (111 * Math.cos(latitude * (Math.PI / 180)));
+        setLongitudeDelta(longitudeDelta);
+
+        // Calculate the latitude delta
+        const latitudeDelta = distance / 111;
+        setLatitudeDelta(latitudeDelta);
       }
     })();
   }, []);
 
-  useEffect(() => {
-    if (laundryQuery?.isFetched) {
-      setMapRender(true);
-    }
-  }, [laundryQuery?.isFetched]);
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
 
   if (laundryQuery.isLoading) return <LoadingScreen />;
   if (laundryQuery.isError) {
     console.log(laundryQuery.error);
-    return <ErrorScreen message={laundryQuery.error.message} />; // Pass error message to ErrorScreen
+    return <ErrorScreen message={laundryQuery.error.message} />;
   }
-  if (errorMsg) return <ErrorScreen message={errorMsg} />; // Pass error message to ErrorScreen
 
-  console.log(laundryQuery.data);
+  const initialRegion = {
+    latitude: Number(location?.coords?.latitude) || 0,
+    latitudeDelta: Number(location?.coords?.latitude) || 0,
+    longitude: Number(location?.coords?.longitude) || 0,
+    longitudeDelta: Number(longitudeDelta) || 0,
+  };
 
   return (
     <ScreenLayout className="bg-[#f0f0f0]">
-      {MapRender && <CalloutMap data={laundryQuery?.data} />}
+      <CalloutMap data={laundryQuery?.data || []} region={initialRegion} />
     </ScreenLayout>
   );
 };

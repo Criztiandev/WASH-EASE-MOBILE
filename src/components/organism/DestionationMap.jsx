@@ -77,7 +77,8 @@ const CalloutMap = ({ data = [] }) => {
           initialRegion={INITIAL_REGION}
           showsUserLocation
           showsMyLocationButton
-          onRegionChangeComplete={handlRegionChange}>
+          onRegionChangeComplete={handlRegionChange}
+        >
           <Marker coordinate={SampleMarker[0]}>
             <Callout>
               <View>
@@ -96,7 +97,7 @@ const CalloutMap = ({ data = [] }) => {
           <MapViewDirections
             origin={SampleMarker[0]}
             destination={SampleMarker[1]}
-            apikey="AIzaSyBg9D7q8d6tXOBcRZ3TyAKIbgHRxOwpLn4"
+            apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
             strokeWidth={3}
           />
         </MapView>

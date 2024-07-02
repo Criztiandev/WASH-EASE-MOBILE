@@ -5,7 +5,7 @@ import { router } from "expo-router";
 
 const AboutTab = ({
   about = "No about details available",
-  address = "No Address available",
+  address,
   opening = "No Opening hour available",
 }) => {
   return (
@@ -20,7 +20,9 @@ const AboutTab = ({
           <Text className="text-[18px] font-bold mb-2 rounded-[5px]">
             Address
           </Text>
-          <Text className="text-[16px] opacity-60">{address}</Text>
+          <Text className="text-[16px] opacity-60">
+            {address || "No available address"}
+          </Text>
         </View>
 
         <View className="bg-white p-4 rounded-[5px] border border-gray-200">

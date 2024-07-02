@@ -21,7 +21,6 @@ const RootScreen = () => {
         `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
       );
 
-      console.log(result.data);
 
       return result?.data || [];
     },

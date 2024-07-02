@@ -24,7 +24,7 @@ const AppLayout = () => {
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Provider>
-            <PaperProvider>
+            <PaperProvider >
               <AuthContextProvider>
                 <RootStackNavigator />
               </AuthContextProvider>

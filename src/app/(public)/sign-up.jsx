@@ -39,7 +39,6 @@ const RootScreen = () => {
         text2: payload.data?.message,
       });
 
-      console.log(payload);
 
       router.replace("/");
     },
