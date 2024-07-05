@@ -9,7 +9,7 @@ import LightTruckIcon from "../../../../assets/icons/light_truck_icon.svg";
 import DarkTruckIcon from "../../../../assets/icons/dark_truck_icon.svg";
 
 import LighHomeIcon from "../../../../assets/icons/light_home_icon.svg";
-import DarkIcon from "../../../../assets/icons/dark_home_icon.svg";
+import DarkHomeIcon from "../../../../assets/icons/dark_home_icon.svg";
 
 import LightChatIcon from "../../../../assets/icons/light_chat_icon.svg";
 import DarkChatIcon from "../../../../assets/icons/dark_chat_icon.svg";
@@ -34,7 +34,8 @@ const HomeTab = () => {
           justifyContent: "center",
           alignItems: "center",
         },
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
@@ -43,25 +44,10 @@ const HomeTab = () => {
             <View
               className={cn(
                 `items-center justify-center mt-4 ${!focused && "opacity-50"}`
-              )}>
-              {focused ? <DarkIcon /> : <LighHomeIcon />}
+              )}
+            >
+              {focused ? <DarkHomeIcon /> : <LighHomeIcon />}
               <Text>Home</Text>
-            </View>
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="task"
-        options={{
-          title: "",
-          tabBarIcon: ({ focused }) => (
-            <View
-              className={cn(
-                `items-center justify-center mt-4 ${!focused && "opacity-50"}`
-              )}>
-              {focused ? <DarkTruckIcon /> : <LightTruckIcon />}
-              <Text>Task</Text>
             </View>
           ),
         }}
@@ -75,7 +61,8 @@ const HomeTab = () => {
             <View
               className={cn(
                 `items-center justify-center mt-4 ${!focused && "opacity-50"}`
-              )}>
+              )}
+            >
               {focused ? <DarkChatIcon /> : <LightChatIcon />}
               <Text>Message</Text>
             </View>
@@ -91,7 +78,8 @@ const HomeTab = () => {
             <View
               className={cn(
                 `items-center justify-center mt-4 ${!focused && "opacity-50"}`
-              )}>
+              )}
+            >
               {focused ? <DarkProfileIcon /> : <LightProfileIcon />}
               <Text>Profile</Text>
             </View>

@@ -50,22 +50,18 @@ const SampleMarker = [
   },
 ];
 
-const CalloutMap = ({ data = [] }) => {
-  const [payload, setPayload] = useState([]);
+const DestionationMap = ({ region }) => {
   const [selectedLaundry, setSelectedLaundry] = useState(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
-    mapRef.current?.animateCamera(
-      { center: INITIAL_REGION, zoom: 12 },
-      { duration: 30 }
-    );
-  }, []);
-
-  const handlRegionChange = (value) => {
-    console.log(selectedLaundry);
-    // console.log(value);
-  };
+    if (mapRef.current) {
+      mapRef.current.animateCamera(
+        { center: region, zoom: 15 },
+        { duration: 30 }
+      );
+    }
+  }, [region]);
 
   return (
     <>
@@ -74,12 +70,11 @@ const CalloutMap = ({ data = [] }) => {
           ref={mapRef}
           className="w-full h-full"
           provider={PROVIDER_GOOGLE}
-          initialRegion={INITIAL_REGION}
+          initialRegion={region || INITIAL_REGION}
           showsUserLocation
           showsMyLocationButton
-          onRegionChangeComplete={handlRegionChange}
         >
-          <Marker coordinate={SampleMarker[0]}>
+          <Marker coordinate={region}>
             <Callout>
               <View>
                 <Text>Origin</Text>
@@ -95,7 +90,7 @@ const CalloutMap = ({ data = [] }) => {
             </Callout>
           </Marker>
           <MapViewDirections
-            origin={SampleMarker[0]}
+            origin={region}
             destination={SampleMarker[1]}
             apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
             strokeWidth={3}
@@ -106,4 +101,4 @@ const CalloutMap = ({ data = [] }) => {
   );
 };
 
-export default CalloutMap;
+export default DestionationMap;

@@ -8,6 +8,8 @@ export const signUpDefaulValue = {
   phone_number: "",
   email: "",
   password: "",
+  user_lat: 1,
+  user_long: 2,
 };
 
 export const PersonalInfoValidation = z.object({
@@ -25,11 +27,13 @@ export const OtherInfoValidation = z.object({
   address: z
     .string()
     .min(2, "Adress is too short")
-    .max(24, "Adress is too long"),
+    .max(255, "Adress is too long"),
   phone_number: z
     .string()
     .min(2, "Contact is too short")
     .max(12, "Contact is too long"),
+  user_lat: z.number().optional(),
+  user_long: z.number().optional(),
 });
 
 export const AccountInfoValidation = z.object({

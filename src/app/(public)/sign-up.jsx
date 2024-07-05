@@ -39,7 +39,6 @@ const RootScreen = () => {
         text2: payload.data?.message,
       });
 
-
       router.replace("/");
     },
     onError: (error) => {
@@ -70,7 +69,7 @@ const RootScreen = () => {
 
   const { step, isFinalStep, isFirstStep, nextStep, prevStep } = useMultiform([
     <PersonalInfoStep control={control} error={errors} />,
-    <OtherInfoStep control={control} error={errors} />,
+    <OtherInfoStep form={form} control={control} error={errors} />,
     <AccountInfoStep form={form} control={control} error={errors} />,
   ]);
 
@@ -130,7 +129,8 @@ const RootScreen = () => {
           <View className="space-y-4">
             <Button
               onPress={handleSubmit(handleFormSubmit)}
-              disabled={registrationMutation.isPending}>
+              disabled={registrationMutation.isPending}
+            >
               {isFinalStep ? "Register" : "Next"}
             </Button>
 
@@ -149,7 +149,8 @@ const RootScreen = () => {
               <Button
                 variant={"outline"}
                 onPress={handlePrevStep}
-                textClassName={"text-black"}>
+                textClassName={"text-black"}
+              >
                 Back
               </Button>
             )}
