@@ -50,6 +50,7 @@ const CalloutMap = ({ data = [], region }) => {
     setSelectedLaundry(transformedPayload);
   };
 
+  // What is this ?
   const MapList = data
     .map((items) => {
       if (items.coords && items?.laundry_location?.laundry_shop_name) {
@@ -65,8 +66,6 @@ const CalloutMap = ({ data = [], region }) => {
       return null;
     })
     .filter((item) => item !== null);
-
-  console.log(data[0].id);
   return (
     <>
       <View className={cn(selectedLaundry ? "h-[400]" : "")}>
