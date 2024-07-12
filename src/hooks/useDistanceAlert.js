@@ -1,0 +1,41 @@
+import { useEffect, useState } from "react";
+
+const useDistanceAlert = (currentLocation, destination, alertDistance) => {
+  const [isReachLocation, setIsReachLocation] = useState(false);
+  const [alertShown, setAlertShown] = useState(false);
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const toRad = (value) => (value * Math.PI) / 180;
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in kilometers
+  };
+
+  useEffect(() => {
+    if (currentLocation) {
+      const distance = calculateDistance(
+        currentLocation.latitude,
+        currentLocation.longitude,
+        destination.latitude,
+        destination.longitude
+      );
+
+      if (distance <= alertDistance && !alertShown) {
+        setIsReachLocation(true);
+        setAlertShown(true);
+      }
+    }
+  }, [currentLocation, destination, alertDistance, alertShown]);
+
+  return { isReachLocation };
+};
+
+export default useDistanceAlert;

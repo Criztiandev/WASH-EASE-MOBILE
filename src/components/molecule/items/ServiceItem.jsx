@@ -36,10 +36,13 @@ const ServiceItem = ({
       <TouchableOpacity
         className={cn(
           `${
-            checked && "bg-blue-300/50 border-2 border-blue-400"
+            checked
+              ? "bg-blue-300/50 border-2 border-blue-400"
+              : "border border-gray-400/50 bg-[#737373]/5  "
           } rounded-[5px] mt-4 mx-4 `
         )}
-        onPress={handleChecked}>
+        onPress={handleChecked}
+      >
         <View className=" max-h-[150px] py-4 px-2 flex-row justify-between ">
           <View className="flex-row space-x-3" style={{ flexShrink: 1 }}>
             <View style={{ flexShrink: 1 }}>

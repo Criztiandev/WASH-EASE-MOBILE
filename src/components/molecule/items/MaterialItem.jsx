@@ -57,20 +57,25 @@ const MaterialItem = memo(
       <TouchableOpacity
         className={cn(
           `${
-            checked && "bg-blue-300/50 border-2 border-blue-400"
-          } rounded-[5px] mb-2`
+            checked
+              ? "bg-blue-300/50 border-2 border-blue-400"
+              : "border border-gray-400/50 bg-[#737373]/5  "
+          } rounded-[5px] mt-4 mx-4 `
         )}
-        onPress={handleSelect}>
+        onPress={handleSelect}
+      >
         <View className=" max-h-[150px] py-4 px-2 flex-row ">
           <View className="justify-between flex-row  flex-1 px-4">
             {/* Details */}
             <View
               className="flex-row space-x-3 justify-between items-center"
-              style={{ flexShrink: 1 }}>
+              style={{ flexShrink: 1 }}
+            >
               {quantity > 0 && (
                 <View className="">
                   <Badge
-                    className={"text-[14px] w-[24px] h-[24px] rounded-full "}>
+                    className={"text-[14px] w-[24px] h-[24px] rounded-full "}
+                  >
                     {quantity}
                   </Badge>
                 </View>

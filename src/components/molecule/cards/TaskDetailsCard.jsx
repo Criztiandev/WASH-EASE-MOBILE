@@ -9,6 +9,7 @@ import { cn } from "../../../utils/dev.utils";
 import Button from "../../atoms/Button";
 
 import { router } from "expo-router";
+import { atom, useSetAtom } from "jotai";
 
 const statusFlag = cva("right-0 m-2", {
   variants: {
@@ -19,8 +20,17 @@ const statusFlag = cva("right-0 m-2", {
   },
 });
 
-const TaskDetailsCard = ({ id, fullName, address, phoneNumber, status }) => {
+export const selectedCustomerAtom = atom(null);
+
+const TaskDetailsCard = (props) => {
+  const { id, fullName, address, phoneNumber, status } = props;
+  const setSelectedAtom = useSetAtom(selectedCustomerAtom);
   const statusStyle = cn(statusFlag({ status }));
+
+  const handleSelectCustomer = () => {
+    setSelectedAtom(props);
+    router.push(`/rider/task/dashboard/${id}`);
+  };
 
   return (
     <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
@@ -30,7 +40,8 @@ const TaskDetailsCard = ({ id, fullName, address, phoneNumber, status }) => {
           <Text
             variant="titleLarge"
             className="font-bold"
-            style={{ flexShrink: 1 }}>
+            style={{ flexShrink: 1 }}
+          >
             {fullName}
           </Text>
         </View>
@@ -62,9 +73,7 @@ const TaskDetailsCard = ({ id, fullName, address, phoneNumber, status }) => {
           </View>
         </View>
 
-        <Button onPress={() => router.push(`/rider/task/dashboard/${id}`)}>
-          View Details
-        </Button>
+        <Button onPress={handleSelectCustomer}>View Details</Button>
       </View>
     </View>
   );

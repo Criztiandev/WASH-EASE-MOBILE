@@ -17,11 +17,7 @@ const useCombinedFilter = (data, searchKey, ratingFilter) => {
     // Apply rating filter
     if (ratingFilter > 0) {
       result = result.filter((item) => {
-        if (item.shops_rating.length === 0) return false; // No ratings, skip the shop
-        const averageRating =
-          item.shops_rating.reduce((sum, rating) => sum + rating, 0) /
-          item.shops_rating.length;
-        return averageRating >= ratingFilter;
+        return ratingFilter === item.avarageRating;
       });
     }
 

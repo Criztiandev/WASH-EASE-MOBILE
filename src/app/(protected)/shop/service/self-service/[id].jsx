@@ -7,7 +7,7 @@ import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 import { useForm } from "react-hook-form";
 
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 
 // Components
@@ -26,6 +26,7 @@ import { useAuthContext } from "../../../../../context/AuthContext";
 
 const SelfServiceScreen = () => {
   const { authState } = useAuthContext();
+  const router = useRouter();
   const currentStep = useAtomValue(stepAtom);
   const { id } = useLocalSearchParams();
 
@@ -95,14 +96,12 @@ const SelfServiceScreen = () => {
     },
 
     onSuccess: (data) => {
-      console.log(data);
-
       Toast.show({
         type: "success",
         text1: "Order Placed",
         text2: "Thank you for using wash ease",
       });
-      router.replace("/customer/home");
+      router.push(`/customer/choosen-shop`);
     },
     onError: (error) => {
       Toast.show({
@@ -114,7 +113,7 @@ const SelfServiceScreen = () => {
     },
   });
 
-  const onSubmit = (value) => {
+  const onSubmit = async (value) => {
     const currentValue = form.getValues(currentStep);
 
     if (isServiceValid(currentValue, currentStep, ["basic-service"])) {
@@ -130,7 +129,13 @@ const SelfServiceScreen = () => {
       return;
     }
 
-    const finalPayload = transformedFinalPayload(id, value, userPayload.data);
+    const finalPayload = await transformedFinalPayloadPromise(
+      id,
+      value,
+      userPayload.data
+    );
+
+    if (!finalPayload) return;
     serviceMutation.mutate(finalPayload);
   };
 
@@ -139,8 +144,6 @@ const SelfServiceScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
-
-  console.log(data);
 
   return (
     <View className="flex-1 bg-[#FAF8FF] mb-2">
@@ -172,18 +175,24 @@ const useFetchLaundryData = (id) => {
     queryKey: [`laundry-${id}`],
     queryFn: async () => {
       const response = await axios.get(
-        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
+        `https://washease.online/api/get-basic-services-by-laundry-shops-id/2`
       );
       const basePayload = response.data;
 
-      const washMachine = basePayload["washing_machine"].filter(
-        (item) => item["machine_type"] === "Washing Machine"
+      const { washing_machine, data } = basePayload;
+
+      const washMachine = washing_machine.filter(
+        (item) =>
+          item["machine_type"] === "Washing Machine" ||
+          item["machine_type"] === "Washing"
       );
-      const dryMachine = basePayload["washing_machine"].filter(
-        (item) => item["machine_type"] === "Drying"
+      const dryMachine = washing_machine.filter(
+        (item) =>
+          item["machine_type"] === "Drying" ||
+          item["machine_type"] === "Drying Machine"
       );
 
-      const basicService = basePayload["data"].filter(
+      const basicService = data.filter(
         (item) =>
           item.service_category.service_category_name === "Basic Services"
       );
@@ -291,4 +300,15 @@ const transformedFinalPayload = (id, value, credentials) => {
     total_bill: value["total"],
     status: "PENDING",
   };
+};
+
+const transformedFinalPayloadPromise = (id, value, credentials) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const payload = transformedFinalPayload(id, value, credentials);
+      resolve(payload);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };

@@ -10,6 +10,7 @@ import axios from "axios";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
+import TransactionCard from "../../../../../components/molecule/cards/TransactionCard";
 
 const RootScreen = () => {
   const { authState } = useAuthContext();
@@ -20,7 +21,6 @@ const RootScreen = () => {
       const result = await axios.get(
         `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
       );
-
 
       return result?.data || [];
     },
@@ -34,6 +34,8 @@ const RootScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
+
+  console.log(data);
 
   return (
     <ScreenLayout>
@@ -51,23 +53,7 @@ const RootScreen = () => {
             data={filteredData}
             renderItem={({ item }) => (
               <View className="">
-                <HeroShopCard
-                  image={
-                    "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  }
-                  label={"View details"}
-                  title={item.service_type || "N/A"}
-                  details={{
-                    location: item.customer_address || item?.status,
-                    schedule: item.total_bill,
-                  }}
-                  status={item.payment_status || "N/A"}
-                  onNavigate={() =>
-                    router.push(
-                      `/shop/choosen/request/${item.laundry_shop_id || 7}`
-                    )
-                  }
-                />
+                <TransactionCard {...item} />
               </View>
             )}
             estimatedItemSize={200}

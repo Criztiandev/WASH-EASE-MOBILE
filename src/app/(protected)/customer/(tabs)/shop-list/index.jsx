@@ -27,12 +27,20 @@ const ShoplistScreen = () => {
         "https://washease.online/api/get-all-laundry-shops"
       );
 
-      const transformedData = result.data?.laundry_shops?.map((items) => ({
-        ...items,
-        avarageRating:
-          items.shops_rating.reduce((sum, rating) => sum + rating, 0) /
-          items.shops_rating.length,
-      }));
+      const { laundry_ratings, laundry_shops } = result.data;
+
+      // check if the current laundry shop is matching on the laundry ratinng
+
+      const transformedData = laundry_shops?.map((items) => {
+        const filteredShop = laundry_ratings.find(
+          (rating) => rating.laundry_shop_id === items.id
+        );
+
+        return {
+          ...items,
+          avarageRating: Math.round(Number(filteredShop?.average_rating)) || 0,
+        };
+      });
 
       return transformedData || [];
     },
@@ -59,16 +67,18 @@ const ShoplistScreen = () => {
               style={{ backgroundColor: "white", width: "85%" }}
               value={searchQuery}
               onChangeText={setSearchQuery}
+              iconColor="black"
+              className="text-black"
             />
 
             <IconButton
               icon="filter"
               style={{
-                backgroundColor: "white",
                 width: 52,
                 height: 52,
                 borderRadius: 26,
               }}
+              iconColor="black"
               onPress={() => setIsShowModal((prev) => !prev)}
             />
           </View>
@@ -125,6 +135,7 @@ const ShoplistScreen = () => {
               onValueChange={(value) => setRatingFilter(value)}
             >
               <Picker.Item label="Select Rating" value={0} />
+              <Picker.Item label="Filter None" value={0} />
               <Picker.Item label="1 star" value={1} />
               <Picker.Item label="2 star" value={2} />
               <Picker.Item label="3 star" value={3} />
@@ -135,26 +146,6 @@ const ShoplistScreen = () => {
         </View>
 
         <View className="px-4 my-4">
-          <Text className="text-md mb-2">Filter Service</Text>
-          <View className="border border-gray-300 rounded-[5px]">
-            <Picker
-              selectedValue={servicePrice}
-              onValueChange={(value) => setServicePrice(value)}
-            >
-              <Picker.Item label="Select Rating" value={0} />
-              <Picker.Item label="100" value={100} />
-              <Picker.Item label="200" value={200} />
-              <Picker.Item label="300" value={300} />
-              <Picker.Item label="400" value={400} />
-              <Picker.Item label="500" value={500} />
-              <Picker.Item label="600" value={600} />
-              <Picker.Item label="700" value={700} />
-              <Picker.Item label="800" value={800} />
-              <Picker.Item label="900" value={900} />
-              <Picker.Item label="1000" value={1000} />
-            </Picker>
-          </View>
-
           <View className="my-4">
             <Button onPress={() => setIsShowModal((prev) => !prev)}>
               <Text>Filter</Text>

@@ -8,9 +8,10 @@ const MessageCard = ({ path, userName, lastMessageSent, unreadCount }) => {
     <TouchableOpacity
       onPress={() => {
         router.push(path);
-      }}>
+      }}
+    >
       <View className="flex-row items-center space-x-3   p-2 border-b border-gray-300/90">
-        <Avatar.Icon />
+        <Avatar.Icon className="bg-purple-800" />
         <View>
           <Text className="text-[16px] font-bold">
             {userName?.substr(0, 25)}
@@ -20,7 +21,9 @@ const MessageCard = ({ path, userName, lastMessageSent, unreadCount }) => {
           </Text>
         </View>
       </View>
-      <Badge className={"absolute right-2 top-2"}>{unreadCount}</Badge>
+      <Badge className={"absolute right-2 top-2 bg-red-500"}>
+        {unreadCount}
+      </Badge>
     </TouchableOpacity>
   );
 };

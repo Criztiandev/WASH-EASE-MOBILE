@@ -18,9 +18,8 @@ const statusFlag = cva("right-0 m-2", {
   },
 });
 
-const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
-  const statusStyle = cn(statusFlag({ status }));
-
+const TransactionCard = ({ onNavigate, ...props }) => {
+  console.log(props);
   return (
     <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow">
       <Image
@@ -32,41 +31,49 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
         className="h-[110px] rounded-t-md flex-1"
       />
       <View className="p-5 space-y-4">
-        <Text className="font-bold capitalize text-3xl">{title}</Text>
+        <Text className="font-bold capitalize text-3xl">
+          {props?.service_type?.split("_")?.join(" ") || "Service Name"}
+        </Text>
 
         <View className="opacity-50 space-y-2 ">
           <View className="flex-row items-center ">
             <View className="mr-2">
-              <LocationIcon />
+              <Icon source={"information"} size={24} color="black" />
             </View>
-            <Text className="text-[16px] capitalize">{details?.location}</Text>
+            <Text className="text-[16px]">{props.total_bill}</Text>
+          </View>
+          <View className="flex-row items-center ">
+            <View className="mr-2">
+              <Icon source={"information"} size={24} color="black" />
+            </View>
+            <Text className="text-[16px]">{props?.payment_method}</Text>
           </View>
 
           <View className="flex-row items-center ">
             <View className="mr-2">
               <Icon source={"information"} size={24} color="black" />
             </View>
-            <Text className="text-[16px]">{details?.schedule || "N/A"}</Text>
+            <Text className="text-[16px]">{props.payment_status}</Text>
           </View>
 
           <View className="flex-row items-center ">
             <View className="mr-2">
               <Icon source={"information"} size={24} color="black" />
             </View>
-            <Text className="text-[16px]">{details?.contact || "N/A"}</Text>
+            <Text className="text-[16px]">{props.status}</Text>
           </View>
         </View>
 
-        {label && <Button onPress={onNavigate}>{label}</Button>}
+        <Button onPress={onNavigate}>View Details</Button>
       </View>
 
-      <Badge className={statusStyle}>
+      <Badge>
         <Text className="text-md font-semibold text-green-900 capitalize">
-          {status}
+          Pending
         </Text>
       </Badge>
     </View>
   );
 };
 
-export default HeroShopCard;
+export default TransactionCard;
