@@ -10,55 +10,29 @@ import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import axios from "axios";
 import { atom, useAtom } from "jotai";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 export const transactionAtoms = atom(null);
 
 const RootScreen = () => {
+  const { authState } = useAuthContext();
   const [transactions, setTransactions] = useAtom(transactionAtoms);
   const { data, isLoading, isError, error } = useQuery({
     queryFn: async () => {
-      const result = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops"
+      const result = await axios.post(
+        `https://washease.online/api/get-all-rider-tasks/${authState.user_id}`
       );
-      const { laundry_shops } = result.data;
 
-      const transformedData = laundry_shops
-        ?.map((details) => {
-          // Check if laundry_shop_transaction exists and is not empty
-          if (
-            details.laundry_shop_transaction &&
-            details.laundry_shop_transaction.length > 0
-          ) {
-            const paidCustomer = details.laundry_shop_transaction.filter(
-              (temp) => temp.payment_status === "PAID"
-            );
+      const { transactions } = result.data;
 
-            const isWalkedIn = paidCustomer.filter(
-              (temp) => temp.customer_type !== "Walk In"
-            );
+      const filterDatByStatus = transactions.filter(
+        (transaction) => transaction.status !== "COMPLETED"
+      );
 
-            // Only return details if there are transactions
-            if (isWalkedIn.length > 0) {
-              return {
-                id: details.id,
-                title: details.laundry_shop_name || "Shop name",
-                details: {
-                  location:
-                    details.laundry_shop_address || "Address is not available",
-                  schedule: `Delivery count ${isWalkedIn?.length}`,
-                  contact: details.phone_number,
-                },
-                transactions: isWalkedIn,
-              };
-            }
-          }
-
-          return null; // Return null for entries with no valid transactions
-        })
-        .filter((details) => details !== null); // Filter out entries with null transactions
-      return transformedData || [];
+      return filterDatByStatus || [];
     },
-    queryKey: ["rider-tast-lists"],
+    queryKey: [`rider-task-${authState.user_id}`],
+    refetchInterval: 500,
   });
 
   if (isLoading) return <LoadingScreen />;
@@ -82,11 +56,14 @@ const RootScreen = () => {
             renderItem={({ item }) => (
               <View className="">
                 <HeroShopCard
-                  {...item}
+                  title={item?.customer_name}
+                  details={{
+                    location: item?.customer_address,
+                    schedule: item?.payment_method,
+                    contact: `P ${item?.total_bill}`,
+                  }}
                   label={"View details"}
-                  onNavigate={() =>
-                    handleSelectTask(item.id, item?.transactions || [])
-                  }
+                  onNavigate={() => handleSelectTask(item.id, item)}
                 />
               </View>
             )}

@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import * as Location from "expo-location";
 
 const useCurrentLocation = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const updateLocation = useCallback((newLocation) => {
+    if (newLocation && newLocation.coords) {
+      const { latitude, longitude } = newLocation.coords;
+      if (latitude && longitude) {
+        setLocation(newLocation.coords);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     let subscriber;
@@ -16,7 +25,12 @@ const useCurrentLocation = () => {
         }
 
         let currentLocation = await Location.getCurrentPositionAsync({});
-        setLocation(currentLocation.coords);
+        if (currentLocation && currentLocation.coords) {
+          const { latitude, longitude } = currentLocation.coords;
+          if (latitude && longitude) {
+            setLocation(currentLocation.coords);
+          }
+        }
 
         subscriber = await Location.watchPositionAsync(
           {
@@ -24,9 +38,7 @@ const useCurrentLocation = () => {
             timeInterval: 10000,
             distanceInterval: 10,
           },
-          (newLocation) => {
-            setLocation(newLocation.coords);
-          }
+          updateLocation
         );
       } catch (error) {
         setErrorMsg(error.message);
@@ -38,9 +50,11 @@ const useCurrentLocation = () => {
         subscriber.remove();
       }
     };
-  }, []);
+  }, [updateLocation]);
 
-  return { location, errorMsg };
+  const memoizedLocation = useMemo(() => location, [location]);
+
+  return { location: memoizedLocation, errorMsg };
 };
 
 export default useCurrentLocation;

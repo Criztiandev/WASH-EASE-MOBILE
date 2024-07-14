@@ -26,7 +26,6 @@ const PaymentStep = ({ form, name }) => {
   }, []);
 
   useEffect(() => {
-    console.log(transactionMethod);
     setIsGcash(paymentMethod === "gcash");
     if (transactionMethod === "self_serivce") {
       setIsFullService(false);
@@ -38,14 +37,16 @@ const PaymentStep = ({ form, name }) => {
       <ScrollView>
         <Text
           className="text-2xl font-bold m-4 text-center mb-2"
-          variant="titleLarge">
+          variant="titleLarge"
+        >
           Order Details
         </Text>
 
         <View className=" rounded-[5px] m-4 border border-gray-300">
           <Picker
             selectedValue={form.getValues("payment-method")}
-            onValueChange={(value) => form.setValue("payment-method", value)}>
+            onValueChange={(value) => form.setValue("payment-method", value)}
+          >
             <Picker.Item label="Choose Payment Method" value="" />
             <Picker.Item label="Cash" value="CASH" />
             <Picker.Item label="Gcash" value="G-CASH" />
@@ -56,9 +57,8 @@ const PaymentStep = ({ form, name }) => {
           <View className=" rounded-[5px] m-4 border border-gray-300">
             <Picker
               selectedValue={form.getValues("delivery-method")}
-              onValueChange={(value) =>
-                form.setValue("delivery-method", value)
-              }>
+              onValueChange={(value) => form.setValue("delivery-method", value)}
+            >
               <Picker.Item label="Choose Develivery Method" value="" />
               <Picker.Item label="Standard" value="standard" />
               <Picker.Item label="Rush" value="rush" />

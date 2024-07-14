@@ -13,26 +13,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import useCurrentLocation from "../../../../../hooks/useCurrentLocation";
 
-const Target = {
-  id: 0,
-  name: "M&L Laundry Hub Katuparan",
-  latitude: 14.529320997312857,
-  longitude: 121.0552984289825,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
-
-const alertDistance = 0.1; // Distance in kilometers
-
 const DashboardScreen = () => {
-  const { location, errorMsg, isReachLocation } = useCurrentLocation(
-    Target,
-    alertDistance
-  );
-  const selectedCustomerValue = useAtomValue(selectedCustomerAtom);
-
-  const { fullName, address, phoneNumber, status, contact } =
-    selectedCustomerValue;
+  const { location, errorMsg } = useCurrentLocation();
 
   return (
     <ScreenLayout>

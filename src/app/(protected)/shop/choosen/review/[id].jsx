@@ -74,8 +74,6 @@ const RootScreen = () => {
       ...value,
       category: selectedCategories,
     };
-
-    console.log(transformedPayload);
   };
 
   const handleRating = (value) => {
@@ -105,7 +103,8 @@ const RootScreen = () => {
                   `border border-gray-300 bg-white ${
                     isSelected && "border-2 border-blue-500 bg-blue-300/50"
                   } min-w-[150px] max-w-[200px] px-4 py-2 rounded-full  mr-3`
-                )}>
+                )}
+              >
                 <Text className="text-lg font-md text-center">
                   {item.title}
                 </Text>

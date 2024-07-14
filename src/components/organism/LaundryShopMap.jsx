@@ -1,20 +1,27 @@
-import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { View, TouchableOpacity } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import HeroShopCard from "../molecule/cards/HeroShopCard";
-import { cn } from "../../utils/dev.utils";
-import { Icon } from "react-native-paper";
+import { useRef } from "react";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import useCurrentLocation from "../../hooks/useCurrentLocation";
+import LoadingScreen from "../atoms/LoadingScreen";
 
 const LaundryShopMap = ({ region, children }) => {
   const mapRef = useRef(null);
+  const { location } = useCurrentLocation();
+
+  const initialRegion = {
+    latitude: location?.latitude || 0,
+    longitude: location?.longitude || 0,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
+
+  if (!location) return <LoadingScreen />;
 
   return (
     <MapView
       ref={mapRef}
       className="w-full h-full"
       provider={PROVIDER_GOOGLE}
-      initialRegion={region || INITIAL_REGION}
+      initialRegion={initialRegion}
       showsUserLocation
       showsMyLocationButton
     >

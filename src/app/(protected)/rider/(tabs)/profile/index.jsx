@@ -65,14 +65,15 @@ const ProfileScreen = () => {
   return (
     <ScreenLayout className="p-4 pt-6">
       <ProfileCard
-        name={`${data?.firstName} ${data?.lastName}`}
-        role={`${data?.role}`}
+        name={`${data?.firstName || "John"} ${data?.lastName || "Doe"}`}
+        role={`${data?.role || "Rider"}`}
       />
 
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/details/${id}`);
-        }}>
+        }}
+      >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <AccountIcon width={32} height={32} />
           <Text className="text-lg font-bold">Account Information</Text>
@@ -82,7 +83,8 @@ const ProfileScreen = () => {
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/notification/${id}`);
-        }}>
+        }}
+      >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Notification</Text>
@@ -92,7 +94,8 @@ const ProfileScreen = () => {
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/transaction/${id}`);
-        }}>
+        }}
+      >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Transaction History</Text>

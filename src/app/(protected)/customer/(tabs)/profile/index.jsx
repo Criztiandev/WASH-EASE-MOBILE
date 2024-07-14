@@ -14,12 +14,13 @@ import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
-const useFetchUserData = (id) => {
+const useFetchUserData = () => {
+  const { authState } = useAuthContext();
   return useQuery({
-    queryKey: [`user-profile-${id}`],
+    queryKey: [`user-profile-${authState.user_id}`],
     queryFn: async () => {
       const result = await axios.get(
-        `https://washease.online/api/get-customer-details/${id}`
+        `https://washease.online/api/get-customer-details/${authState.user_id}`
       );
       const { first_name, last_name, email, phone_number, role } = result.data;
       return {
@@ -65,14 +66,18 @@ const ProfileScreen = () => {
   return (
     <ScreenLayout className="p-4 pt-6">
       <ProfileCard
-        name={`${data?.firstName} ${data?.lastName}`}
-        role={`${data?.role}`}
+        name={
+          `${data?.firstName || "John"} ${data?.lastName || "Doe"}` ||
+          "John doe"
+        }
+        role={`${data?.role || "Rider"}`}
       />
 
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/details/${id}`);
-        }}>
+        }}
+      >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <AccountIcon width={32} height={32} />
           <Text className="text-lg font-bold">Account Information</Text>
@@ -82,7 +87,8 @@ const ProfileScreen = () => {
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/notification/${id}`);
-        }}>
+        }}
+      >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Notification</Text>
@@ -92,7 +98,8 @@ const ProfileScreen = () => {
       <TouchableOpacity
         onPress={() => {
           router.push(`/account/transaction/${id}`);
-        }}>
+        }}
+      >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <NotificationIcon width={32} height={32} />
           <Text className="text-lg font-bold">Transaction History</Text>

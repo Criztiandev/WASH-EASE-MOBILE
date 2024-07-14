@@ -21,17 +21,6 @@ const SampleMarker = [
 const RiderDestinationMap = ({ id, region }) => {
   const mapRef = useRef(null);
 
-  // fetch data here
-
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.animateCamera(
-        { center: region, zoom: 15 },
-        { duration: 30 }
-      );
-    }
-  }, [region]);
-
   return (
     <>
       <View>

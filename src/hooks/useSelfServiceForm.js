@@ -52,8 +52,6 @@ const useSelfServiceForm = ({ selected, payloadData }) => {
   );
 
   const onSubmit = (values) => {
-    console.log(values);
-
     // if (
     //   !values["basic-service"] ||
     //   (values["basic-service"].length <= 0 && currentStepIndex === 2)

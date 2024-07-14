@@ -19,7 +19,6 @@ const statusFlag = cva("right-0 m-2", {
 });
 
 const TransactionCard = ({ onNavigate, ...props }) => {
-  console.log(props);
   return (
     <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow">
       <Image

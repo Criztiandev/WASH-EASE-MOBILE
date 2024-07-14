@@ -22,7 +22,11 @@ const RootScreen = () => {
         `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
       );
 
-      return result?.data || [];
+      const filterDatByStatus = result?.data?.filter(
+        (transaction) => transaction.status !== "COMPLETED"
+      );
+
+      return filterDatByStatus || [];
     },
     queryKey: [`choosen-shop-${authState["user_id"]}`],
     refetchInterval: 500,
@@ -35,25 +39,24 @@ const RootScreen = () => {
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
 
-  console.log(data);
-
   return (
     <ScreenLayout>
       <Text className="text-2xl font-bold p-4">Transactions</Text>
 
-      <Searchbar
-        placeholder="Search"
-        className="bg-white mx-4"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-      />
       <View className="flex-1 my-4">
         {filteredData?.length > 0 ? (
           <FlashList
             data={filteredData}
             renderItem={({ item }) => (
               <View className="">
-                <TransactionCard {...item} />
+                <TransactionCard
+                  {...item}
+                  onNavigate={() =>
+                    router.push(
+                      `/shop/choosen/request/${item.laundry_shop_id}?transactionID=${item.id}`
+                    )
+                  }
+                />
               </View>
             )}
             estimatedItemSize={200}

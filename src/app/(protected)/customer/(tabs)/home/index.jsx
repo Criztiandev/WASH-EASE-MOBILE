@@ -18,7 +18,7 @@ import LaundryShopDetails from "../../../../../components/organism/LaundryShopDe
 const HomeScreen = () => {
   const { location, errorMsg } = useCurrentLocation();
   const [selectedLaundryShop, setSelectedLaundryShop] = useState(null);
-  const { isLoading, isError, error, data } = useQuery({
+  const { isLoading, isError, error, data, isFetchedAfterMount } = useQuery({
     queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
     queryKey: ["home-laundry-shop"],
   });
@@ -37,17 +37,19 @@ const HomeScreen = () => {
   return (
     <ScreenLayout className="bg-[#f0f0f0]">
       <View className={cn(selectedLaundryShop ? "h-[400px]" : "")}>
-        <LaundryShopMap region={initialRegion}>
-          {data?.map((shop) => (
-            <Marker
-              key={shop.id}
-              coordinate={{
-                ...shop.coords,
-              }}
-              onPress={() => setSelectedLaundryShop(shop.id)}
-            />
-          ))}
-        </LaundryShopMap>
+        {isFetchedAfterMount && (
+          <LaundryShopMap region={initialRegion}>
+            {data?.map((shop) => (
+              <Marker
+                key={shop.id}
+                coordinate={{
+                  ...shop.coords,
+                }}
+                onPress={() => setSelectedLaundryShop(shop.id)}
+              />
+            ))}
+          </LaundryShopMap>
+        )}
       </View>
 
       {selectedLaundryShop && (
