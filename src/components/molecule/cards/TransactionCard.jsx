@@ -63,7 +63,9 @@ const TransactionCard = ({ onNavigate, ...props }) => {
           </View>
         </View>
 
-        <Button onPress={onNavigate}>View Details</Button>
+        <Button onPress={onNavigate} disabled={props.status === "PENDING"}>
+          View Details
+        </Button>
       </View>
 
       <Badge>

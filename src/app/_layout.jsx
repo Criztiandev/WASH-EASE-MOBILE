@@ -22,13 +22,13 @@ const AppLayout = () => {
     <>
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <Provider>
-            <PaperProvider>
+          <PaperProvider>
+            <Provider>
               <AuthContextProvider>
                 <RootStackNavigator />
               </AuthContextProvider>
-            </PaperProvider>
-          </Provider>
+            </Provider>
+          </PaperProvider>
         </GestureHandlerRootView>
         <Toast />
       </QueryClientProvider>

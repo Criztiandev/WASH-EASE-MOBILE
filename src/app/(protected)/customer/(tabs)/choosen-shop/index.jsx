@@ -4,7 +4,6 @@ import { FlashList } from "@shopify/flash-list";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
-import { Searchbar } from "react-native-paper";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuthContext } from "../../../../../context/AuthContext";

@@ -2,7 +2,8 @@ import { View, Text } from "react-native";
 import React from "react";
 import { router, useLocalSearchParams } from "expo-router";
 
-import { Avatar, IconButton } from "react-native-paper";
+import { Avatar } from "react-native-paper";
+import { Info, MessageCircle } from "lucide-react-native";
 
 const RootScreen = () => {
   const { id } = useLocalSearchParams();
@@ -21,14 +22,19 @@ const RootScreen = () => {
               </View>
             </View>
             <View className="flex-row">
-              <IconButton
-                icon={"message"}
+              <TouchableOpacity
+                className="p-4 rounded-full"
                 onPress={() => router.push(`/rider/message/${id}`)}
-              />
-              <IconButton
-                icon={"information"}
-                onPress={() => router.push(`../order-details/${id}}`)}
-              />
+              >
+                <MessageCircle color="black" fill="black" />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="p-4 rounded-full"
+                onPress={() => router.push(`/rider/message/${id}`)}
+              >
+                <Info color="black" fill="black" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>

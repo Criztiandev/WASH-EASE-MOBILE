@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Avatar, IconButton } from "react-native-paper";
 import { router } from "expo-router";
+import { Info, MessageCircle } from "lucide-react-native";
 
 const RequestHeader = ({ id, name, status }) => {
   return (
@@ -14,15 +15,19 @@ const RequestHeader = ({ id, name, status }) => {
         </View>
       </View>
       <View className="flex-row">
-        <IconButton
-          icon={"message"}
+        <TouchableOpacity
+          className="p-4 rounded-full"
           onPress={() => router.push(`/rider/message/${id}`)}
-        />
+        >
+          <MessageCircle color="black" fill="black" />
+        </TouchableOpacity>
 
-        <IconButton
-          icon={"information"}
-          onPress={() => router.push(`../order-details/${id}}`)}
-        />
+        <TouchableOpacity
+          className="p-4 rounded-full"
+          onPress={() => router.push(`/rider/message/${id}`)}
+        >
+          <Info color="black" fill="black" />
+        </TouchableOpacity>
       </View>
     </View>
   );

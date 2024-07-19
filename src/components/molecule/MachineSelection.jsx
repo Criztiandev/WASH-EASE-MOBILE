@@ -1,7 +1,6 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import WashingMachine from "../../assets/icons/washing_machine.svg";
 import { useController } from "react-hook-form";
-import { Text } from "react-native-paper";
 
 import { ToggleButton } from "react-native-paper";
 import { cn } from "../../utils/dev.utils";
@@ -26,7 +25,8 @@ const MachineSelection = ({ controller, label, name, data }) => {
       <ToggleButton.Row
         onValueChange={field?.onChange}
         value={field.value}
-        style={{ flexWrap: "wrap", gap: 16, justifyContent: "center" }}>
+        style={{ flexWrap: "wrap", gap: 16, justifyContent: "center" }}
+      >
         {data &&
           data.map(({ id, status }) => (
             <View
@@ -35,7 +35,8 @@ const MachineSelection = ({ controller, label, name, data }) => {
                 `justify-center ${
                   status === "inactive" ? "opacity-50 " : "opacity-100"
                 }`
-              )}>
+              )}
+            >
               <ToggleButton
                 disabled={status === "inactive" ? true : false}
                 value={`wash-${id}`}

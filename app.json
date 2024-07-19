@@ -5,20 +5,22 @@
     "version": "1.0.0",
     "scheme": "your-app-scheme",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCIqmXkN45k5UQ2TlyptbPTwG9BkxMcXAI"
+          "apiKey": "AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
         }
       },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.capstone.washease"

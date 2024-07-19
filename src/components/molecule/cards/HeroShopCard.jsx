@@ -1,4 +1,4 @@
-import { View, Dimensions, Text } from "react-native";
+import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import { Icon } from "react-native-paper";
@@ -6,7 +6,6 @@ import { Icon } from "react-native-paper";
 import LocationIcon from "../../../assets/icons/location_icon.svg";
 import { cva } from "class-variance-authority";
 import { cn } from "../../../utils/dev.utils";
-import Badge from "../../atoms/Badge";
 
 import Button from "../../atoms/Button";
 const statusFlag = cva("right-0 m-2", {
@@ -59,12 +58,6 @@ const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
 
         {label && <Button onPress={onNavigate}>{label}</Button>}
       </View>
-
-      <Badge className={statusStyle}>
-        <Text className="text-md font-semibold text-green-900 capitalize">
-          {status}
-        </Text>
-      </Badge>
     </View>
   );
 };

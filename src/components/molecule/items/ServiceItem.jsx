@@ -4,6 +4,7 @@ import { Icon, IconButton, Portal } from "react-native-paper";
 import InfoIcon from "../../../assets/icons/info_icon.svg";
 import { cn } from "../../../utils/dev.utils";
 import Button from "../../atoms/Button";
+import { X } from "lucide-react-native";
 
 const ServiceItem = ({
   id: serviceID,
@@ -61,10 +62,13 @@ const ServiceItem = ({
         <Modal animationType="slide" visible={isModalVisible} className="">
           <View className="flex-row justify-between p-4 items-center">
             <Text className="text-2xl font-semibold">{title}</Text>
-            <IconButton
-              icon={"close"}
+
+            <TouchableOpacity
+              className="p-4  rounded-full "
               onPress={() => setIsModalVisible(false)}
-            />
+            >
+              <X color="black" fill="black" />
+            </TouchableOpacity>
           </View>
 
           <View className="px-4 space-y-4">

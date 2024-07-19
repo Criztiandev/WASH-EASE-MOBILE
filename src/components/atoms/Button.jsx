@@ -43,8 +43,9 @@ export default function Button({
       onPress={onPress}
       className={cn(
         buttonVariants({ variant, size, className }),
-        `${disabled && "opacity-50"}`
-      )}>
+        `${disabled && "opacity-60"}`
+      )}
+    >
       <Text className={textClass}>{children}</Text>
     </TouchableOpacity>
   );

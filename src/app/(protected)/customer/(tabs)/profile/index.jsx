@@ -14,13 +14,11 @@ import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
-const useFetchUserData = () => {
-  const { authState } = useAuthContext();
+const useFetchUserData = (id) => {
   return useQuery({
-    queryKey: [`user-profile-${authState.user_id}`],
     queryFn: async () => {
       const result = await axios.get(
-        `https://washease.online/api/get-customer-details/${authState.user_id}`
+        `https://washease.online/api/get-customer-details/${id}`
       );
       const { first_name, last_name, email, phone_number, role } = result.data;
       return {
@@ -32,6 +30,7 @@ const useFetchUserData = () => {
         role,
       };
     },
+    queryKey: [`user-profile-${id}`],
   });
 };
 
@@ -40,7 +39,9 @@ const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
   const { handleLogout } = useAuthContext();
 
-  const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
+  const { data, isLoading, isError } = useFetchUserData(
+    authState?.user_id || 73
+  );
 
   const logoutMutation = useMutation({
     mutationFn: async () => await accoutApi.logout(),
@@ -61,7 +62,6 @@ const ProfileScreen = () => {
   };
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
 
   return (
     <ScreenLayout className="p-4 pt-6">

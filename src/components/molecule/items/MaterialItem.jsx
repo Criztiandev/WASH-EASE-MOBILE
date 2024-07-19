@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { Badge, IconButton } from "react-native-paper";
 import { cn } from "../../../utils/dev.utils";
+import { Minus, Plus } from "lucide-react-native";
 
 const MaterialItem = memo(
   ({
@@ -95,19 +96,19 @@ const MaterialItem = memo(
             {/* Actions */}
             {checked && (
               <View className="flex-row">
-                <IconButton
-                  icon="plus"
-                  size={24}
+                <TouchableOpacity
+                  className="p-4 rounded-full"
                   onPress={handleIncrement}
-                  className=" bg-gray-400/50"
-                />
+                >
+                  <Plus color="black" fill="black" />
+                </TouchableOpacity>
 
-                <IconButton
-                  icon="minus"
-                  size={24}
+                <TouchableOpacity
+                  className="p-4  rounded-full "
                   onPress={handleDecrement}
-                  className=" bg-gray-400/50"
-                />
+                >
+                  <Minus color="black" fill="black" />
+                </TouchableOpacity>
               </View>
             )}
           </View>

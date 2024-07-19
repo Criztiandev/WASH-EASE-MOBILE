@@ -1,7 +1,6 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import WashingMachine from "../../../assets/icons/washing_machine.svg";
 import { useController } from "react-hook-form";
-import { Text } from "react-native-paper";
 
 import { ToggleButton } from "react-native-paper";
 import { cn } from "../../../utils/dev.utils";
@@ -27,7 +26,8 @@ const SelectDryMachineStep = ({ controller, name, renderItems }) => {
       <ToggleButton.Row
         onValueChange={field?.onChange}
         value={field.value}
-        style={{ flexWrap: "wrap", gap: 16, justifyContent: "center" }}>
+        style={{ flexWrap: "wrap", gap: 16, justifyContent: "center" }}
+      >
         {renderItems &&
           renderItems.map(({ machine_name, ...field }) => (
             <MachineToggleButton
@@ -63,7 +63,8 @@ const MachineToggleButton = ({ id, machineName, status }) => {
         `justify-center ${
           status !== "Available" ? "opacity-50 " : "opacity-100"
         }`
-      )}>
+      )}
+    >
       <ToggleButton
         disabled={status !== "Available" ? true : false}
         value={id}

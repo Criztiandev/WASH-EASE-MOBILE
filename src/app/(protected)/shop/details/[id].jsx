@@ -26,27 +26,26 @@ const ShopDetails = () => {
   const { isLoading, isError, data } = useQuery({
     queryFn: async () => {
       const response = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops",
-        {
-          headers: {
-            Authorization:
-              "Bearer 11|x0SPQs9C9Ycu0UDA5gBslV2JVHOMMQVZiJGpsdgY89e5c0b0",
-          },
-        }
+        "https://washease.online/api/get-all-laundry-shops"
       );
 
       const laundryDetails = response.data?.laundry_shops_location?.find(
+        ({ laundry_shop_id: currentID }) => currentID === Number(shopID)
+      );
+
+      const laundryServiceAndRating = response.data?.laundry_shops?.find(
         ({ id: currentID }) => currentID === Number(shopID)
       );
 
       if (!laundryDetails) return [];
 
-      const { laundry_location, laundry_shops } = laundryDetails;
+      const { laundry_location } = laundryDetails;
+      const { shop_services, shops_rating } = laundryServiceAndRating;
 
       return {
         details: { ...laundry_location },
-        ratings: laundry_shops?.shops_rating || [],
-        services: laundry_shops?.shop_services || [],
+        ratings: shops_rating || [],
+        services: shop_services || [],
       };
     },
     queryKey: [`shop-details-${shopID}`],
@@ -55,17 +54,17 @@ const ShopDetails = () => {
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen />;
 
-  const { details, rating, services } = data;
+  const { details, ratings, services } = data;
 
   const renderScene = SceneMap({
     about: () => (
       <AboutTab
         about="Details is not available"
-        address={details?.laundry_shop_address}
+        address={details?.laundry_shop_address || "N/A"}
         opening={details?.laundry_shop_open_hours || "N/A"}
       />
     ),
-    reviews: () => <ShopReviewTabs data={rating} />,
+    reviews: () => <ShopReviewTabs data={ratings} />,
     service: () => (
       <ShopServiceOfferTab data={services} id={shopID} status={true} />
     ),
@@ -76,7 +75,7 @@ const ShopDetails = () => {
       <ShopDetailsCover
         title={details?.laundry_shop_name}
         phoneNumber={details?.phone_number}
-        rating={rating?.length || 0}
+        rating={ratings?.length || 0}
         status={details?.is_shop_closed === 0 ? "Closed" : "Open"}
       />
       <View className="flex-1">

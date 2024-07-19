@@ -1,24 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, Modal } from "react-native";
-import { IconButton, Searchbar } from "react-native-paper";
+import { View, Text, Modal, TextInput, TouchableOpacity } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
-import useSearch from "../../../../../hooks/useSearch";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../../../../../components/atoms/Button";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
-import useRatingFilter from "../../../../../hooks/useRatingFilter";
 import useCombinedFilter from "../../../../../hooks/useCombineFilter";
+import { Filter, X } from "lucide-react-native";
 
 const ShoplistScreen = () => {
-  const [flag, setFlag] = useState("all");
   const [isShowModal, setIsShowModal] = useState(false);
-  const [servicePrice, setServicePrice] = useState(0);
   const [ratingFilter, setRatingFilter] = useState(0);
 
   const { data, isLoading, isError } = useQuery({
@@ -62,25 +58,19 @@ const ShoplistScreen = () => {
       <View style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: 4, marginTop: 4 }}>
           <View style={{ flexDirection: "row" }} className="m-4">
-            <Searchbar
-              placeholder="Search"
-              style={{ backgroundColor: "white", width: "85%" }}
+            <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
-              iconColor="black"
-              className="text-black"
+              className="border flex-1 rounded-full bg-white border-gray-400/20 px-8 "
+              placeholder="Search here"
             />
 
-            <IconButton
-              icon="filter"
-              style={{
-                width: 52,
-                height: 52,
-                borderRadius: 26,
-              }}
-              iconColor="black"
+            <TouchableOpacity
               onPress={() => setIsShowModal((prev) => !prev)}
-            />
+              className="rounded-full p-4 "
+            >
+              <Filter color="black" fill="black" />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -121,10 +111,9 @@ const ShoplistScreen = () => {
       <Modal animationType="slide" visible={isShowModal}>
         <View className="p-4 flex-row justify-between items-center">
           <Text className="text-[32px] font-bold">Filter</Text>
-          <IconButton
-            icon={"close"}
-            onPress={() => setIsShowModal((prev) => !prev)}
-          />
+          <TouchableOpacity onPress={() => setIsShowModal((prev) => !prev)}>
+            <X color="black" fill="black" />
+          </TouchableOpacity>
         </View>
 
         <View className="px-4">

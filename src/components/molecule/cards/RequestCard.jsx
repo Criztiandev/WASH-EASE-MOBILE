@@ -1,8 +1,7 @@
-import { View, Dimensions } from "react-native";
+import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
-import { Link, router } from "expo-router";
-import { Text } from "react-native-paper";
+import { router } from "expo-router";
 
 import LocationIcon from "../../../assets/icons/location_icon.svg";
 import ClockIcon from "../../../assets/icons/clock_icon.svg";
@@ -53,7 +52,8 @@ const RequestCard = ({ image, title, id, details, status }) => {
         <Button onPress={() => router.push(`/shop/choosen/request/${id}`)}>
           <Text
             variant="bodyLarge"
-            className="text-center text-[18px] font-bold  text-white">
+            className="text-center text-[18px] font-bold  text-white"
+          >
             View details
           </Text>
         </Button>

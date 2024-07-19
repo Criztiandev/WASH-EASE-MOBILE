@@ -1,9 +1,7 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
+import { View, TouchableOpacity } from "react-native";
+import React from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { IconButton } from "react-native-paper";
-import Toast from "react-native-toast-message";
-
+import { Check } from "lucide-react-native";
 const RootLayout = () => {
   return (
     <Stack>
@@ -27,7 +25,12 @@ const RootLayout = () => {
 
             return (
               <View className="flex-row space-x-2">
-                <IconButton icon={"check"} onPress={handleSelect} />
+                <TouchableOpacity
+                  className="rounded-full p-4"
+                  onPress={handleSelect}
+                >
+                  <Check color="black" />
+                </TouchableOpacity>
               </View>
             );
           },

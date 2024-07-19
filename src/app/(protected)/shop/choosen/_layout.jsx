@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Icon, IconButton } from "react-native-paper";
+import { Info, Star } from "lucide-react-native";
 
 const RootLayout = () => {
   return (
@@ -13,7 +14,8 @@ const RootLayout = () => {
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
-              className="p-2 rounded-full mr-2">
+              className="p-2 rounded-full mr-2"
+            >
               <Icon source={"arrow-left"} size={24} />
             </TouchableOpacity>
           ),
@@ -22,15 +24,19 @@ const RootLayout = () => {
             const { id } = useLocalSearchParams();
             return (
               <View className="flex-row items-center">
-                <IconButton
-                  icon="star"
+                <TouchableOpacity
+                  className="p-4 rounded-full"
                   onPress={() => router.push(`/shop/choosen/review/${id}`)}
-                />
+                >
+                  <Star color="black" fill="black" />
+                </TouchableOpacity>
 
-                <IconButton
-                  icon="information"
+                <TouchableOpacity
+                  className="p-4 rounded-full"
                   onPress={() => router.push(`/shop/choosen/details/${id}`)}
-                />
+                >
+                  <Info color="white" fill="black" />
+                </TouchableOpacity>
               </View>
             );
           },
@@ -44,7 +50,8 @@ const RootLayout = () => {
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
-              className="p-2 rounded-full mr-2">
+              className="p-2 rounded-full mr-2"
+            >
               <Icon source={"arrow-left"} size={24} />
             </TouchableOpacity>
           ),
@@ -71,7 +78,8 @@ const RootLayout = () => {
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
-              className="p-2 rounded-full mr-2">
+              className="p-2 rounded-full mr-2"
+            >
               <Icon source={"arrow-left"} size={24} />
             </TouchableOpacity>
           ),
