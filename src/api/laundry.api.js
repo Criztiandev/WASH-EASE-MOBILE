@@ -3,32 +3,39 @@ import axios from "axios";
 export default {
   fetchAllLaundryShopLocation: async () => {
     try {
-      const response = await axios.get(
+      const { data } = await axios.get(
         "https://washease.online/api/get-all-laundry-shops"
       );
-      const { laundry_shops_location } = response.data;
+      const { laundry_shops_location, laundry_shops } = data;
 
-      const transformedPayload = laundry_shops_location?.map((shops) => {
-        const { latitude, longitude } = shops;
+      return (
+        laundry_shops_location
+          ?.map((shop) => {
+            const { id, latitude, longitude } = shop;
+            const shopDetails =
+              laundry_shops.find((item) => item.id === id) || {};
 
-        return {
-          ...shops,
-          coords: {
-            latitude: Number(latitude) || 0,
-            longitude: Number(longitude) || 0,
-            latitudeDelta: 0.0922 || 0,
-            longitudeDelta: 0.0421 || 0,
-          },
-        };
-      });
-
-      return transformedPayload;
-    } catch (e) {
-      console.log(e);
+            return {
+              id: id,
+              name: shopDetails.laundry_shop_name,
+              address: shopDetails.laundry_shop_address,
+              phoneNumber: shopDetails.phone_number,
+              isOpen: shopDetails?.is_shop_closed === 0 ? "Close" : "Open",
+              coords: {
+                latitude: Number(latitude) || 0,
+                longitude: Number(longitude) || 0,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              },
+            };
+          })
+          .filter((shop) => shop.name) || []
+      );
+    } catch (error) {
+      console.error("Error fetching laundry shop locations:", error);
       return [];
     }
   },
-
   fetchAllLaundryShopByID: async (id) => {
     try {
       const response = await axios.get(

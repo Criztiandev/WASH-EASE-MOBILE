@@ -12,36 +12,15 @@ import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import useCombinedFilter from "../../../../../hooks/useCombineFilter";
 import { Filter, X } from "lucide-react-native";
+import laundryApi from "../../../../../api/laundry.api";
 
 const ShoplistScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [ratingFilter, setRatingFilter] = useState(0);
 
-  const { data, isLoading, isError } = useQuery({
-    queryFn: async () => {
-      const result = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops"
-      );
-
-      const { laundry_ratings, laundry_shops } = result.data;
-
-      // check if the current laundry shop is matching on the laundry ratinng
-
-      const transformedData = laundry_shops?.map((items) => {
-        const filteredShop = laundry_ratings.find(
-          (rating) => rating.laundry_shop_id === items.id
-        );
-
-        return {
-          ...items,
-          avarageRating: Math.round(Number(filteredShop?.average_rating)) || 0,
-        };
-      });
-
-      return transformedData || [];
-    },
-    queryKey: ["shops-lists"],
-    refetchInterval: 500,
+  const { isLoading, isError, data, refetch } = useQuery({
+    queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
+    queryKey: ["home-laundry-shops"],
   });
 
   const { searchQuery, setSearchQuery, filteredData } = useCombinedFilter(
@@ -51,7 +30,12 @@ const ShoplistScreen = () => {
   );
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
+  if (isError) {
+    refetch();
+    return <LoadingScreen />;
+  }
+
+  console.log(JSON.stringify(data, null, 2));
 
   return (
     <ScreenLayout>
@@ -77,19 +61,21 @@ const ShoplistScreen = () => {
           {filteredData?.length > 0 ? (
             <FlashList
               data={filteredData}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
                 return (
                   <HeroShopCard
                     image="https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    title={item?.laundry_shop_name}
+                    title={item?.name}
                     details={{
-                      location: item?.laundry_shop_address || "N/Ar",
-                      schedule: item?.avarageRating || "N/A",
-                      contact: item?.phone_number || "N/A",
+                      location: item?.address || "N/Ar",
+                      contact: item?.phoneNumber || "N/A",
                     }}
+                    isOpen={item?.isOpen || "Open"}
                     label="View details"
-                    onNavigate={() => router.push(`/shop/details/${item.id}`)}
+                    onNavigate={() =>
+                      router.navigate(`/shop/details/${item?.id}`)
+                    }
                   />
                 );
               }}

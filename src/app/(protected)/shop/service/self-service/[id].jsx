@@ -30,6 +30,8 @@ const SelfServiceScreen = () => {
   const currentStep = useAtomValue(stepAtom);
   const { id } = useLocalSearchParams();
 
+  console.log(id);
+
   const form = useForm({
     defaultValues: {
       wash: 0,
@@ -71,7 +73,7 @@ const SelfServiceScreen = () => {
       initialData={form.getValues("basic-material")}
       renderItems={data?.["basic-material"]}
     />,
-    <PaymentStep form={form} name="method" />,
+    <PaymentStep shopID={id} form={form} name="method" />,
     <CheckOutStep
       total={form.getValues("total")}
       method={form.getValues("payment-method")}
@@ -95,7 +97,7 @@ const SelfServiceScreen = () => {
       return result.data;
     },
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       Toast.show({
         type: "success",
         text1: "Order Placed",
@@ -178,7 +180,6 @@ const useFetchLaundryData = (id) => {
         `https://washease.online/api/get-basic-services-by-laundry-shops-id/2`
       );
       const basePayload = response.data;
-
       const { washing_machine, data } = basePayload;
 
       const washMachine = washing_machine.filter(

@@ -14,6 +14,9 @@ import { Picker } from "@react-native-picker/picker";
 import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCover";
 import Button from "../../../../../components/atoms/Button";
 import { cn } from "../../../../../utils/dev.utils";
+import { useQuery } from "@tanstack/react-query";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import axios from "axios";
 
 const ShopDetails = {
   name: "Shabu Houze",
@@ -53,7 +56,7 @@ const Category = [
 ];
 
 const RootScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id: shopID } = useLocalSearchParams();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
 
@@ -70,10 +73,7 @@ const RootScreen = () => {
   };
 
   const onSubmit = (value) => {
-    const transformedPayload = {
-      ...value,
-      category: selectedCategories,
-    };
+    console.log(form.getValues());
   };
 
   const handleRating = (value) => {
@@ -81,9 +81,53 @@ const RootScreen = () => {
     form.setValue("rating", value);
   };
 
+  const { isLoading, isError, data, refetch } = useQuery({
+    queryFn: async () => {
+      const response = await axios.get(
+        "https://washease.online/api/get-all-laundry-shops"
+      );
+
+      const { laundry_shops } = response.data;
+
+      const laundryDetails = laundry_shops?.find(
+        (item) => Number(item.id) === Number(shopID)
+      );
+
+      const laundryServiceAndRating = laundry_shops?.filter(
+        ({ id: currentID }) => Number(currentID) === Number(shopID)
+      );
+
+      if (!laundryDetails) {
+        return [];
+      }
+
+      const { shop_services, shops_rating } = laundryServiceAndRating;
+
+      return {
+        details: laundryDetails,
+        ratings: shops_rating || [],
+        services: shop_services || [],
+      };
+    },
+    queryKey: [`shop-details-${shopID}`],
+  });
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) {
+    refetch();
+    return <LoadingScreen />;
+  }
+
+  const { details, ratings } = data;
+
   return (
     <ScrollView>
-      <ShopDetailsCover {...ShopDetails} />
+      <ShopDetailsCover
+        title={details?.laundry_shop_name || "Shop Name"}
+        phoneNumber={details?.phone_number || "09288383838"}
+        rating={ratings?.length || 0}
+        status={details?.is_shop_closed === 0 ? "Closed" : "Open"}
+      />
 
       <Text className="px-4 text-[32px] font-bold mt-4">
         Tell us what can be improved?

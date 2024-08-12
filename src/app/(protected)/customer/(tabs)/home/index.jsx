@@ -18,14 +18,16 @@ import LaundryShopDetails from "../../../../../components/organism/LaundryShopDe
 const HomeScreen = () => {
   const { location, errorMsg } = useCurrentLocation();
   const [selectedLaundryShop, setSelectedLaundryShop] = useState(null);
-  const { isLoading, isError, error, data, isFetchedAfterMount } = useQuery({
-    queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
-    queryKey: ["home-laundry-shop"],
-  });
+  const { isLoading, isError, error, data, isFetchedAfterMount, refetch } =
+    useQuery({
+      queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
+      queryKey: ["home-laundry-shops"],
+    });
 
   if (isLoading) return <LoadingScreen />;
   if (isError || errorMsg) {
-    return <ErrorScreen message={error.message} />;
+    refetch();
+    return <LoadingScreen />;
   }
 
   const initialRegion = {
@@ -41,11 +43,11 @@ const HomeScreen = () => {
           <LaundryShopMap region={initialRegion}>
             {data?.map((shop) => (
               <Marker
-                key={shop.id}
+                key={shop.name}
                 coordinate={{
                   ...shop.coords,
                 }}
-                onPress={() => setSelectedLaundryShop(shop.id)}
+                onPress={() => setSelectedLaundryShop(shop)}
               />
             ))}
           </LaundryShopMap>
@@ -54,7 +56,12 @@ const HomeScreen = () => {
 
       {selectedLaundryShop && (
         <View className="flex-1">
-          <LaundryShopDetails id={selectedLaundryShop} />
+          <LaundryShopDetails
+            id={selectedLaundryShop.id}
+            name={selectedLaundryShop?.name}
+            address={selectedLaundryShop.address}
+            phone_number={selectedLaundryShop.phoneNumber}
+          />
 
           <View className="absolute top-0 right-0 mt-6 mx-6">
             <TouchableOpacity
@@ -71,27 +78,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-// const handleMarkSelect = (location) => {
-//   const _payload = data.find((items) => items.id === location.id);
-
-//   if (!_payload) return;
-
-//   const { id, laundry_location } = _payload;
-//   const { laundry_shop_name, laundry_shop_address, laundry_shop_open_hours } =
-//     laundry_location;
-
-//   const transformedPayload = {
-//     id: id,
-//     title: laundry_shop_name || "Untitled Name",
-//     image:
-//       "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600",
-//     details: {
-//       location: laundry_shop_address || "Address is not available",
-//       schedule: laundry_shop_open_hours || "Schedule is not Available",
-//     },
-//     status: _payload?.status || "Active",
-//   };
-
-//   setSelectedLaundry(transformedPayload);
-// };

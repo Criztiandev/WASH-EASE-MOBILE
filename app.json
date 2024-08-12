@@ -23,7 +23,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.capstone.washease"
+      "package": "com.capstone.washease",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,7 +53,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "09be86c5-91c0-4968-aeed-2c51adf2656b"
+        "projectId": "83949903-44ec-4322-8cda-468d88d29e4d"
       }
     }
   }

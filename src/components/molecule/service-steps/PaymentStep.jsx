@@ -1,48 +1,102 @@
+import React, { useEffect, useState, useMemo } from "react";
 import { View, Text, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-import { useController } from "react-hook-form";
 import Divider from "../../atoms/Divider";
 import ServiceTable from "../tables/ServiceTable";
 import QuantityTable from "../tables/QuantityTable";
 import TotalSection from "./TotalSection";
 import { useSetAtom } from "jotai";
 import { stepAtom } from "../../../service/states/service.atoms";
+import QRCode from "react-native-qrcode-svg";
+import { useQuery } from "@tanstack/react-query";
+import LoadingScreen from "../../atoms/LoadingScreen";
+import ErrorScreen from "../../atoms/ErrorScreen";
+import axios from "axios";
 
-const PaymentStep = ({ form, name }) => {
-  const [isGCash, setIsGcash] = useState(false);
-  const [isFullService, setIsFullService] = useState(true);
+const PaymentStep = ({ shopID = 1, form, name }) => {
   const setCurrentStep = useSetAtom(stepAtom);
   const deliveryMethod = form.watch("delivery-method");
   const paymentMethod = form.watch("payment-method");
   const transactionMethod = form.watch("transaction-method");
 
+  const isGCash = useMemo(() => paymentMethod === "G-CASH", [paymentMethod]);
+  const isFullService = useMemo(
+    () => transactionMethod !== "self_serivce",
+    [transactionMethod]
+  );
+
+  const { isLoading, isError, data, refetch } = useQuery({
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          "https://washease.online/api/get-all-laundry-shops"
+        );
+        const { laundry_shops } = response?.data;
+        return laundry_shops?.find((items) => items?.id === shopID);
+      } catch (err) {
+        console.error("Error fetching shop details:", err);
+        throw err;
+      }
+    },
+    queryKey: [`shop-details-payment-${shopID}`],
+  });
+
   useEffect(() => {
     setCurrentStep(name);
+    return () => setCurrentStep("");
+  }, [name, setCurrentStep]);
 
-    return () => {
-      setCurrentStep("");
+  if (isLoading) return <LoadingScreen />;
+  if (isError) {
+    refetch();
+    return <LoadingScreen />;
+  }
+
+  const renderServiceTables = () => {
+    const serviceKeys = ["basic-service"];
+    return serviceKeys.map((key) => (
+      <ServiceTable key={key} title="Service" payload={form.getValues(key)} />
+    ));
+  };
+
+  const renderQuantityTables = () => {
+    const quantityKeys = ["basic-material", "basic-cleaning", "basic-ironing"];
+    const titleMap = {
+      "basic-material": "Service",
+      "basic-cleaning": "Cleaning",
+      "basic-ironing": "Ironing",
     };
-  }, []);
-
-  useEffect(() => {
-    setIsGcash(paymentMethod === "gcash");
-    if (transactionMethod === "self_serivce") {
-      setIsFullService(false);
-    }
-  }, [paymentMethod, transactionMethod]);
+    return quantityKeys.map((key) => (
+      <QuantityTable
+        key={key}
+        title={titleMap[key]}
+        payload={form.getValues(key)}
+      />
+    ));
+  };
 
   return (
-    <View className="flex-1  w-full mt-4">
+    <View className="flex-1 w-full mt-4">
       <ScrollView>
-        <Text
-          className="text-2xl font-bold m-4 text-center mb-2"
-          variant="titleLarge"
-        >
+        <Text className="text-2xl font-bold m-4 text-center mb-4">
           Order Details
         </Text>
 
-        <View className=" rounded-[5px] m-4 border border-gray-300">
+        {isGCash && (
+          <View className="text-center items-center justify-center">
+            <View className="mx-4 px-4 w-[90%] rounded-md">
+              <QRCode value={data?.phone_number} size={300} />
+            </View>
+            <Text className="text-lg my-4 font-semibold">
+              Mobile No.: {data?.phone_number}
+            </Text>
+            <Text className="text-lg font-semibold">
+              {data?.laundry_shop_name}
+            </Text>
+          </View>
+        )}
+
+        <View className="rounded-[5px] m-4 border border-gray-300">
           <Picker
             selectedValue={form.getValues("payment-method")}
             onValueChange={(value) => form.setValue("payment-method", value)}
@@ -54,68 +108,22 @@ const PaymentStep = ({ form, name }) => {
         </View>
 
         {isFullService && (
-          <View className=" rounded-[5px] m-4 border border-gray-300">
+          <View className="rounded-[5px] m-4 border border-gray-300">
             <Picker
               selectedValue={form.getValues("delivery-method")}
               onValueChange={(value) => form.setValue("delivery-method", value)}
             >
-              <Picker.Item label="Choose Develivery Method" value="" />
+              <Picker.Item label="Choose Delivery Method" value="" />
               <Picker.Item label="Standard" value="standard" />
               <Picker.Item label="Rush" value="rush" />
             </Picker>
           </View>
         )}
 
-        {isGCash && (
-          <View className="flex justify-center items-center space-y-2">
-            <View className="w-[200px] h-[200px] border rounded-[5px] mx-auto"></View>
-            <Text>Scan QR Code</Text>
-            <Text className="text-2xl font-bold">09482004868</Text>
-          </View>
-        )}
-
         <View className="px-4">
-          {Object.keys(form.getValues()).map((key) => {
-            const serviceKey = ["basic-service"];
-            if (serviceKey.includes(key)) {
-              const titleMap = {
-                "basic-service": "Service",
-              };
-
-              return (
-                <ServiceTable
-                  key={key}
-                  title={titleMap[key]}
-                  payload={form.getValues(key)}
-                />
-              );
-            }
-          })}
-
+          {renderServiceTables()}
           <Divider />
-
-          {Object.keys(form.getValues()).map((key) => {
-            const expectedKey = [
-              "basic-material",
-              "basic-cleaning",
-              "basic-ironing",
-            ];
-
-            if (expectedKey.includes(key)) {
-              const titleMap = {
-                "basic-material": "Service",
-                "basic-cleaning": "Cleaning",
-                "basic-ironing": "Ironing",
-              };
-              return (
-                <QuantityTable
-                  key={key}
-                  title={titleMap[key]}
-                  payload={form.getValues(key)}
-                />
-              );
-            }
-          })}
+          {renderQuantityTables()}
           <Divider />
           <TotalSection
             mode={deliveryMethod}

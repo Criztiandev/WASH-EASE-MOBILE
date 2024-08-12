@@ -18,7 +18,8 @@ const ShopDetailsCover = ({ title, address, phoneNumber, rating, status }) => {
 
       <View
         className="space-y-2 absolute bg-black/50 h-[250px]"
-        style={{ width: Dimensions.get("screen").width }}>
+        style={{ width: Dimensions.get("screen").width }}
+      >
         <View className="absolute bottom-0 m-4">
           <View className="space-y-1">
             <Text className="text-[22px] font-bold underline text-white">
@@ -39,7 +40,7 @@ const ShopDetailsCover = ({ title, address, phoneNumber, rating, status }) => {
           </View>
         </View>
 
-        <Badge className="bg-green-300 m-2">
+        <Badge className={status === "Open" ? "bg-green-300" : "bg-red-400"}>
           <Text>{status}</Text>
         </Badge>
       </View>

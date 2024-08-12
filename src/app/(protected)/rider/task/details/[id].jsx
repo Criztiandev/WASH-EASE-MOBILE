@@ -19,12 +19,20 @@ const RootScreen = () => {
   const { location, errorMsg } = useCurrentLocation();
   const [isReachLocation, setIsReachLocation] = useState(false);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryFn: async () => {
-      const result = await axios.post(
-        `https://washease.online/api/get-rider-tasks/${id}`
-      );
-      return result?.data;
+      try {
+        const result = await axios.post(
+          `https://washease.online/api/get-rider-tasks/${id}`
+        );
+        if (result?.data) {
+          return result.data;
+        } else {
+          throw new Error("No data returned");
+        }
+      } catch (e) {
+        throw new Error("Failed to fetch rider tasks");
+      }
     },
     queryKey: [`request-service-${id}`],
   });
@@ -55,24 +63,33 @@ const RootScreen = () => {
 
   // Add this useEffect
   useEffect(() => {
-    if (location && customer) {
+    if (location && data?.customer) {
       const distance = calculateDistance(
         location.latitude,
         location.longitude,
-        customer.lat,
-        customer.long
+        data?.customer.lat,
+        data?.customer.long
       );
 
       if (distance <= 0.1) {
         setIsReachLocation(true);
       }
     }
-  }, [location, customer]);
+  }, [location, data?.customer]);
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
-
-  const { customer } = data;
+  if (isError) {
+    if (error.message === "Failed to fetch rider tasks") {
+      return (
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-[24px] font-bold text-center px-8">
+            Transaction Not Found ! There is no Location setted
+          </Text>
+        </View>
+      );
+    }
+    return <ErrorScreen />;
+  }
 
   // Helper function to calculate distance between two points
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -92,67 +109,69 @@ const RootScreen = () => {
 
   return (
     <View className=" flex-1 ">
-      {location ? (
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          className="w-full h-full flex-1"
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          showsUserLocation
-          showsBuildings
-          showsMyLocationButton
-        >
-          <Marker
-            coordinate={{
+      <>
+        {location ? (
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            className="w-full h-full flex-1"
+            initialRegion={{
               latitude: location.latitude,
               longitude: location.longitude,
-            }}
-            title="Your Location"
-          />
-          <Marker
-            coordinate={{
-              latitude: Number(customer?.lat),
-              longitude: Number(customer?.long),
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            title="Target Location"
-          />
-          <MapViewDirections
-            origin={location}
-            destination={{
-              latitude: Number(customer?.lat),
-              longitude: Number(customer?.long),
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-            apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
-            mode="WALKING"
-            strokeWidth={2}
-          />
-        </MapView>
-      ) : (
-        <View className="flex justify-center items-center">
-          <Text>{errorMsg ? errorMsg : "Loading..."}</Text>
-        </View>
-      )}
-      {isReachLocation && (
-        <View className="absolute bottom-0 p-4 flex justify-center items-center w-full">
-          <Button
-            disabled={mutation.isPending}
-            onPress={() => mutation.mutate({})}
-            className={`w-[300px] ${
-              mutation.isPending ? "opacity-50" : "opacity-100"
-            }`}
+            showsUserLocation
+            showsBuildings
+            showsMyLocationButton
           >
-            Deliver
-          </Button>
-        </View>
-      )}
+            <Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}
+              title="Your Location"
+            />
+            <Marker
+              coordinate={{
+                latitude: Number(data?.customer?.lat),
+                longitude: Number(data?.customer?.long),
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              title="Target Location"
+            />
+            <MapViewDirections
+              origin={location}
+              destination={{
+                latitude: Number(data?.customer?.lat),
+                longitude: Number(data?.customer?.long),
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
+              mode="WALKING"
+              strokeWidth={2}
+            />
+          </MapView>
+        ) : (
+          <View className="flex justify-center items-center">
+            <Text>{errorMsg ? errorMsg : "Loading..."}</Text>
+          </View>
+        )}
+        {isReachLocation && (
+          <View className="absolute bottom-0 p-4 flex justify-center items-center w-full">
+            <Button
+              disabled={mutation.isPending}
+              onPress={() => mutation.mutate({})}
+              className={`w-[300px] ${
+                mutation.isPending ? "opacity-50" : "opacity-100"
+              }`}
+            >
+              Deliver
+            </Button>
+          </View>
+        )}
+      </>
     </View>
   );
 };

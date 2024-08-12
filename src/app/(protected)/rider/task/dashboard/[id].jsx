@@ -64,7 +64,7 @@ const DashboardScreen = () => {
                 className="font-bold text-xl"
                 style={{ flexShrink: 1 }}
               >
-                {fullName}
+                {fullName || "John doe"}
               </Text>
             </View>
 

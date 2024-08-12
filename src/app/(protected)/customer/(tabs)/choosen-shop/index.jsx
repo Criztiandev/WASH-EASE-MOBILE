@@ -1,65 +1,71 @@
-import React, { useState } from "react";
-import { Text, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import { Text, View, TextInput } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
-import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
-import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import TransactionCard from "../../../../../components/molecule/cards/TransactionCard";
 
 const RootScreen = () => {
   const { authState } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data, isLoading, isError } = useQuery({
-    queryFn: async () => {
+  const fetchTransactions = useCallback(async () => {
+    try {
       const result = await axios.get(
         `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
       );
-
-      const filterDatByStatus = result?.data?.filter(
+      return result.data.filter(
         (transaction) => transaction.status !== "COMPLETED"
       );
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      return [];
+    }
+  }, [authState]);
 
-      return filterDatByStatus || [];
-    },
+  const { data, isLoading, isError } = useQuery({
+    queryFn: fetchTransactions,
     queryKey: [`choosen-shop-${authState["user_id"]}`],
-    refetchInterval: 500,
+    refetchInterval: 5000,
   });
 
-  const filteredData = data?.filter((item) =>
-    item.service_type.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData =
+    data?.filter((item) =>
+      item.service_type.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
+  if (isError) return <LoadingScreen />;
 
   return (
     <ScreenLayout>
       <Text className="text-2xl font-bold p-4">Transactions</Text>
-
+      <TextInput
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        placeholder="Search transactions..."
+        className=" py-3 bg-white px-8 mx-4 rounded-full border border-gray-300 "
+      />
       <View className="flex-1 my-4">
-        {filteredData?.length > 0 ? (
+        {filteredData.length > 0 ? (
           <FlashList
             data={filteredData}
             renderItem={({ item }) => (
-              <View className="">
-                <TransactionCard
-                  {...item}
-                  onNavigate={() =>
-                    router.push(
-                      `/shop/choosen/request/${item.laundry_shop_id}?transactionID=${item.id}`
-                    )
-                  }
-                />
-              </View>
+              <TransactionCard
+                {...item}
+                onNavigate={() =>
+                  router.push(
+                    `/shop/choosen/request/${item.laundry_shop_id}?transactionID=${item.id}`
+                  )
+                }
+              />
             )}
             estimatedItemSize={200}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
           />
         ) : (
           <View className="flex-1 justify-center items-center">

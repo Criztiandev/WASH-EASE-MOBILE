@@ -87,7 +87,7 @@ const FullServiceScreen = () => {
       name={"transaction-method"}
       initialData={form.getValues("transaction-method")}
       renderItems={[
-        { id: 0, title: "Pick only" },
+        { id: 0, title: "Pick up only" },
         { id: 1, title: "Pick up and Delivery" },
       ]}
     />,

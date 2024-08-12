@@ -11,6 +11,7 @@ import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import axios from "axios";
 import { atom, useAtom } from "jotai";
 import { useAuthContext } from "../../../../../context/AuthContext";
+import Toast from "react-native-toast-message";
 
 export const transactionAtoms = atom(null);
 
@@ -29,7 +30,7 @@ const RootScreen = () => {
         (transaction) => transaction.status !== "COMPLETED"
       );
 
-      return filterDatByStatus || [];
+      return filterDatByStatus;
     },
     queryKey: [`rider-task-${authState.user_id}`],
     refetchInterval: 500,
@@ -46,6 +47,7 @@ const RootScreen = () => {
     router.push(`/rider/task/details/${id}`);
   };
 
+  console.log(authState.user_id);
   return (
     <ScreenLayout>
       <Text className="text-2xl font-bold p-4">My Task</Text>
@@ -56,14 +58,28 @@ const RootScreen = () => {
             renderItem={({ item }) => (
               <View className="">
                 <HeroShopCard
-                  title={item?.customer_name}
+                  title={item?.customer_name || "John doe"}
                   details={{
                     location: item?.customer_address,
                     schedule: item?.payment_method,
                     contact: `P ${item?.total_bill}`,
                   }}
-                  label={"View details"}
-                  onNavigate={() => handleSelectTask(item.id, item)}
+                  label={
+                    item?.customer_address === null
+                      ? "No Address specfied"
+                      : "View details"
+                  }
+                  onNavigate={() => {
+                    if (item?.customer_address === null) {
+                      Toast.show({
+                        type: "error",
+                        text1:
+                          "There is no location specified, Please Provide one",
+                      });
+                      return;
+                    }
+                    handleSelectTask(item.id, item);
+                  }}
                 />
               </View>
             )}

@@ -8,20 +8,34 @@ import { cva } from "class-variance-authority";
 import { cn } from "../../../utils/dev.utils";
 
 import Button from "../../atoms/Button";
-const statusFlag = cva("right-0 m-2", {
-  variants: {
-    status: {
-      open: "bg-green-300 border border-green-600",
-      close: "bg-red-300 border border-red-600",
-    },
-  },
-});
 
-const HeroShopCard = ({ image, title, details, status, label, onNavigate }) => {
-  const statusStyle = cn(statusFlag({ status }));
-
+const HeroShopCard = ({
+  image,
+  title,
+  details,
+  label,
+  isOpen,
+  onNavigate,
+  ...props
+}) => {
+  console.log(props);
   return (
     <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow">
+      <View
+        className={cn(
+          `absolute top-0 right-0 m-2 z-50  px-6 py-1 rounded-full border ${
+            isOpen === "Open"
+              ? "bg-green-400 border-green-300"
+              : "bg-red-400 border-red-300"
+          } `
+        )}
+      >
+        <Text
+          className={cn(`${isOpen === "Open" ? "text-black" : "text-white"}`)}
+        >
+          {isOpen}
+        </Text>
+      </View>
       <Image
         source={
           "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600"

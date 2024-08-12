@@ -8,11 +8,11 @@ const ServiceTable = ({ title, payload = [] }) => {
     <DataTable className="">
       <DataTable.Header>
         <DataTable.Title>
-          <Text className="font-bold text-base">{title}</Text>
+          <Text className="font-bold text-base text-black">{title}</Text>
         </DataTable.Title>
 
         <DataTable.Title numeric>
-          <Text className="font-bold text-base">Price</Text>
+          <Text className="font-bold text-base text-black">Price</Text>
         </DataTable.Title>
       </DataTable.Header>
 
@@ -29,7 +29,8 @@ const ServiceTable = ({ title, payload = [] }) => {
                 style={{
                   justifyContent: "flex-start",
                   alignItems: "flex-start",
-                }}>
+                }}
+              >
                 <DataTable.Cell className="justify-start" numeric>
                   <Text className="opacity-75">{item.title}</Text>
                 </DataTable.Cell>

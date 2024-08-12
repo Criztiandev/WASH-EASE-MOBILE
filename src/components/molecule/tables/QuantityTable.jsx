@@ -8,13 +8,13 @@ const QuantityTable = ({ title, payload = [] }) => {
     <DataTable className="min-h-[64px]">
       <DataTable.Header>
         <DataTable.Title>
-          <Text className="font-bold text-base">{title}</Text>
+          <Text className="font-bold text-base text-black">{title}</Text>
         </DataTable.Title>
         <DataTable.Title numeric>
-          <Text className="font-bold text-base">Quantity</Text>
+          <Text className="font-bold text-base text-black">Quantity</Text>
         </DataTable.Title>
         <DataTable.Title numeric>
-          <Text className="font-bold text-base">Price</Text>
+          <Text className="font-bold text-base text-black">Price</Text>
         </DataTable.Title>
       </DataTable.Header>
 

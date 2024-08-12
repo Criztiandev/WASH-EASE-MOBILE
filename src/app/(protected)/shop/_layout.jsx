@@ -13,27 +13,9 @@ const RootLayout = () => {
       />
       <Stack.Screen name="dashboard" />
       <Stack.Screen
-        name="details"
+        name="details/[id]"
         options={{
           title: "Details",
-          headerRight: () => {
-            const { id } = useLocalSearchParams();
-
-            const handleSelect = () => {
-              router.push(`/shop/transaction/${id}`);
-            };
-
-            return (
-              <View className="flex-row space-x-2">
-                <TouchableOpacity
-                  className="rounded-full p-4"
-                  onPress={handleSelect}
-                >
-                  <Check color="black" />
-                </TouchableOpacity>
-              </View>
-            );
-          },
         }}
       />
       <Stack.Screen name="lists" />

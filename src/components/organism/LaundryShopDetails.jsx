@@ -3,23 +3,12 @@ import React from "react";
 import { Image } from "expo-image";
 import { Icon } from "react-native-paper";
 import Badge from "../atoms/Badge";
-import { useQuery } from "@tanstack/react-query";
-import laundryApi from "../../api/laundry.api";
 import LoadingScreen from "../atoms/LoadingScreen";
 import ErrorScreen from "../atoms/ErrorScreen";
 import { useRouter } from "expo-router";
 
-const LaundryShopDetails = ({ id }) => {
+const LaundryShopDetails = ({ id, name, address, phone_number }) => {
   const router = useRouter();
-  const { isLoading, isError, error, data } = useQuery({
-    queryFn: async () => await laundryApi.fetchAllLaundryShopByID(id),
-    queryKey: [`home-laundry-${id}`],
-  });
-
-  if (isLoading) return <LoadingScreen />;
-  if (isError) {
-    return <ErrorScreen message={error.message} />;
-  }
 
   return (
     <TouchableOpacity
@@ -37,7 +26,7 @@ const LaundryShopDetails = ({ id }) => {
         />
         <View className="p-5 space-y-4">
           <Text className="font-bold capitalize text-3xl">
-            {data.laundry_shop_name || "Shop name"}
+            {name || "Shop name"}
           </Text>
 
           <View className="opacity-50 space-y-2 ">
@@ -46,7 +35,7 @@ const LaundryShopDetails = ({ id }) => {
                 <Icon source={"information"} size={24} color="black" />
               </View>
               <Text className="text-[16px] capitalize">
-                {data?.laundry_shop_address || data?.address || "Unavailable"}
+                {address || "Unavailable"}
               </Text>
             </View>
 
@@ -55,7 +44,7 @@ const LaundryShopDetails = ({ id }) => {
                 <Icon source={"phone"} size={24} color="black" />
               </View>
               <Text className="text-[16px]">
-                {data?.phone_number || "Unavailable"}
+                {phone_number || "Unavailable"}
               </Text>
             </View>
           </View>
