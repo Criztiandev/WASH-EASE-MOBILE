@@ -42,7 +42,6 @@ const RootScreen = () => {
       router.replace("/");
     },
     onError: (error) => {
-      console.log(error);
       Toast.show({
         type: "error",
         text1: "Something went wrong",

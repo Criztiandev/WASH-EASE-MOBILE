@@ -7,14 +7,6 @@ import { Text, View } from "react-native";
 
 // map ref current.animateCamera({center:location,zoom:10},{duration:10})
 
-const onRegionChange = (value) => {
-  console.log(value);
-};
-
-const onMarkerSelected = (marker) => {
-  console.log(marker);
-};
-
 const MapFrame = (props) => {
   const mapRef = useRef();
   const defastyle = cn(

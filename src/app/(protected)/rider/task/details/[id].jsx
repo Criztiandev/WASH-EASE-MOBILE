@@ -1,16 +1,78 @@
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
-import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
-import axios from "axios";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import useCurrentLocation from "../../../../../hooks/useCurrentLocation";
+import axios from "axios";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import Toast from "react-native-toast-message";
+import Geocoding from "react-native-geocoding";
+
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import Button from "../../../../../components/atoms/Button";
+import useCurrentLocation from "../../../../../hooks/useCurrentLocation";
 import { useAuthContext } from "../../../../../context/AuthContext";
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY";
+const DISTANCE_THRESHOLD = 0.1; // km
+
+// Initialize the Geocoding module with your API key
+Geocoding.init(GOOGLE_MAPS_API_KEY);
+
+const useCustomerDetails = (id) => {
+  return useQuery({
+    queryKey: [`request-service-${id}`],
+    queryFn: async () => {
+      try {
+        const result = await axios.get(
+          `https://washease.online/api/get-customer-details/${id}`
+        );
+
+        console.log(result.data);
+
+        if (!result?.data) throw new Error("No data returned");
+
+        const { address } = result.data;
+        const geocodeResponse = await Geocoding.from(address);
+
+        if (geocodeResponse.results.length > 0) {
+          const { lat, lng } = geocodeResponse.results[0].geometry.location;
+          return {
+            ...result.data,
+            latitude: lat,
+            longitude: lng,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          };
+        }
+        throw new Error("Geocoding failed");
+      } catch (error) {
+        console.error("Error fetching customer details:", error);
+        throw error;
+      }
+    },
+  });
+};
+
+const useCompleteMutation = (authState, router) => {
+  return useMutation({
+    mutationFn: (id) =>
+      axios.put(
+        `https://washease.online/api/laundry-shop/transactions/${id}`,
+        { status: "COMPLETED" },
+        { headers: { Authorization: `Bearer ${authState.token}` } }
+      ),
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Confirmed, Thank you for your patience",
+      });
+      router.replace("/rider/home");
+    },
+    onError: (e) => console.error("Mutation error:", e),
+  });
+};
 
 const RootScreen = () => {
   const router = useRouter();
@@ -19,81 +81,11 @@ const RootScreen = () => {
   const { location, errorMsg } = useCurrentLocation();
   const [isReachLocation, setIsReachLocation] = useState(false);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryFn: async () => {
-      try {
-        const result = await axios.post(
-          `https://washease.online/api/get-rider-tasks/${id}`
-        );
-        if (result?.data) {
-          return result.data;
-        } else {
-          throw new Error("No data returned");
-        }
-      } catch (e) {
-        throw new Error("Failed to fetch rider tasks");
-      }
-    },
-    queryKey: [`request-service-${id}`],
-  });
+  const { data, isLoading, isError, error } = useCustomerDetails(id);
+  const mutation = useCompleteMutation(authState, router);
 
-  const mutation = useMutation({
-    mutationFn: async () =>
-      await axios.put(
-        `https://washease.online/api/laundry-shop/transactions/${id}`,
-        { status: "COMPLETED" },
-        {
-          headers: { Authorization: `Bearer ${authState.token}` },
-        }
-      ),
-    mutationKey: [`rider-delivery-mutation-${id}`],
-    onSuccess: () => {
-      Toast.show({
-        type: "success",
-        text1: "Confirmed, Thank you for your patience",
-      });
-
-      router.replace("/rider/home");
-    },
-
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  // Add this useEffect
-  useEffect(() => {
-    if (location && data?.customer) {
-      const distance = calculateDistance(
-        location.latitude,
-        location.longitude,
-        data?.customer.lat,
-        data?.customer.long
-      );
-
-      if (distance <= 0.1) {
-        setIsReachLocation(true);
-      }
-    }
-  }, [location, data?.customer]);
-
-  if (isLoading) return <LoadingScreen />;
-  if (isError) {
-    if (error.message === "Failed to fetch rider tasks") {
-      return (
-        <View className="flex-1 justify-center items-center">
-          <Text className="text-[24px] font-bold text-center px-8">
-            Transaction Not Found ! There is no Location setted
-          </Text>
-        </View>
-      );
-    }
-    return <ErrorScreen />;
-  }
-
-  // Helper function to calculate distance between two points
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the Earth in km
+  const calculateDistance = useCallback((lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth's radius in km
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a =
@@ -103,75 +95,98 @@ const RootScreen = () => {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in km
-    return distance;
-  };
+    return R * c; // Distance in km
+  }, []);
+
+  useEffect(() => {
+    if (location && data?.latitude && data?.longitude) {
+      const distance = calculateDistance(
+        location.latitude,
+        location.longitude,
+        data.latitude,
+        data.longitude
+      );
+      setIsReachLocation(distance <= DISTANCE_THRESHOLD);
+    }
+  }, [location, data, calculateDistance]);
+
+  const mapRegion = useMemo(() => {
+    return location
+      ? {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }
+      : null;
+  }, [location]);
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) {
+    console.log(error);
+    return error.message === "Failed to fetch rider tasks" ? (
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-[24px] font-bold text-center px-8">
+          Transaction Not Found! No location set.
+        </Text>
+      </View>
+    ) : (
+      <ErrorScreen />
+    );
+  }
 
   return (
-    <View className=" flex-1 ">
-      <>
-        {location ? (
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            className="w-full h-full flex-1"
-            initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-            showsUserLocation
-            showsBuildings
-            showsMyLocationButton
+    <View className="flex-1">
+      {mapRegion ? (
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          className="w-full h-full flex-1"
+          initialRegion={mapRegion}
+          showsUserLocation
+          showsBuildings
+          showsMyLocationButton
+        >
+          <Marker coordinate={location} title="Your Location" />
+          {data?.latitude && data?.longitude && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: Number(data.latitude),
+                  longitude: Number(data.longitude),
+                }}
+                title="Target Location"
+              />
+              <MapViewDirections
+                origin={location}
+                destination={{
+                  latitude: Number(data.latitude),
+                  longitude: Number(data.longitude),
+                }}
+                apikey={GOOGLE_MAPS_API_KEY}
+                mode="WALKING"
+                strokeWidth={2}
+              />
+            </>
+          )}
+        </MapView>
+      ) : (
+        <View className="flex justify-center items-center">
+          <Text>{errorMsg || "Loading map..."}</Text>
+        </View>
+      )}
+      {isReachLocation && (
+        <View className="absolute bottom-0 p-4 flex justify-center items-center w-full">
+          <Button
+            disabled={mutation.isPending}
+            onPress={() => mutation.mutate(id)}
+            className={`w-[300px] ${
+              mutation.isPending ? "opacity-50" : "opacity-100"
+            }`}
           >
-            <Marker
-              coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}
-              title="Your Location"
-            />
-            <Marker
-              coordinate={{
-                latitude: Number(data?.customer?.lat),
-                longitude: Number(data?.customer?.long),
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              title="Target Location"
-            />
-            <MapViewDirections
-              origin={location}
-              destination={{
-                latitude: Number(data?.customer?.lat),
-                longitude: Number(data?.customer?.long),
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
-              mode="WALKING"
-              strokeWidth={2}
-            />
-          </MapView>
-        ) : (
-          <View className="flex justify-center items-center">
-            <Text>{errorMsg ? errorMsg : "Loading..."}</Text>
-          </View>
-        )}
-        {isReachLocation && (
-          <View className="absolute bottom-0 p-4 flex justify-center items-center w-full">
-            <Button
-              disabled={mutation.isPending}
-              onPress={() => mutation.mutate({})}
-              className={`w-[300px] ${
-                mutation.isPending ? "opacity-50" : "opacity-100"
-              }`}
-            >
-              Deliver
-            </Button>
-          </View>
-        )}
-      </>
+            Deliver
+          </Button>
+        </View>
+      )}
     </View>
   );
 };

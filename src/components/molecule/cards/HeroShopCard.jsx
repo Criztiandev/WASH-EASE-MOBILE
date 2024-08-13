@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import { Image } from "expo-image";
-import React from "react";
+import React, { useMemo } from "react";
 import { Icon } from "react-native-paper";
 
 import LocationIcon from "../../../assets/icons/location_icon.svg";
@@ -9,8 +9,15 @@ import { cn } from "../../../utils/dev.utils";
 
 import Button from "../../atoms/Button";
 
+import LaundryOne from "../../../assets/images/laundry.jpg";
+import LaundryTwo from "../../../assets/images/laundry2.jpg";
+import LaundryThree from "../../../assets/images/laundry3.jpg";
+import LaundryFour from "../../../assets/images/laundry4.jpg";
+
+const laundryImages = [LaundryOne, LaundryTwo, LaundryThree, LaundryFour];
+
 const HeroShopCard = ({
-  image,
+  image = Math.floor(Math.random() * laundryImages.length),
   title,
   details,
   label,
@@ -18,28 +25,27 @@ const HeroShopCard = ({
   onNavigate,
   ...props
 }) => {
-  console.log(props);
   return (
     <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow">
-      <View
-        className={cn(
-          `absolute top-0 right-0 m-2 z-50  px-6 py-1 rounded-full border ${
-            isOpen === "Open"
-              ? "bg-green-400 border-green-300"
-              : "bg-red-400 border-red-300"
-          } `
-        )}
-      >
-        <Text
-          className={cn(`${isOpen === "Open" ? "text-black" : "text-white"}`)}
+      {isOpen && (
+        <View
+          className={cn(
+            `absolute top-0 right-0 m-2 z-50  px-6 py-1 rounded-full border ${
+              isOpen === "Open"
+                ? "bg-green-400 border-green-300"
+                : "bg-red-400 border-red-300"
+            } `
+          )}
         >
-          {isOpen}
-        </Text>
-      </View>
+          <Text
+            className={cn(`${isOpen === "Open" ? "text-black" : "text-white"}`)}
+          >
+            {isOpen}
+          </Text>
+        </View>
+      )}
       <Image
-        source={
-          "https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600"
-        }
+        source={laundryImages[image]}
         contentFit="cover"
         transition={1000}
         className="h-[110px] rounded-t-md flex-1"
@@ -52,7 +58,9 @@ const HeroShopCard = ({
             <View className="mr-2">
               <LocationIcon />
             </View>
-            <Text className="text-[16px] capitalize">{details?.location}</Text>
+            <Text className="text-[16px] capitalize flex-shrink break-all">
+              {details?.location}
+            </Text>
           </View>
 
           <View className="flex-row items-center ">

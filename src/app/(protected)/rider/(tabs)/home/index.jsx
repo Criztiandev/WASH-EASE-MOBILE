@@ -1,53 +1,72 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Text, View } from "react-native";
-
 import { FlashList } from "@shopify/flash-list";
-import ScreenLayout from "../../../../../layout/ScreenLayout";
-import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
+import { atom, useSetAtom } from "jotai";
+import axios from "axios";
+import Toast from "react-native-toast-message";
+
+import ScreenLayout from "../../../../../layout/ScreenLayout";
+import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
-import axios from "axios";
-import { atom, useAtom } from "jotai";
 import { useAuthContext } from "../../../../../context/AuthContext";
-import Toast from "react-native-toast-message";
 
 export const transactionAtoms = atom(null);
 
 const RootScreen = () => {
   const { authState } = useAuthContext();
-  const [transactions, setTransactions] = useAtom(transactionAtoms);
-  const { data, isLoading, isError, error } = useQuery({
+  const setTransactions = useSetAtom(transactionAtoms);
+
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: [`rider-task-${authState.user_id}`],
     queryFn: async () => {
       const result = await axios.post(
         `https://washease.online/api/get-all-rider-tasks/${authState.user_id}`
       );
-
       const { transactions } = result.data;
 
-      const filterDatByStatus = transactions.filter(
+      const filteredTransactionData = transactions.filter(
         (transaction) => transaction.status !== "COMPLETED"
       );
 
-      return filterDatByStatus;
+      // add details to the user
+      const transformedTransactionData = await Promise.all(
+        filteredTransactionData.map(async (transaction) => {
+          const { customer_id } = transaction;
+
+          const { data } = await axios.get(
+            `https://washease.online/api/get-customer-details/${customer_id}`
+          );
+
+          return {
+            id: transaction.id,
+            total: transaction.total_bill,
+            ...data,
+          };
+        })
+      );
+
+      return transformedTransactionData;
     },
-    queryKey: [`rider-task-${authState.user_id}`],
-    refetchInterval: 500,
+    refetchInterval: 1000,
   });
+
+  const handleSelectTask = useCallback(
+    (id, payload) => {
+      setTransactions(payload);
+      router.push(`/rider/task/details/${id}`);
+    },
+    [setTransactions]
+  );
 
   if (isLoading) return <LoadingScreen />;
   if (isError) {
-    console.log(error);
-    return <ErrorScreen message={error.message} />;
+    refetch();
+    return <LoadingScreen />;
   }
 
-  const handleSelectTask = (id, payload) => {
-    setTransactions(payload);
-    router.push(`/rider/task/details/${id}`);
-  };
-
-  console.log(authState.user_id);
   return (
     <ScreenLayout>
       <Text className="text-2xl font-bold p-4">My Task</Text>
@@ -56,38 +75,37 @@ const RootScreen = () => {
           <FlashList
             data={data}
             renderItem={({ item }) => (
-              <View className="">
-                <HeroShopCard
-                  title={item?.customer_name || "John doe"}
-                  details={{
-                    location: item?.customer_address,
-                    schedule: item?.payment_method,
-                    contact: `P ${item?.total_bill}`,
-                  }}
-                  label={
-                    item?.customer_address === null
-                      ? "No Address specfied"
-                      : "View details"
+              <HeroShopCard
+                title={`${item?.first_name} ${item.last_name}` || "John Doe"}
+                details={{
+                  location: item?.address,
+                  schedule: item?.phone_number,
+                  contact: `P ${item?.total}`,
+                }}
+                label={
+                  item?.customer_address === null
+                    ? "No Address specified"
+                    : "View details"
+                }
+                onNavigate={() => {
+                  if (item?.customer_address === null) {
+                    Toast.show({
+                      type: "error",
+                      text1:
+                        "There is no location specified. Please provide one.",
+                    });
+                    return;
                   }
-                  onNavigate={() => {
-                    if (item?.customer_address === null) {
-                      Toast.show({
-                        type: "error",
-                        text1:
-                          "There is no location specified, Please Provide one",
-                      });
-                      return;
-                    }
-                    handleSelectTask(item.id, item);
-                  }}
-                />
-              </View>
+                  handleSelectTask(item.customer_id, item);
+                }}
+              />
             )}
             estimatedItemSize={200}
+            keyExtractor={(item) => item?.id.toString()}
           />
         ) : (
           <View className="flex-1 justify-center items-center">
-            <Text className="text-3xl ">No available Task</Text>
+            <Text className="text-3xl">No available Tasks</Text>
           </View>
         )}
       </View>

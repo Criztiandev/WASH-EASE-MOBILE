@@ -72,9 +72,7 @@ const RootScreen = () => {
     }
   };
 
-  const onSubmit = (value) => {
-    console.log(form.getValues());
-  };
+  const onSubmit = (value) => {};
 
   const handleRating = (value) => {
     setSelectedRating(value);

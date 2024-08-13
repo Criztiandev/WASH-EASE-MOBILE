@@ -26,7 +26,6 @@ const useLoginForm = () => {
       const { message } = data;
     },
     onError: (error) => {
-      console.log(error);
       Toast.show({
         type: "error",
         text1: error.response?.data?.message || "Something went wrong",

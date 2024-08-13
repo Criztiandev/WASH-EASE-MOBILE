@@ -77,7 +77,6 @@ const FullServiceScreen = () => {
         text1: "Something went wrong",
         text2: "Thank you for your patience",
       });
-      console.log(error);
     },
   });
 

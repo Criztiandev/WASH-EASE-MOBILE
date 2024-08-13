@@ -5,8 +5,8 @@ import Button from "./src/components/atoms/Button";
 import useMultiform from "./src/hooks/useMultiform";
 import useLocalStorage from "./src/hooks/useLocalStorage";
 
-const SplashScreen = ({ setState }) => {
-  const { storeData } = useLocalStorage("splash");
+const SplashScreen = ({ onDisable }) => {
+  const { storeData } = useLocalStorage("isFirstTimeVisit");
   const { step, nextStep, isFinalStep } = useMultiform([
     <IntroScreen />,
     <ServiceScreen />,
@@ -16,8 +16,8 @@ const SplashScreen = ({ setState }) => {
 
   const handleNextStep = () => {
     if (isFinalStep) {
-      storeData({ isAlreadySplashed: true });
-      setState(false);
+      storeData(true);
+      onDisable();
       return;
     }
 
@@ -32,7 +32,8 @@ const SplashScreen = ({ setState }) => {
         alignItems: "center",
         paddingHorizontal: 32,
         gap: 24,
-      }}>
+      }}
+    >
       {step}
 
       <View style={{ width: "100%", marginTop: 24 }}>
@@ -68,7 +69,8 @@ const IntroScreen = () => {
             fontSize: 16,
             paddingHorizontal: 64,
             fontWeight: "semibold",
-          }}>
+          }}
+        >
           Discover WashEase Laundry - Experience Freshness.
         </Text>
       </View>
@@ -98,7 +100,8 @@ const ServiceScreen = () => {
             fontSize: 16,
             paddingHorizontal: 64,
             fontWeight: "semibold",
-          }}>
+          }}
+        >
           Self Service Enjoy Hassle-Free Self-Service!
         </Text>
       </View>
@@ -128,7 +131,8 @@ const LocationScreen = () => {
             fontSize: 16,
             paddingHorizontal: 64,
             fontWeight: "semibold",
-          }}>
+          }}
+        >
           WashEase delivery driver pick up your order
         </Text>
       </View>
@@ -158,7 +162,8 @@ const DeliveryScreen = () => {
             fontSize: 16,
             paddingHorizontal: 64,
             fontWeight: "semibold",
-          }}>
+          }}
+        >
           Your clothes are dropped off clean and ready to wear
         </Text>
       </View>

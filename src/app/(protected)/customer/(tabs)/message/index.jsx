@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
@@ -162,6 +162,29 @@ const MOCKDATA = [
 const RootScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(MOCKDATA);
+  const [messages, setMessages] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    setMessages([
+      {
+        _id: 1,
+        text: "Hello developer",
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: "React Native",
+          avatar: "https://placeimg.com/140/140/any",
+        },
+      },
+    ]);
+  }, []);
+
+  const onSend = useCallback((messages = []) => {
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+  }, []);
 
   const onChangeSearch = (query) => {
     setSearchQuery(query);
@@ -176,7 +199,45 @@ const RootScreen = () => {
     }
   };
 
-  const id = 123123;
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    // Here you would typically fetch the chat history for this user
+    // For now, we'll just set a welcome message
+    setMessages([
+      {
+        _id: 1,
+        text: `Hello, you're now chatting with ${user.fullName}`,
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: user.fullName,
+          avatar: "https://placeimg.com/140/140/any",
+        },
+      },
+    ]);
+  };
+
+  if (selectedUser) {
+    return (
+      <ScreenLayout>
+        <View className="flex-1">
+          <View className="p-4 bg-primary">
+            <Text className="text-white text-lg font-bold">
+              {selectedUser.fullName}
+            </Text>
+          </View>
+          <GiftedChat
+            messages={messages}
+            onSend={(messages) => onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+          />
+        </View>
+      </ScreenLayout>
+    );
+  }
+
   return (
     <ScreenLayout>
       <View className="px-2 flex-1">
@@ -193,7 +254,7 @@ const RootScreen = () => {
             data={filteredData}
             renderItem={({ item }) => (
               <MessageCard
-                path={`/customer/message/${id}`}
+                onPress={() => handleUserSelect(item)}
                 userName={item.fullName}
                 {...item}
               />

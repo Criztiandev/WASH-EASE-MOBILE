@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Modal, TextInput, TouchableOpacity } from "react-native";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
-import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../../../../../components/atoms/Button";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
@@ -18,9 +16,17 @@ const ShoplistScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [ratingFilter, setRatingFilter] = useState(0);
 
-  const { isLoading, isError, data, refetch } = useQuery({
-    queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
-    queryKey: ["home-laundry-shops"],
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["home-laundry-shops-list"],
+    queryFn: async () => {
+      try {
+        return await laundryApi.fetchAllLaundryShopLocation();
+      } catch (error) {
+        console.error("API Error:", error);
+        throw error;
+      }
+    },
+    staleTime: 30000, // Consider data fresh for 1 minute
   });
 
   const { searchQuery, setSearchQuery, filteredData } = useCombinedFilter(
@@ -60,12 +66,11 @@ const ShoplistScreen = () => {
         <View style={{ flex: 1 }}>
           {filteredData?.length > 0 ? (
             <FlashList
-              data={filteredData}
+              data={filteredData.reverse()}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
                 return (
                   <HeroShopCard
-                    image="https://images.pexels.com/photos/2159065/pexels-photo-2159065.jpeg?auto=compress&cs=tinysrgb&w=600"
                     title={item?.name}
                     details={{
                       location: item?.address || "N/Ar",

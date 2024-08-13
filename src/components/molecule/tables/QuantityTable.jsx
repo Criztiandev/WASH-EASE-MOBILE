@@ -29,10 +29,14 @@ const QuantityTable = ({ title, payload = [] }) => {
             renderItem={({ item }) => (
               <DataTable.Row style={{ justifyContent: "flex-start" }}>
                 <DataTable.Cell className="justify-start">
-                  <Text className="opacity-75">{item["item_name"]}</Text>
+                  <Text className="text-black">{item["item_name"]}</Text>
                 </DataTable.Cell>
-                <DataTable.Cell numeric>{item?.quantity}</DataTable.Cell>
-                <DataTable.Cell numeric>₱ {item?.price}</DataTable.Cell>
+                <DataTable.Cell numeric>
+                  <Text className="text-black">{item?.quantity}</Text>
+                </DataTable.Cell>
+                <DataTable.Cell numeric>
+                  <Text className="text-black">₱ {item?.price}</Text>
+                </DataTable.Cell>
               </DataTable.Row>
             )}
             estimatedItemSize={200}

@@ -4,13 +4,25 @@ import StarRating from "../../assets/icons/start_fill_icon.svg";
 import { Image } from "expo-image";
 import Badge from "../atoms/Badge";
 
-const ShopDetailsCover = ({ title, address, phoneNumber, rating, status }) => {
+import LaundryOne from "../../assets/images/laundry.jpg";
+import LaundryTwo from "../../assets/images/laundry2.jpg";
+import LaundryThree from "../../assets/images/laundry3.jpg";
+import LaundryFour from "../../assets/images/laundry4.jpg";
+
+const laundryImages = [LaundryOne, LaundryTwo, LaundryThree, LaundryFour];
+
+const ShopDetailsCover = ({
+  index,
+  title,
+  address,
+  phoneNumber,
+  rating,
+  status,
+}) => {
   return (
     <View className="relative  p-0">
       <Image
-        source={
-          "https://images.pexels.com/photos/13696491/pexels-photo-13696491.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-        }
+        source={laundryImages[Math.floor(Math.random() * laundryImages.length)]}
         contentFit="cover"
         transition={1000}
         className="h-[250px]  -z-30"

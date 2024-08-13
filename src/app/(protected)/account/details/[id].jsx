@@ -81,7 +81,10 @@ const RootScreen = () => {
     },
 
     onError: (error) => {
-      console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to complete the delivery",
+      });
     },
   });
 
@@ -128,7 +131,6 @@ const RootScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
   if (isError) {
-    console.log(error);
     refetch();
     return <LoadingScreen />;
   }

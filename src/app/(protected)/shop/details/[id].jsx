@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, useWindowDimensions, TouchableOpacity } from "react-native";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Stack,
+  useFocusEffect,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
 import { TabView, SceneMap } from "react-native-tab-view";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -54,14 +59,15 @@ const ShopDetails = () => {
       };
     },
     queryKey: [`shop-details-${shopID}`],
-    retry: 3,
-    retryDelay: 1000,
+    staleTime: 30000,
   });
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <ErrorScreen onRetry={refetch} />;
 
   const { details, ratings, services } = data;
+
+  console.log(JSON.stringify(details, null, 2));
 
   const renderScene = SceneMap({
     about: () => (

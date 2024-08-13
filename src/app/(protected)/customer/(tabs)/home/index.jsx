@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import LaundryShopMap from "../../../../../components/organism/LaundryShopMap.jsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
-import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import useCurrentLocation from "../../../../../hooks/useCurrentLocation";
 import laundryApi from "../../../../../api/laundry.api";
 import { Marker } from "react-native-maps";
 import { View } from "react-native";
 import { cn } from "../../../../../utils/dev.utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
 import { Icon } from "react-native-paper";
 import LaundryShopDetails from "../../../../../components/organism/LaundryShopDetails";
+import { useFocusEffect } from "expo-router";
 
 const HomeScreen = () => {
   const { location, errorMsg } = useCurrentLocation();
@@ -22,13 +20,10 @@ const HomeScreen = () => {
     useQuery({
       queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
       queryKey: ["home-laundry-shops"],
+      refetchInterval: 30000,
     });
 
   if (isLoading) return <LoadingScreen />;
-  if (isError || errorMsg) {
-    refetch();
-    return <LoadingScreen />;
-  }
 
   const initialRegion = {
     ...location,

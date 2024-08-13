@@ -1,18 +1,21 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import InputField from "../components/atoms/InputField";
-import Button from "../components/atoms/Button";
 import { router } from "expo-router";
 import ScreenLayout from "../layout/ScreenLayout";
+import InputField from "../components/atoms/InputField";
+import Button from "../components/atoms/Button";
 
 import useLoginForm from "../hooks/useLogin";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useAuthContext } from "../context/AuthContext";
+import SplashScreen from "../../SplashScreen";
 
 const RootScreen = () => {
+  const [isFirstTime, setIsFirstTime] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
   const { setAuthState } = useAuthContext();
-  const { getData, storeData } = useLocalStorage("auth");
+  const { getData, storeData } = useLocalStorage("isFirstTimeVisit");
   const {
     isPending,
     data: payload,
@@ -22,19 +25,42 @@ const RootScreen = () => {
   } = useLoginForm();
 
   useEffect(() => {
+    const checkFirstTime = async () => {
+      const firstTime = await getData();
+
+      setIsFirstTime(
+        firstTime === null || firstTime === undefined ? true : false
+      );
+      setShowSplash(
+        firstTime === null || firstTime === undefined ? true : false
+      );
+    };
+    checkFirstTime();
+  }, []);
+
+  useEffect(() => {
     if (payload && payload?.data) {
       const { data } = payload;
 
       if (data && data.isAuthenticated) {
         const currentRole = data?.role.toLowerCase();
 
-        storeData(data);
+        storeData(false);
         setAuthState(data);
 
         router.replace(`${currentRole}/home`);
       }
     }
   }, [payload]);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+    storeData(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onDisable={handleSplashFinish} />;
+  }
 
   return (
     <ScreenLayout>

@@ -11,7 +11,7 @@ const RootScreen = () => {
   const [message, setMessage] = useState([
     {
       _id: 1,
-      text: "Hello developer",
+      text: "Hello!",
       createdAt: new Date(),
       user: {
         _id: 2,
@@ -33,7 +33,8 @@ const RootScreen = () => {
         <View className=" rounded-[5px]  border border-gray-300 bg-primary/90">
           <Picker
             selectedValue={status}
-            onValueChange={(value) => setStatus(value)}>
+            onValueChange={(value) => setStatus(value)}
+          >
             <Picker.Item
               style={{ color: "white" }}
               label="Select Status"

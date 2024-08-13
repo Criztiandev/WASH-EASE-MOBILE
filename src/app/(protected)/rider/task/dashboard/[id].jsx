@@ -108,12 +108,7 @@ const DashboardScreen = () => {
               </View>
             </View>
 
-            <Button
-              disabled={isReachLocation}
-              onPress={() => console.log("hiu")}
-            >
-              Deliver
-            </Button>
+            <Button disabled={isReachLocation}>Deliver</Button>
           </View>
         </View>
       </View>

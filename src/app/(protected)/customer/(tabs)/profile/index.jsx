@@ -53,7 +53,10 @@ const ProfileScreen = () => {
       handleLogout();
     },
     onError: (error) => {
-      console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to complete the delivery",
+      });
     },
   });
 

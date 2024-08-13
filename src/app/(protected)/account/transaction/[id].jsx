@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../../../context/AuthContext";
 import LoadingScreen from "../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../components/atoms/ErrorScreen";
+import axios from "axios";
 
 const MOCKDATA = [
   {
@@ -50,25 +51,52 @@ const RootScreen = () => {
   const handleSearch = (value) => {
     const query = value.toLowerCase();
     const filteredData = MOCKDATA.filter((item) =>
-      item.title.toLocaleLowerCase().includes(query)
+      item.title.toLowerCase().includes(query)
     );
     setSearchedItems(filteredData);
   };
 
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, refetch, error } = useQuery({
     queryFn: async () => {
-      const result = await axios.get(
-        `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
-      );
-      return result?.data || [];
+      try {
+        const result = await axios.get(
+          `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
+        );
+        return result?.data || [];
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          throw new Error(`Server error: ${error.response.status}`);
+        } else if (error.request) {
+          // The request was made but no response was received
+          throw new Error("No response received from server");
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          throw new Error(`Error: ${error.message}`);
+        }
+      }
     },
     queryKey: [`choosen-shop-${authState["user_id"]}`],
   });
 
   if (isLoading) return <LoadingScreen />;
   if (isError) {
-    refetch();
-    return <LoadingScreen />;
+    Alert.alert(
+      "Error",
+      `An error occurred while fetching data: ${error.message}. Do you want to try again?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Retry",
+          onPress: () => refetch(),
+        },
+      ]
+    );
+    return <ErrorScreen message={error.message} onRetry={refetch} />;
   }
 
   return (

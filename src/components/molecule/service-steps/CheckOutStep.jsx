@@ -20,7 +20,6 @@ const CheckOutStep = ({ total, method }) => {
   const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
   return (
     <ScreenLayout>
       <View className="flex-1 ">

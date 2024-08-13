@@ -18,9 +18,39 @@ const RootScreen = () => {
       const result = await axios.get(
         `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
       );
-      return result.data.filter(
+      const filtered = result.data.filter(
         (transaction) => transaction.status !== "COMPLETED"
       );
+
+      const fullDetails = await Promise.all(
+        filtered.map(async (items) => {
+          const { laundry_shop_id } = items;
+
+          const response = await axios.get(
+            `https://washease.online/api/laundry-shop/users/${laundry_shop_id}`,
+            {
+              headers: { Authorization: `Bearer ${authState.token}` },
+            }
+          );
+
+          const { data: Details } = response?.data;
+
+          const { laundry_shop_name, laundry_shop_address, phone_number } =
+            Details;
+
+          return {
+            id: laundry_shop_id,
+            shopName: laundry_shop_name,
+            address: laundry_shop_address,
+            contact: phone_number,
+            service_type: items?.service_type,
+            total_bill: items?.total_bill,
+            status: items.status,
+          };
+        })
+      );
+
+      return fullDetails || [];
     } catch (error) {
       console.error("Error fetching transactions:", error);
       return [];
@@ -30,7 +60,7 @@ const RootScreen = () => {
   const { data, isLoading, isError } = useQuery({
     queryFn: fetchTransactions,
     queryKey: [`choosen-shop-${authState["user_id"]}`],
-    refetchInterval: 5000,
+    // refetchInterval: 1000,
   });
 
   const filteredData =
@@ -40,6 +70,8 @@ const RootScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <LoadingScreen />;
+
+  console.log(JSON.stringify(filteredData, null, 2));
 
   return (
     <ScreenLayout>
@@ -53,13 +85,13 @@ const RootScreen = () => {
       <View className="flex-1 my-4">
         {filteredData.length > 0 ? (
           <FlashList
-            data={filteredData}
+            data={filteredData.reverse()}
             renderItem={({ item }) => (
               <TransactionCard
                 {...item}
                 onNavigate={() =>
                   router.push(
-                    `/shop/choosen/request/${item.laundry_shop_id}?transactionID=${item.id}`
+                    `/shop/choosen/request/${item.id}?transactionID=${item.id}`
                   )
                 }
               />

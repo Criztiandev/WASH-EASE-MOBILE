@@ -1,4 +1,9 @@
 import axios from "axios";
+import Geocoder from "react-native-geocoding";
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY";
+
+Geocoder.init(GOOGLE_MAPS_API_KEY);
 
 export default {
   fetchAllLaundryShopLocation: async () => {
@@ -6,36 +11,51 @@ export default {
       const { data } = await axios.get(
         "https://washease.online/api/get-all-laundry-shops"
       );
-      const { laundry_shops_location, laundry_shops } = data;
+      const { laundry_shops } = data;
 
-      return (
-        laundry_shops_location
-          ?.map((shop) => {
-            const { id, latitude, longitude } = shop;
-            const shopDetails =
-              laundry_shops.find((item) => item.id === id) || {};
+      const transformPayload = (
+        await Promise.all(
+          laundry_shops.map(async (item) => {
+            const { laundry_shop_address, ...rest } = item;
 
-            return {
-              id: id,
-              name: shopDetails.laundry_shop_name,
-              address: shopDetails.laundry_shop_address,
-              phoneNumber: shopDetails.phone_number,
-              isOpen: shopDetails?.is_shop_closed === 0 ? "Close" : "Open",
-              coords: {
-                latitude: Number(latitude) || 0,
-                longitude: Number(longitude) || 0,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              },
-            };
+            try {
+              // Geocode the address
+              const geocodeResponse = await Geocoder.from(laundry_shop_address);
+
+              if (geocodeResponse.results.length > 0) {
+                const { lat, lng } =
+                  geocodeResponse.results[0].geometry.location;
+
+                return {
+                  id: item.id,
+                  name: item?.laundry_shop_name,
+                  address: item?.laundry_shop_address,
+                  phoneNumber: item?.phone_number,
+                  isOpen: item?.is_shop_closed === 0 ? "Close" : "Open",
+                  coords: {
+                    latitude: lat,
+                    longitude: lng,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  },
+                };
+              }
+            } catch (geocodeError) {
+              return null;
+            }
+
+            // Return null for unsuccessful geocoding
+            return null;
           })
-          .filter((shop) => shop.name) || []
-      );
+        )
+      ).filter(Boolean); // Filter out null values
+      return transformPayload;
     } catch (error) {
       console.error("Error fetching laundry shop locations:", error);
       return [];
     }
   },
+
   fetchAllLaundryShopByID: async (id) => {
     try {
       const response = await axios.get(

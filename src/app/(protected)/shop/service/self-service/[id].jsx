@@ -1,36 +1,32 @@
+import React from "react";
 import { View, Text } from "react-native";
-import Button from "../../../../../components/atoms/Button";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
-import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
-
 import { useForm } from "react-hook-form";
-
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useAtomValue } from "jotai";
+import axios from "axios";
 import Toast from "react-native-toast-message";
 
-// Components
+import Button from "../../../../../components/atoms/Button";
+import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 import useMultiform from "../../../../../hooks/useMultiform";
+import { stepAtom } from "../../../../../service/states/service.atoms";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 // Steps
+import SelectWashMachineStep from "../../../../../components/molecule/service-steps/SelectWashMachineStep";
+import SelectDryMachineStep from "../../../../../components/molecule/service-steps/SelectDryMachineStep";
+import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
 import SelectMaterialStep from "../../../../../components/molecule/service-steps/SelectMaterialStep";
 import PaymentStep from "../../../../../components/molecule/service-steps/PaymentStep";
 import CheckOutStep from "../../../../../components/molecule/service-steps/CheckOutStep";
-import SelectServiceStep from "../../../../../components/molecule/service-steps/SelectServiceStep";
-import SelectWashMachineStep from "../../../../../components/molecule/service-steps/SelectWashMachineStep";
-import SelectDryMachineStep from "../../../../../components/molecule/service-steps/SelectDryMachineStep";
-import { useAtomValue } from "jotai";
-import { stepAtom } from "../../../../../service/states/service.atoms";
-import { useAuthContext } from "../../../../../context/AuthContext";
 
 const SelfServiceScreen = () => {
   const { authState } = useAuthContext();
   const router = useRouter();
   const currentStep = useAtomValue(stepAtom);
   const { id } = useLocalSearchParams();
-
-  console.log(id);
 
   const form = useForm({
     defaultValues: {
@@ -40,38 +36,44 @@ const SelfServiceScreen = () => {
       "basic-material": [],
       "payment-method": "cash",
       "delivery-method": "standard",
-      "transaction-method": "self_serivce",
+      "transaction-method": "self_service",
       total: 0,
     },
   });
 
-  const { data, isError, isLoading } = useFetchLaundryData(id);
-  const userPayload = useFetchUserData(authState?.user_id);
+  const {
+    data: laundryData,
+    isError: isLaundryError,
+    isLoading: isLaundryLoading,
+  } = useFetchLaundryData(id);
+  const {
+    data: userData,
+    isError: isUserError,
+    isLoading: isUserLoading,
+  } = useFetchUserData(authState?.user_id);
 
   const { step, nextStep, prevStep, isFinalStep, isFirstStep } = useMultiform([
     <SelectWashMachineStep
       controller={form.control}
-      name={"wash"}
-      renderItems={data?.wash}
+      name="wash"
+      renderItems={laundryData?.wash}
     />,
-
     <SelectDryMachineStep
       controller={form.control}
-      name={"dry"}
-      renderItems={data?.dry}
+      name="dry"
+      renderItems={laundryData?.dry}
     />,
     <SelectServiceStep
       form={form}
-      name={"basic-service"}
+      name="basic-service"
       initialData={form.getValues("basic-service")}
-      renderItems={data?.["basic-service"]}
+      renderItems={laundryData?.["basic-service"]}
     />,
-
     <SelectMaterialStep
       form={form}
       name="basic-material"
       initialData={form.getValues("basic-material")}
-      renderItems={data?.["basic-material"]}
+      renderItems={laundryData?.["basic-material"]}
     />,
     <PaymentStep shopID={id} form={form} name="method" />,
     <CheckOutStep
@@ -82,46 +84,43 @@ const SelfServiceScreen = () => {
 
   const serviceMutation = useMutation({
     mutationFn: async (value) => {
-      const authToken = authState.token; // Replace with your actual auth token
-
-      const result = await axios.post(
+      const response = await axios.post(
         "https://washease.online/api/laundry_shop/transactions",
         value,
         {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json", // Ensure Content-Type is set if needed
+            Authorization: `Bearer ${authState.token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-      return result.data;
+      return response.data;
     },
-
     onSuccess: () => {
       Toast.show({
         type: "success",
         text1: "Order Placed",
-        text2: "Thank you for using wash ease",
+        text2: "Thank you for using Wash Ease",
       });
-      router.push(`/customer/choosen-shop`);
+      router.push("/customer/choosen-shop");
     },
     onError: (error) => {
       Toast.show({
         type: "error",
         text1: "Something went wrong",
-        text2: "Thank you for your patience",
+        text2: "Please try again later",
       });
-      console.log(error);
+      console.error(error);
     },
   });
 
   const onSubmit = async (value) => {
     const currentValue = form.getValues(currentStep);
 
-    if (isServiceValid(currentValue, currentStep, ["basic-service"])) {
+    if (isServiceValid(currentValue, currentStep)) {
       Toast.show({
         type: "error",
-        text1: "Please Fill all the field to proceed",
+        text1: "Please fill all the fields to proceed",
       });
       return;
     }
@@ -131,35 +130,37 @@ const SelfServiceScreen = () => {
       return;
     }
 
-    const finalPayload = await transformedFinalPayloadPromise(
-      id,
-      value,
-      userPayload.data
-    );
-
-    if (!finalPayload) return;
-    serviceMutation.mutate(finalPayload);
+    try {
+      const finalPayload = await transformedFinalPayloadPromise(
+        id,
+        value,
+        userData
+      );
+      serviceMutation.mutate(finalPayload);
+    } catch (error) {
+      console.error("Error preparing final payload:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error preparing order",
+        text2: "Please try again",
+      });
+    }
   };
 
-  if (isLoading || userPayload.isLoading) return <LoadingScreen />;
-  if (isError || userPayload.isError) return <ErrorScreen />;
-
-  if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
+  if (isLaundryLoading || isUserLoading) return <LoadingScreen />;
+  if (isLaundryError || isUserError) return <ErrorScreen />;
 
   return (
     <View className="flex-1 bg-[#FAF8FF] mb-2">
-      <View className=" flex-1 justify-center items-center">{step}</View>
-
-      <View className="px-4  space-y-2">
+      <View className="flex-1 justify-center items-center">{step}</View>
+      <View className="px-4 space-y-2">
         <Button onPress={form.handleSubmit(onSubmit)}>
-          <Text className="text-center font-semibold text-xl text-white ">
+          <Text className="text-center font-semibold text-xl text-white">
             {isFinalStep ? "Proceed" : "Next"}
           </Text>
         </Button>
-
         {!isFirstStep && (
-          <Button variant={"outline"} onPress={() => prevStep()}>
+          <Button variant="outline" onPress={prevStep}>
             <Text className="text-center font-semibold text-xl text-black">
               Back
             </Text>
@@ -177,57 +178,49 @@ const useFetchLaundryData = (id) => {
     queryKey: [`laundry-${id}`],
     queryFn: async () => {
       const response = await axios.get(
-        `https://washease.online/api/get-basic-services-by-laundry-shops-id/2`
+        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
       );
-      const basePayload = response.data;
-      const { washing_machine, data } = basePayload;
+      const { washing_machine, data, selling_items } = response.data;
 
-      const washMachine = washing_machine.filter(
-        (item) =>
-          item["machine_type"] === "Washing Machine" ||
-          item["machine_type"] === "Washing"
+      const washMachine = washing_machine.filter((item) =>
+        ["Washing Machine", "Washing"].includes(item.machine_type)
       );
-      const dryMachine = washing_machine.filter(
-        (item) =>
-          item["machine_type"] === "Drying" ||
-          item["machine_type"] === "Drying Machine"
+      const dryMachine = washing_machine.filter((item) =>
+        ["Drying", "Drying Machine"].includes(item.machine_type)
       );
-
       const basicService = data.filter(
         (item) =>
           item.service_category.service_category_name === "Basic Services"
       );
 
-      const transformedPayload = {
+      return {
         "basic-service": basicService,
-        "basic-material": basePayload["selling_items"],
+        "basic-material": selling_items,
         wash: washMachine,
         dry: dryMachine,
       };
-
-      return transformedPayload;
     },
   });
 };
 
 const useFetchUserData = (id) => {
   return useQuery({
+    queryKey: [`user-${id}`],
     queryFn: async () => {
-      const result = await axios.get(`
-      https://washease.online/api/get-customer-details/${id}`);
-
-      const { first_name, last_name, email, phone_number, role } = result.data;
-
+      const response = await axios.get(
+        `https://washease.online/api/get-customer-details/${id}`
+      );
+      const { first_name, last_name, email, phone_number, role } =
+        response.data;
       return {
-        id: id,
+        id,
         firstName: first_name,
         lastName: last_name,
         email,
-        phoneNumer: phone_number,
+        phoneNumber: phone_number,
         role,
       };
     },
-    queryKey: [`user-${id}`],
   });
 };
 
@@ -239,41 +232,34 @@ const transformItems = (items, itemNameKey = "item_name") =>
     quantity: item.quantity || 0,
   }));
 
-const transformService = (id, serviceName, servicePrice) => {
-  return [
-    {
-      service: id,
-      service_name: serviceName,
-      service_price: servicePrice,
-      quantity: 1,
-    },
-  ];
-};
+const transformService = (id, serviceName, servicePrice) => [
+  {
+    service: id,
+    service_name: serviceName,
+    service_price: servicePrice,
+    quantity: 1,
+  },
+];
 
-const isServiceValid = (value, step) => {
-  return (
-    value === "" ||
-    value === null ||
-    (Array.isArray(value) && value.length <= 0 && step === "basic-service")
-  );
-};
+const isServiceValid = (value, step) =>
+  value === "" ||
+  value === null ||
+  (Array.isArray(value) && value.length === 0 && step === "basic-service");
 
 const transformedFinalPayload = (id, value, credentials) => {
-  const date = new Date();
-  const currentDate = date.toISOString().split("T")[0];
+  const currentDate = new Date().toISOString().split("T")[0];
 
   const transformedWashMachine = transformService(
-    value["wash"],
+    value.wash,
     "Washing Machine",
     "N/A"
   );
-  const transformeDryMachine = transformService(
-    value["dry"],
-    "Washing Machine",
+  const transformedDryMachine = transformService(
+    value.dry,
+    "Drying Machine",
     "N/A"
   );
   const transformedBasicMaterial = transformItems(value["basic-material"]);
-
   const transformedBasicService = transformItems(
     value["basic-service"],
     "title"
@@ -283,7 +269,7 @@ const transformedFinalPayload = (id, value, credentials) => {
     ...transformedBasicMaterial,
     ...transformedBasicService,
     ...transformedWashMachine,
-    ...transformeDryMachine,
+    ...transformedDryMachine,
   ];
 
   return {
@@ -297,14 +283,14 @@ const transformedFinalPayload = (id, value, credentials) => {
     service_type: value["transaction-method"],
     delivery_fee: 0,
     delivery_date: currentDate,
-    payment_method: value["payment_method"] || "CASH",
-    total_bill: value["total"],
+    payment_method: value["payment-method"] || "CASH",
+    total_bill: value.total,
     status: "PENDING",
   };
 };
 
-const transformedFinalPayloadPromise = (id, value, credentials) => {
-  return new Promise((resolve, reject) => {
+const transformedFinalPayloadPromise = (id, value, credentials) =>
+  new Promise((resolve, reject) => {
     try {
       const payload = transformedFinalPayload(id, value, credentials);
       resolve(payload);
@@ -312,4 +298,3 @@ const transformedFinalPayloadPromise = (id, value, credentials) => {
       reject(error);
     }
   });
-};

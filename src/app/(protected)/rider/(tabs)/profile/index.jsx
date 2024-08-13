@@ -16,12 +16,14 @@ import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 const useFetchUserData = (id) => {
   return useQuery({
-    queryKey: [`user-profile-${id}`],
     queryFn: async () => {
-      const result = await axios.get(
-        `https://washease.online/api/get-customer-details/${id}`
+      const result = await axios.post(
+        `https://washease.online/api/get-rider-details/${id}`
       );
-      const { first_name, last_name, email, phone_number, role } = result.data;
+
+      const { data: riderDetails } = result.data.data;
+      const { first_name, last_name, email, phone_number, role } = riderDetails;
+
       return {
         id,
         firstName: first_name,
@@ -31,6 +33,7 @@ const useFetchUserData = (id) => {
         role,
       };
     },
+    queryKey: [`user-profile-${id}`],
   });
 };
 
@@ -39,7 +42,9 @@ const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
   const { handleLogout } = useAuthContext();
 
-  const { data, isLoading, isError } = useFetchUserData(authState?.user_id);
+  const { data, isLoading, isError } = useFetchUserData(
+    authState?.user_id || 73
+  );
 
   const logoutMutation = useMutation({
     mutationFn: async () => await accoutApi.logout(),
@@ -51,7 +56,10 @@ const ProfileScreen = () => {
       handleLogout();
     },
     onError: (error) => {
-      console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to complete the delivery",
+      });
     },
   });
 
@@ -60,12 +68,14 @@ const ProfileScreen = () => {
   };
 
   if (isLoading) return <LoadingScreen />;
-  if (isError) return <ErrorScreen />;
 
   return (
     <ScreenLayout className="p-4 pt-6">
       <ProfileCard
-        name={`${data?.firstName || "John"} ${data?.lastName || "Doe"}`}
+        name={
+          `${data?.firstName || "John"} ${data?.lastName || "Doe"}` ||
+          "John doe"
+        }
         role={`${data?.role || "Rider"}`}
       />
 
@@ -77,28 +87,6 @@ const ProfileScreen = () => {
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
           <AccountIcon width={32} height={32} />
           <Text className="text-lg font-bold">Account Information</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => {
-          router.push(`/account/notification/${id}`);
-        }}
-      >
-        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <NotificationIcon width={32} height={32} />
-          <Text className="text-lg font-bold">Notification</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => {
-          router.push(`/account/transaction/${id}`);
-        }}
-      >
-        <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">
-          <NotificationIcon width={32} height={32} />
-          <Text className="text-lg font-bold">Transaction History</Text>
         </View>
       </TouchableOpacity>
 
