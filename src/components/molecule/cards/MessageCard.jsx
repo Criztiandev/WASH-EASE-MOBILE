@@ -3,13 +3,9 @@ import React from "react";
 import { Avatar, Badge, IconButton } from "react-native-paper";
 import { router } from "expo-router";
 
-const MessageCard = ({ path, userName, lastMessageSent, unreadCount }) => {
+const MessageCard = ({ path, userName, unreadCount, onPress }) => {
   return (
-    <TouchableOpacity
-      onPress={() => {
-        router.push(path);
-      }}
-    >
+    <TouchableOpacity onPress={onPress}>
       <View className="flex-row items-center space-x-3   p-2 border-b border-gray-300/90">
         <IconButton
           icon="account"
@@ -21,14 +17,8 @@ const MessageCard = ({ path, userName, lastMessageSent, unreadCount }) => {
           <Text className="text-[16px] font-bold">
             {userName?.substr(0, 25)}
           </Text>
-          <Text className="text-[16px] opacity-50">
-            {lastMessageSent?.substr(0, 30)}....
-          </Text>
         </View>
       </View>
-      <Badge className={"absolute right-2 top-2 bg-red-500"}>
-        {unreadCount}
-      </Badge>
     </TouchableOpacity>
   );
 };

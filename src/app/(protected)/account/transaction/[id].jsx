@@ -99,6 +99,8 @@ const RootScreen = () => {
     return <ErrorScreen message={error.message} onRetry={refetch} />;
   }
 
+  console.log(JSON.stringify(data, null, 2));
+
   return (
     <View className="flex-1 ">
       <View className="flex-1 py-4">
@@ -116,6 +118,7 @@ const RootScreen = () => {
               status={item.status}
               bill={item.total_bill}
               method={item.payment_method}
+              {...item}
             />
           )}
           estimatedItemSize={200}
@@ -128,7 +131,15 @@ const RootScreen = () => {
 
 export default RootScreen;
 
-const TransactionCard = ({ id, title, body, status, bill = 0, method }) => {
+const TransactionCard = ({
+  id,
+  title,
+  body,
+  status,
+  bill = 0,
+  method,
+  ...props
+}) => {
   const transformedTitle = title.split("_").join(" ");
   return (
     <TouchableOpacity
@@ -142,7 +153,7 @@ const TransactionCard = ({ id, title, body, status, bill = 0, method }) => {
       >
         <View className="flex-row space-x-2 mb-2 items-center justify-between">
           <Icon source={"bell"} size={24} />
-          <Text className="px-4 py-1 bg-gray-300 rounded-full max-w-[100px] text-center ml-auto font-semibold mb-2">
+          <Text className="px-4 py-1 bg-gray-300 rounded-full max-w-[200px] text-center ml-auto font-semibold mb-2">
             {status}
           </Text>
         </View>
@@ -153,19 +164,55 @@ const TransactionCard = ({ id, title, body, status, bill = 0, method }) => {
         >
           {transformedTitle}
         </Text>
-        <Text
-          className="text-md font-semibold capitalize"
-          style={{ flexShrink: 1 }}
-        >
-          Payment Method: {method}
-        </Text>
 
-        <Text
-          className="text-md font-semibold capitalize"
-          style={{ flexShrink: 1 }}
-        >
-          Total: {bill}
-        </Text>
+        <View className=" py-2 px-1">
+          <FlashList
+            data={props.service_avail}
+            renderItem={({ item }) => (
+              <View className="flex-row space-x-2">
+                <Text className="text-base">{item?.service_name}</Text>
+                <Text className="text-base">-</Text>
+                <Text className="text-base">
+                  {item?.service_price === "PN/A"
+                    ? "Reserved"
+                    : item?.service_price === "N/A"
+                    ? "Reserved"
+                    : item?.service_price}
+                </Text>
+              </View>
+            )}
+            estimatedItemSize={100}
+          />
+        </View>
+
+        <View className="border-b border-gray-400 my-2"></View>
+
+        <View className="flex flex-row items-center space-x-2">
+          <Text className="text-base">Kilo:</Text>
+          <Text className="text-base">
+            {props?.kilo === null
+              ? "7 kilo"
+              : props?.kilo === "N/A"
+              ? "7 kilo"
+              : `${props?.kilo} kilo`}
+          </Text>
+        </View>
+
+        <View className="w-full justify-between flex-row items-center">
+          <Text
+            className="text-md font-semibold capitalize"
+            style={{ flexShrink: 1 }}
+          >
+            Payment Method: {method}
+          </Text>
+
+          <Text
+            className="text-md font-semibold capitalize"
+            style={{ flexShrink: 1 }}
+          >
+            Total: {bill}
+          </Text>
+        </View>
 
         <Text style={{ flexShrink: 1 }}>{body}</Text>
       </View>

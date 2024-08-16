@@ -41,8 +41,6 @@ const ShoplistScreen = () => {
     return <LoadingScreen />;
   }
 
-  console.log(JSON.stringify(data, null, 2));
-
   return (
     <ScreenLayout>
       <View style={{ flex: 1 }}>

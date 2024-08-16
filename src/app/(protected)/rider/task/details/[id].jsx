@@ -29,8 +29,6 @@ const useCustomerDetails = (id) => {
           `https://washease.online/api/get-customer-details/${id}`
         );
 
-        console.log(result.data);
-
         if (!result?.data) throw new Error("No data returned");
 
         const { address } = result.data;
@@ -63,7 +61,7 @@ const useCompleteMutation = (authState, router) => {
         { status: "COMPLETED" },
         { headers: { Authorization: `Bearer ${authState.token}` } }
       ),
-    onSuccess: () => {
+    onSuccess: (data) => {
       Toast.show({
         type: "success",
         text1: "Confirmed, Thank you for your patience",
@@ -77,7 +75,7 @@ const useCompleteMutation = (authState, router) => {
 const RootScreen = () => {
   const router = useRouter();
   const { authState } = useAuthContext();
-  const { id } = useLocalSearchParams();
+  const { id, transactionID } = useLocalSearchParams();
   const { location, errorMsg } = useCurrentLocation();
   const [isReachLocation, setIsReachLocation] = useState(false);
 
@@ -178,7 +176,7 @@ const RootScreen = () => {
         <View className="absolute bottom-0 p-4 flex justify-center items-center w-full">
           <Button
             disabled={mutation.isPending}
-            onPress={() => mutation.mutate(id)}
+            onPress={() => mutation.mutate(transactionID)}
             className={`w-[300px] ${
               mutation.isPending ? "opacity-50" : "opacity-100"
             }`}

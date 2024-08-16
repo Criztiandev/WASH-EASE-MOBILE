@@ -20,6 +20,7 @@ const LaundryShopMap = ({ region, children }) => {
     <MapView
       ref={mapRef}
       className="w-full h-full"
+      
       provider={PROVIDER_GOOGLE}
       initialRegion={initialRegion}
       showsUserLocation

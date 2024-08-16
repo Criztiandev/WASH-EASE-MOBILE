@@ -40,8 +40,10 @@ const RootScreen = () => {
             `https://washease.online/api/get-customer-details/${customer_id}`
           );
 
+          data.avatar = null;
           return {
             id: transaction.id,
+            customer_id: customer_id,
             total: transaction.total_bill,
             ...data,
           };
@@ -50,13 +52,13 @@ const RootScreen = () => {
 
       return transformedTransactionData;
     },
-    refetchInterval: 1000,
+    refetchInterval: 30000,
   });
 
   const handleSelectTask = useCallback(
-    (id, payload) => {
+    (id, transactionID, payload) => {
       setTransactions(payload);
-      router.push(`/rider/task/details/${id}`);
+      router.push(`/rider/task/details/${id}?transactionID=${transactionID}`);
     },
     [setTransactions]
   );
@@ -96,7 +98,7 @@ const RootScreen = () => {
                     });
                     return;
                   }
-                  handleSelectTask(item.customer_id, item);
+                  handleSelectTask(item.customer_id, item.id, item);
                 }}
               />
             )}

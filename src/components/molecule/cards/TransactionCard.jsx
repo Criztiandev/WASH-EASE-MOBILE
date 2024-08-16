@@ -43,7 +43,7 @@ const TransactionCard = ({
             <View className="mr-2">
               <Icon source={"information"} size={24} color="black" />
             </View>
-            <Text className="text-[16px] capitalize">
+            <Text className="text-[16px] capitalize ">
               {props?.service_type?.split("_")?.join(" ") || "Service Name"}
             </Text>
           </View>

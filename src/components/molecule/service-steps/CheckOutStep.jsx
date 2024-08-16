@@ -33,7 +33,7 @@ const CheckOutStep = ({ total, method }) => {
         </View>
 
         <View className="flex-row space-x-2 justify-center  items-center">
-          <Text className="text-lg font-bold">Estimiated Delivery Date</Text>
+          <Text className="text-lg font-bold">Estimated Delivery Date</Text>
           <Text className="text-base">{formattedNextDate}</Text>
         </View>
 
@@ -41,13 +41,6 @@ const CheckOutStep = ({ total, method }) => {
           <Text className="text-lg font-bold">Personal Info</Text>
           <Text className="text-base font-semibold opacity-50">
             Name: {data.firstName} {data.lastName}
-          </Text>
-
-          <Text className="text-base font-semibold opacity-50">
-            Address: {data?.address || "N/A"}
-          </Text>
-          <Text className="text-base font-semibold opacity-50">
-            Phone number: {data.phoneNumer}
           </Text>
         </View>
 
@@ -75,7 +68,7 @@ const CheckOutStep = ({ total, method }) => {
 
           <View className="flex-row space-x-1 items-center">
             <Text className="text-base font-semibold opacity-50">Status:</Text>
-            <View className=" items-center justify-center bg-green-400  px-3 py-0.5 rounded-full ">
+            <View className=" items-center justify-center bg-blue-400  px-3 py-0.5 rounded-full ">
               <Text className="capitalize  font-semibold text-white">
                 Pending
               </Text>

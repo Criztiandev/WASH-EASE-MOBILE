@@ -136,6 +136,7 @@ const SelfServiceScreen = () => {
         value,
         userData
       );
+
       serviceMutation.mutate(finalPayload);
     } catch (error) {
       console.error("Error preparing final payload:", error);

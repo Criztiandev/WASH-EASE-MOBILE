@@ -18,7 +18,7 @@ const LaundryShopDetails = ({ id, name, address, phone_number }) => {
   return (
     <TouchableOpacity
       className="flex-1"
-      onPress={() => router.push(`/shop/details/${data.id}`)}
+      onPress={() => router.push(`/shop/details/${id}`)}
     >
       <View className=" flex-1  m-4 relative max-w-sm bg-white border border-gray-300 rounded-lg shadow">
         <Image
@@ -54,12 +54,6 @@ const LaundryShopDetails = ({ id, name, address, phone_number }) => {
             </View>
           </View>
         </View>
-
-        <Badge>
-          <Text className="text-md font-semibold text-green-900 capitalize">
-            Status
-          </Text>
-        </Badge>
       </View>
     </TouchableOpacity>
   );

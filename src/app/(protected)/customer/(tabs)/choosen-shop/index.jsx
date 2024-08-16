@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Text, View, TextInput } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
@@ -39,7 +39,8 @@ const RootScreen = () => {
             Details;
 
           return {
-            id: laundry_shop_id,
+            id: items.id, // Ensure this is the transaction ID, not the shop ID
+            laundry_shop_id: items.laundry_shop_id,
             shopName: laundry_shop_name,
             address: laundry_shop_address,
             contact: phone_number,
@@ -60,18 +61,21 @@ const RootScreen = () => {
   const { data, isLoading, isError } = useQuery({
     queryFn: fetchTransactions,
     queryKey: [`choosen-shop-${authState["user_id"]}`],
-    // refetchInterval: 1000,
+    refetchInterval: 30000,
   });
 
-  const filteredData =
-    data?.filter((item) =>
-      item.service_type.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
+  const filteredData = useMemo(() => {
+    return (
+      data?.filter((item) =>
+        item.service_type.toLowerCase().includes(searchQuery.toLowerCase())
+      ) || []
+    );
+  }, [data, searchQuery]);
+
+  const keyExtractor = useCallback((item) => `transaction_${item.id}`, []);
 
   if (isLoading) return <LoadingScreen />;
   if (isError) return <LoadingScreen />;
-
-  console.log(JSON.stringify(filteredData, null, 2));
 
   return (
     <ScreenLayout>
@@ -80,7 +84,7 @@ const RootScreen = () => {
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Search transactions..."
-        className=" py-3 bg-white px-8 mx-4 rounded-full border border-gray-300 "
+        className="py-3 bg-white px-8 mx-4 rounded-full border border-gray-300"
       />
       <View className="flex-1 my-4">
         {filteredData.length > 0 ? (
@@ -91,13 +95,13 @@ const RootScreen = () => {
                 {...item}
                 onNavigate={() =>
                   router.push(
-                    `/shop/choosen/request/${item.id}?transactionID=${item.id}`
+                    `/shop/choosen/request/${item.laundry_shop_id}?transactionID=${item.id}`
                   )
                 }
               />
             )}
             estimatedItemSize={200}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={keyExtractor}
           />
         ) : (
           <View className="flex-1 justify-center items-center">

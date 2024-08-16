@@ -119,7 +119,7 @@ const FullServiceScreen = () => {
       renderItems={data?.["basic-material"]}
     />,
 
-    <PaymentStep form={form} name="method" />,
+    <PaymentStep shopID={id} form={form} name="method" />,
 
     <CheckOutStep
       total={form.getValues("total")}
@@ -148,7 +148,9 @@ const FullServiceScreen = () => {
       return;
     }
 
-    const finalPayload = transformedFinalPayload(id, value, userPayload);
+    const finalPayload = transformedFinalPayload(id, value, userPayload.data);
+    console.log(finalPayload);
+
     serviceMutation.mutate(finalPayload);
 
     Toast.show({
@@ -156,7 +158,7 @@ const FullServiceScreen = () => {
       text1: "Order Placed",
       text2: "Thank you for using wash ease",
     });
-    // router.replace("../../customer/(tabs)/home");
+    router.push("/customer/choosen-shop");
   };
 
   if (isLoading || userPayload.isLoading) return <LoadingScreen />;

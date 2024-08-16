@@ -21,16 +21,11 @@ const useFetchUserData = (id) => {
         `https://washease.online/api/get-rider-details/${id}`
       );
 
-      const { data: riderDetails } = result.data.data;
-      const { first_name, last_name, email, phone_number, role } = riderDetails;
+      const { data: riderDetails } = result.data;
 
       return {
         id,
-        firstName: first_name,
-        lastName: last_name,
-        email,
-        phoneNumber: phone_number,
-        role,
+        ...riderDetails,
       };
     },
     queryKey: [`user-profile-${id}`],
@@ -42,9 +37,11 @@ const ProfileScreen = () => {
   const { id } = useLocalSearchParams();
   const { handleLogout } = useAuthContext();
 
-  const { data, isLoading, isError } = useFetchUserData(
+  const { data, isLoading, isError, error } = useFetchUserData(
     authState?.user_id || 73
   );
+
+  console.log(authState.data);
 
   const logoutMutation = useMutation({
     mutationFn: async () => await accoutApi.logout(),
@@ -69,19 +66,17 @@ const ProfileScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
 
+  if (isError) {
+    console.log(error);
+  }
+
   return (
     <ScreenLayout className="p-4 pt-6">
-      <ProfileCard
-        name={
-          `${data?.firstName || "John"} ${data?.lastName || "Doe"}` ||
-          "John doe"
-        }
-        role={`${data?.role || "Rider"}`}
-      />
+      <ProfileCard name={data?.name} role={`${data?.role || "Rider"}`} />
 
       <TouchableOpacity
         onPress={() => {
-          router.push(`/account/details/${id}`);
+          router.push(`/account/rider-details/${id}`);
         }}
       >
         <View className="flex-row items-center space-x-4 p-4 rounded-[5px] bg-white shadow-md border border-gray-300">

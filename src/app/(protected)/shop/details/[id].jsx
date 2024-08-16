@@ -67,14 +67,12 @@ const ShopDetails = () => {
 
   const { details, ratings, services } = data;
 
-  console.log(JSON.stringify(details, null, 2));
-
   const renderScene = SceneMap({
     about: () => (
       <AboutTab
-        about="Details is not available"
+        about="A laundry shop that offers affordable and quality laundry services"
         address={details?.laundry_shop_address || "N/A"}
-        opening={details?.laundry_shop_open_hours || "N/A"}
+        opening={details?.laundry_shop_open_hours || "8AM - 8PM"}
       />
     ),
     reviews: () => <ShopReviewTabs data={ratings} />,
