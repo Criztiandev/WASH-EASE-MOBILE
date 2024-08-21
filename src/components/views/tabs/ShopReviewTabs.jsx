@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import React from "react";
 import { FlashList } from "@shopify/flash-list";
 import CustomerReviewCard from "../../molecule/cards/CustomerReviewCard";
+import { useQuery } from "@tanstack/react-query";
 
 const ShopReviewTabs = ({ data }) => {
   return (
@@ -11,6 +12,7 @@ const ShopReviewTabs = ({ data }) => {
           data={data}
           renderItem={({ item }) => (
             <CustomerReviewCard
+              id={item?.customer_id}
               name={`Customer ${item?.customer_id}`}
               rating={item?.rating_count}
               comment={item?.rating_comment}

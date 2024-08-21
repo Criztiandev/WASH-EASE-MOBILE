@@ -138,6 +138,7 @@ const SelfServiceScreen = () => {
       );
 
       serviceMutation.mutate(finalPayload);
+      console.log(JSON.stringify(finalPayload, null, 2));
     } catch (error) {
       console.error("Error preparing final payload:", error);
       Toast.show({
@@ -233,14 +234,18 @@ const transformItems = (items, itemNameKey = "item_name") =>
     quantity: item.quantity || 0,
   }));
 
-const transformService = (id, serviceName, servicePrice) => [
-  {
-    service: id,
-    service_name: serviceName,
-    service_price: servicePrice,
-    quantity: 1,
-  },
-];
+const transformService = (id, serviceName, servicePrice) => {
+  if (!id) return;
+
+  return [
+    {
+      service: id,
+      service_name: serviceName,
+      service_price: servicePrice,
+      quantity: 1,
+    },
+  ];
+};
 
 const isServiceValid = (value, step) =>
   value === "" ||
@@ -250,16 +255,14 @@ const isServiceValid = (value, step) =>
 const transformedFinalPayload = (id, value, credentials) => {
   const currentDate = new Date().toISOString().split("T")[0];
 
-  const transformedWashMachine = transformService(
-    value.wash,
-    "Washing Machine",
-    "N/A"
-  );
-  const transformedDryMachine = transformService(
-    value.dry,
-    "Drying Machine",
-    "N/A"
-  );
+  const transformedWashMachine = value.wash
+    ? transformService(value.wash, "Washing Machine", "N/A")
+    : [];
+
+  const transformedDryMachine = value.dry
+    ? transformService(value.dry, "Drying Machine", "N/A")
+    : [];
+
   const transformedBasicMaterial = transformItems(value["basic-material"]);
   const transformedBasicService = transformItems(
     value["basic-service"],
