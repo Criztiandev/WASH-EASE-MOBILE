@@ -19,6 +19,7 @@ import ShopDetailsCover from "../../../../../components/organism/ShopDetailsCove
 import Button from "../../../../../components/atoms/Button";
 import { cn } from "../../../../../utils/dev.utils";
 import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
+import { useAuthContext } from "../../../../../context/AuthContext";
 
 const Category = [
   { id: 1, title: "Overall Experience" },
@@ -29,12 +30,45 @@ const Category = [
 ];
 
 const RootScreen = () => {
+  const { authState } = useAuthContext();
   const { id: shopID } = useLocalSearchParams();
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   console.log(shopID);
 
-  const { control, handleSubmit, reset } = useForm({
+  const mutation = useMutation({
+    mutationKey: [`mutate-${shopID}`],
+    mutationFn: async (value) =>
+      await axios.post(
+        "https://washease.online/api/laundry-shop/laundry-shop-ratings",
+        value,
+        {
+          headers: {
+            Authorization: `Bearer ${authState?.token}`,
+          },
+        }
+      ),
+
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Thank you for your feedback",
+      });
+      reset();
+      setSelectedCategories([]);
+    },
+
+    onError: (error) => {
+      Toast.show({
+        type: "error",
+        text1: error?.message,
+      });
+
+      console.log(JSON.stringify(error?.response?.data?.message, null, 2));
+    },
+  });
+
+  const { control, handleSubmit, reset, getValues } = useForm({
     defaultValues: { description: "", rating: "" },
   });
 
@@ -45,12 +79,16 @@ const RootScreen = () => {
   };
 
   const onSubmit = (formData) => {
-    Toast.show({
-      type: "success",
-      text1: "Thank you for your feedback",
-    });
-    reset();
-    setSelectedCategories([]);
+    const payload = {
+      customer_id: authState?.user_id,
+      laundry_shop_id: shopID,
+      services_id: "",
+      rating_count: getValues()?.rating,
+      rating_comment: getValues()?.description,
+    };
+
+    console.log(payload);
+    mutation.mutate(payload);
   };
 
   return (
@@ -127,7 +165,7 @@ const RootScreen = () => {
         </View>
 
         <View className="px-4 mt-4 mb-8">
-          <Button onPress={onSubmit}>
+          <Button onPress={handleSubmit(onSubmit)}>
             <Text className="text-center text-lg font-bold text-white">
               Submit
             </Text>
