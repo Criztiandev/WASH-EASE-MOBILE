@@ -14,7 +14,7 @@ import Button from "../../../../../components/atoms/Button";
 import useCurrentLocation from "../../../../../hooks/useCurrentLocation";
 import { useAuthContext } from "../../../../../context/AuthContext";
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY";
+const GOOGLE_MAPS_API_KEY = "AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y";
 const DISTANCE_THRESHOLD = 0.1; // km
 
 // Initialize the Geocoding module with your API key

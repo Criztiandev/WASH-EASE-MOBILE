@@ -45,7 +45,7 @@ const DashboardScreen = () => {
               <MapViewDirections
                 origin={location}
                 destination={Target}
-                apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
+                apikey="AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y"
                 mode="WALKING"
                 strokeWidth={2}
               />

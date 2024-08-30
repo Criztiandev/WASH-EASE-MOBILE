@@ -51,7 +51,7 @@ const RiderDestinationMap = ({ id, region }) => {
           <MapViewDirections
             origin={region}
             destination={SampleMarker[0]}
-            apikey="AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"
+            apikey="AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y"
             strokeWidth={3}
           />
         </MapView>

@@ -19,7 +19,7 @@ import Toast from "react-native-toast-message";
 import LoadingScreen from "../../../../components/atoms/LoadingScreen";
 
 // Initialize Geocoder outside of the component
-Geocoder.init("AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"); // Replace with your API key
+Geocoder.init("AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y"); // Replace with your API key
 
 const getAddress = async (latitude, longitude) => {
   try {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import Geocoding from "react-native-geocoding";
 
 // Initialize the Geocoding module with your API key
-Geocoding.init("AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"); // Replace with your actual API key
+Geocoding.init("AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y"); // Replace with your actual API key
 
 const useMyLocation = () => {
   const [location, setLocation] = useState(null);

@@ -36,7 +36,7 @@ const OtherInfoStep = ({ form, control, error }) => {
   }, [address]);
 
   const getAddress = async (latitude, longitude) => {
-    Geocoder.init("AIzaSyCUTRVpYG7yWdHnvU5QUxrulEhlXOegDTY"); // Replace with your API key
+    Geocoder.init("AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y"); // Replace with your API key
     Geocoder.from(latitude, longitude)
       .then((json) => {
         var addressComponent = json.results[0].formatted_address;
