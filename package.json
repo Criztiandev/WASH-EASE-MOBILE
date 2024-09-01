@@ -24,6 +24,7 @@
     "expo": "~51.0.31",
     "expo-checkbox": "~3.0.0",
     "expo-constants": "~16.0.2",
+    "expo-crypto": "~13.0.2",
     "expo-file-system": "~17.0.1",
     "expo-image": "~1.12.15",
     "expo-image-picker": "~15.0.7",
@@ -54,8 +55,11 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-timeline-flatlist": "^0.8.0",
     "react-native-toast-message": "^2.2.0",
+    "react-native-uuid": "^2.0.2",
     "react-native-webview": "13.8.6",
     "tailwind-merge": "^2.2.2",
+    "typescript": "~5.3.3",
+    "uuid": "^10.0.0",
     "zod": "^3.23.7"
   },
   "devDependencies": {

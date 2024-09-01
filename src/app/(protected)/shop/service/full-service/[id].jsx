@@ -51,7 +51,7 @@ const FullServiceScreen = () => {
     mutationFn: async (value) => {
       const authToken = authState.token; // Replace with your actual auth token
       const result = await axios.post(
-        "https://washease.online/api/laundry_shop/transactions",
+        "https://washeaselaundry.online/api/laundry_shop/transactions",
         value,
         {
           headers: {
@@ -194,7 +194,7 @@ const useFetchLaundryData = (id) => {
     queryKey: [`laundry-${id}`],
     queryFn: async () => {
       const response = await axios.get(
-        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
+        `https://washeaselaundry.online/api/get-basic-services-by-laundry-shops-id/${id}`
       );
       const basePayload = response.data;
 
@@ -225,7 +225,7 @@ const useFetchUserData = (id) => {
   return useQuery({
     queryFn: async () => {
       const result = await axios.get(`
-      https://washease.online/api/get-customer-details/${id}`);
+      https://washeaselaundry.online/api/get-customer-details/${id}`);
 
       const { first_name, last_name, email, phone_number, role } = result.data;
 

@@ -19,7 +19,7 @@ const CustomerReviewCard = ({ id, name, rating, date, comment, className }) => {
     queryKey: [`shop-reviews-${id}`],
     queryFn: async () => {
       const { data: result } = await axios.get(
-        `https://washease.online/api/laundry-shop/users/${id}`,
+        `https://washeaselaundry.online/api/laundry-shop/users/${id}`,
         {
           headers: {
             Authorization: `Bearer ${authState.token}`,

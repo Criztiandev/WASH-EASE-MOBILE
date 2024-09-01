@@ -35,7 +35,7 @@ const useCustomerDetails = (id, authState) => {
     queryFn: async () => {
       try {
         const result = await axios.get(
-          `https://washease.online/api/laundry-shop/users/${id}`,
+          `https://washeaselaundry.online/api/laundry-shop/users/${id}`,
           {
             headers: {
               Authorization: `Bearer ${authState.token}`,
@@ -75,7 +75,7 @@ const useCompleteMutation = (authState, router, transactionID) => {
   return useMutation({
     mutationFn: async () =>
       await axios.put(
-        `https://washease.online/api/laundry-shop/transactions/${transactionID}`,
+        `https://washeaselaundry.online/api/laundry-shop/transactions/${transactionID}`,
         { status: "COMPLETED" },
         {
           headers: { Authorization: `Bearer ${authState.token}` },

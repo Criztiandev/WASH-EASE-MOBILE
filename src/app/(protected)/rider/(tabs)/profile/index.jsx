@@ -18,7 +18,7 @@ const useFetchUserData = (id) => {
   return useQuery({
     queryFn: async () => {
       const result = await axios.post(
-        `https://washease.online/api/get-rider-details/${id}`
+        `https://washeaselaundry.online/api/get-rider-details/${id}`
       );
 
       const { data: riderDetails } = result.data;
@@ -40,8 +40,6 @@ const ProfileScreen = () => {
   const { data, isLoading, isError, error } = useFetchUserData(
     authState?.user_id || 73
   );
-
-  console.log(authState.data);
 
   const logoutMutation = useMutation({
     mutationFn: async () => await accoutApi.logout(),

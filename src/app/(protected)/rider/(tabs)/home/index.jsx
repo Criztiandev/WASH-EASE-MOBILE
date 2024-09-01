@@ -23,7 +23,7 @@ const RootScreen = () => {
     queryKey: [`rider-task-${authState.user_id}`],
     queryFn: async () => {
       const result = await axios.post(
-        `https://washease.online/api/get-all-rider-tasks/${authState.user_id}`
+        `https://washeaselaundry.online/api/get-all-rider-tasks/${authState.user_id}`
       );
       const { transactions } = result.data;
 
@@ -37,7 +37,7 @@ const RootScreen = () => {
           const { customer_id } = transaction;
 
           const { data } = await axios.get(
-            `https://washease.online/api/get-customer-details/${customer_id}`
+            `https://washeaselaundry.online/api/get-customer-details/${customer_id}`
           );
 
           data.avatar = null;

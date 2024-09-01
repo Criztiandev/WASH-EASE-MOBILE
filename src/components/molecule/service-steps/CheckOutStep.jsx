@@ -86,7 +86,7 @@ const useFetchUserData = (id) => {
   return useQuery({
     queryFn: async () => {
       const result = await axios.get(`
-      https://washease.online/api/get-customer-details/${id}`);
+      https://washeaselaundry.online/api/get-customer-details/${id}`);
 
       const { first_name, last_name, email, phone_number, role } = result.data;
 

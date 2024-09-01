@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import NotificationIcon from "../../../../../assets/icons/notification_icon.svg";
 import AccountIcon from "../../../../../assets/icons/account_icon.svg";
@@ -15,10 +15,21 @@ import LoadingScreen from "../../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../../components/atoms/ErrorScreen";
 
 const useFetchUserData = (id) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsFocused(true);
+      return () => {
+        setIsFocused(false);
+      };
+    }, [])
+  );
+
   return useQuery({
     queryFn: async () => {
       const result = await axios.get(
-        `https://washease.online/api/get-customer-details/${id}`
+        `https://washeaselaundry.online/api/get-customer-details/${id}`
       );
       const { first_name, last_name, email, phone_number, role } = result.data;
       return {
@@ -31,6 +42,7 @@ const useFetchUserData = (id) => {
       };
     },
     queryKey: [`user-profile-${id}`],
+    enabled: isFocused,
   });
 };
 

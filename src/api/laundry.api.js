@@ -1,5 +1,6 @@
 import axios from "axios";
 import Geocoder from "react-native-geocoding";
+import uuid from "react-native-uuid";
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyD2S3-_jyyJJLOJdCzEeGLY31egBsD4i1Y";
 
@@ -9,7 +10,7 @@ export default {
   fetchAllLaundryShopLocation: async () => {
     try {
       const { data } = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops"
+        "https://washeaselaundry.online/api/get-all-laundry-shops"
       );
       const { laundry_shops } = data;
 
@@ -27,6 +28,7 @@ export default {
                   geocodeResponse.results[0].geometry.location;
 
                 return {
+                  uid: uuid.v4(),
                   id: item.id,
                   name: item?.laundry_shop_name,
                   address: item?.laundry_shop_address,
@@ -59,7 +61,7 @@ export default {
   fetchAllLaundryShopByID: async (id) => {
     try {
       const response = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops"
+        "https://washeaselaundry.online/api/get-all-laundry-shops"
       );
       const { laundry_shops } = response.data;
       const findData = laundry_shops?.find((shop) => shop?.id === id);

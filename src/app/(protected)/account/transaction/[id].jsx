@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React, { useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
@@ -9,6 +9,7 @@ import { useAuthContext } from "../../../../context/AuthContext";
 import LoadingScreen from "../../../../components/atoms/LoadingScreen";
 import ErrorScreen from "../../../../components/atoms/ErrorScreen";
 import axios from "axios";
+import { FlatList } from "react-native-gesture-handler";
 
 const MOCKDATA = [
   {
@@ -60,7 +61,7 @@ const RootScreen = () => {
     queryFn: async () => {
       try {
         const result = await axios.get(
-          `https://washease.online/api/get-customer-transactions/${authState["user_id"]}/`
+          `https://washeaselaundry.online/api/get-customer-transactions/${authState["user_id"]}/`
         );
         return result?.data || [];
       } catch (error) {
@@ -121,8 +122,7 @@ const RootScreen = () => {
               {...item}
             />
           )}
-          estimatedItemSize={200}
-          keyExtractor={(item) => item.id}
+          estimatedItemSize={1000}
         />
       </View>
     </View>
@@ -165,24 +165,23 @@ const TransactionCard = ({
           {transformedTitle}
         </Text>
 
-        <View className=" py-2 px-1">
-          <FlashList
-            data={props.service_avail}
-            renderItem={({ item }) => (
-              <View className="flex-row space-x-2">
-                <Text className="text-base">{item?.service_name}</Text>
-                <Text className="text-base">-</Text>
-                <Text className="text-base">
-                  {item?.service_price === "PN/A"
-                    ? "Reserved"
-                    : item?.service_price === "N/A"
-                    ? "Reserved"
-                    : item?.service_price}
-                </Text>
-              </View>
-            )}
-            estimatedItemSize={100}
-          />
+        <View className=" py-2 px-1 h-[200px]">
+          {props?.service_avail?.map((item, index) => (
+            <View
+              key={`shop-avail-${item?.id}-${index}`}
+              className="flex-row space-x-2"
+            >
+              <Text className="text-base">{item?.service_name}</Text>
+              <Text className="text-base">-</Text>
+              <Text className="text-base">
+                {item?.service_price === "PN/A"
+                  ? "Reserved"
+                  : item?.service_price === "N/A"
+                  ? "Reserved"
+                  : item?.service_price}
+              </Text>
+            </View>
+          ))}
         </View>
 
         <View className="border-b border-gray-400 my-2"></View>

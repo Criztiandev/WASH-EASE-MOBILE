@@ -33,7 +33,7 @@ const ShopDetails = () => {
   const { isLoading, isError, data, refetch } = useQuery({
     queryFn: async () => {
       const response = await axios.get(
-        "https://washease.online/api/get-all-laundry-shops"
+        "https://washeaselaundry.online/api/get-all-laundry-shops"
       );
 
       const { laundry_shops } = response.data;

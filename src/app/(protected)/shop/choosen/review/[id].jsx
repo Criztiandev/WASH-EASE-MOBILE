@@ -40,7 +40,7 @@ const RootScreen = () => {
     mutationKey: [`mutate-${shopID}`],
     mutationFn: async (value) =>
       await axios.post(
-        "https://washease.online/api/laundry-shop/laundry-shop-ratings",
+        "https://washeaselaundry.online/api/laundry-shop/laundry-shop-ratings",
         value,
         {
           headers: {

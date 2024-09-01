@@ -35,7 +35,7 @@ const useFetchUserData = (id) => {
   return useQuery({
     queryFn: async () => {
       const result = await axios.post(
-        `https://washease.online/api/get-rider-details/${id}`
+        `https://washeaselaundry.online/api/get-rider-details/${id}`
       );
 
       const { data: riderDetails } = result.data;
@@ -62,7 +62,7 @@ const RootScreen = () => {
   const mutation = useMutation({
     mutationFn: async (value) =>
       await axios.put(
-        `https://washease.online/api/laundry_shop/users/${user_id}`,
+        `https://washeaselaundry.online/api/laundry_shop/users/${user_id}`,
         value,
         {
           headers: {

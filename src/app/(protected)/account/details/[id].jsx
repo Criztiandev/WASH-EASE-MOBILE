@@ -40,7 +40,7 @@ const RootScreen = () => {
   const { isLoading, isError, refetch, data, error } = useQuery({
     queryFn: async () => {
       const result = await axios.get(
-        `https://washease.online/api/laundry_shop/users/${user_id}`,
+        `https://washeaselaundry.online/api/laundry_shop/users/${user_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const RootScreen = () => {
   const mutation = useMutation({
     mutationFn: async (value) =>
       await axios.put(
-        `https://washease.online/api/laundry_shop/users/${user_id}`,
+        `https://washeaselaundry.online/api/laundry_shop/users/${user_id}`,
         value,
         {
           headers: {

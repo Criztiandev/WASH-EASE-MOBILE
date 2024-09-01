@@ -85,7 +85,7 @@ const SelfServiceScreen = () => {
   const serviceMutation = useMutation({
     mutationFn: async (value) => {
       const response = await axios.post(
-        "https://washease.online/api/laundry_shop/transactions",
+        "https://washeaselaundry.online/api/laundry_shop/transactions",
         value,
         {
           headers: {
@@ -180,7 +180,7 @@ const useFetchLaundryData = (id) => {
     queryKey: [`laundry-${id}`],
     queryFn: async () => {
       const response = await axios.get(
-        `https://washease.online/api/get-basic-services-by-laundry-shops-id/${id}`
+        `https://washeaselaundry.online/api/get-basic-services-by-laundry-shops-id/${id}`
       );
       const { washing_machine, data, selling_items } = response.data;
 
@@ -210,7 +210,7 @@ const useFetchUserData = (id) => {
     queryKey: [`user-${id}`],
     queryFn: async () => {
       const response = await axios.get(
-        `https://washease.online/api/get-customer-details/${id}`
+        `https://washeaselaundry.online/api/get-customer-details/${id}`
       );
       const { first_name, last_name, email, phone_number, role } =
         response.data;

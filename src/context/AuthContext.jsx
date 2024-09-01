@@ -4,6 +4,7 @@ import { AuthAtom } from "../service/states/auth.atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useRouter } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 const getData = async () => {
   try {
@@ -26,6 +27,7 @@ export const useAuthContext = () => {
 };
 
 const AuthContextProvider = ({ children }) => {
+  const queryClient = useQueryClient();
   const [authState, setAuthState] = useAtom(AuthAtom);
   const { removeData } = useLocalStorage("auth");
   const router = useRouter();
@@ -41,6 +43,8 @@ const AuthContextProvider = ({ children }) => {
         UID: null,
       });
 
+      queryClient.clear();
+      router.dismissAll();
       router.replace("/");
     } catch (error) {
       console.error("Logout failed:", error);

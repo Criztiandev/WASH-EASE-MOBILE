@@ -6,13 +6,15 @@ import { Picker } from "@react-native-picker/picker";
 import Button from "../../../../../components/atoms/Button";
 import ScreenLayout from "../../../../../layout/ScreenLayout";
 import HeroShopCard from "../../../../../components/molecule/cards/HeroShopCard";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import useCombinedFilter from "../../../../../hooks/useCombineFilter";
 import { Filter, X } from "lucide-react-native";
+
 import laundryApi from "../../../../../api/laundry.api";
 
 const ShoplistScreen = () => {
+  const [isFocused, setIsFocused] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [ratingFilter, setRatingFilter] = useState(0);
 
@@ -26,13 +28,22 @@ const ShoplistScreen = () => {
         throw error;
       }
     },
-    staleTime: 30000, // Consider data fresh for 1 minute
+    enabled: isFocused,
   });
 
   const { searchQuery, setSearchQuery, filteredData } = useCombinedFilter(
     data,
     "laundry_shop_name",
     ratingFilter
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsFocused(true);
+      return () => {
+        setIsFocused(false);
+      };
+    }, [])
   );
 
   if (isLoading) return <LoadingScreen />;
@@ -65,7 +76,6 @@ const ShoplistScreen = () => {
           {filteredData?.length > 0 ? (
             <FlashList
               data={filteredData.reverse()}
-              keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
                 return (
                   <HeroShopCard
@@ -82,7 +92,7 @@ const ShoplistScreen = () => {
                   />
                 );
               }}
-              estimatedItemSize={200}
+              estimatedItemSize={1000}
             />
           ) : (
             <View

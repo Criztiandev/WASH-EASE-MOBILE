@@ -13,15 +13,26 @@ import { Icon } from "react-native-paper";
 import LaundryShopDetails from "../../../../../components/organism/LaundryShopDetails";
 import { useFocusEffect } from "expo-router";
 
+
 const HomeScreen = () => {
+  const [isFocused, setIsFocused] = useState(false);
   const { location, errorMsg } = useCurrentLocation();
   const [selectedLaundryShop, setSelectedLaundryShop] = useState(null);
   const { isLoading, isError, error, data, isFetchedAfterMount, refetch } =
     useQuery({
       queryFn: async () => await laundryApi.fetchAllLaundryShopLocation(),
       queryKey: ["home-laundry-shops"],
-      refetchInterval: 30000,
+      enabled: isFocused,
     });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsFocused(true);
+      return () => {
+        setIsFocused(false);
+      };
+    }, [])
+  );
 
   if (isLoading) return <LoadingScreen />;
 
@@ -36,9 +47,9 @@ const HomeScreen = () => {
       <View className={cn(selectedLaundryShop ? "h-[400px]" : "")}>
         {isFetchedAfterMount && (
           <LaundryShopMap region={initialRegion}>
-            {data?.map((shop) => (
+            {data?.map((shop, index) => (
               <Marker
-                key={shop.name}
+                key={`${shop.name}-${index}`}
                 coordinate={{
                   ...shop.coords,
                 }}
