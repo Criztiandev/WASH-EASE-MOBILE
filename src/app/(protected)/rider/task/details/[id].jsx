@@ -82,6 +82,7 @@ const RootScreen = () => {
   const { data, isLoading, isError, error } = useCustomerDetails(id);
   const mutation = useCompleteMutation(authState, router);
 
+  // calculate the radius of the target location
   const calculateDistance = useCallback((lat1, lon1, lat2, lon2) => {
     const R = 6371; // Earth's radius in km
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -96,6 +97,7 @@ const RootScreen = () => {
     return R * c; // Distance in km
   }, []);
 
+  // Mount the location
   useEffect(() => {
     if (location && data?.latitude && data?.longitude) {
       const distance = calculateDistance(
@@ -121,7 +123,6 @@ const RootScreen = () => {
 
   if (isLoading) return <LoadingScreen />;
   if (isError) {
-    console.log(error);
     return error.message === "Failed to fetch rider tasks" ? (
       <View className="flex-1 justify-center items-center">
         <Text className="text-[24px] font-bold text-center px-8">

@@ -81,7 +81,7 @@ const ShoplistScreen = () => {
                   <HeroShopCard
                     title={item?.name}
                     details={{
-                      location: item?.address || "N/Ar",
+                      location: item?.address || "Taguig",
                       contact: item?.phoneNumber || "N/A",
                     }}
                     isOpen={item?.isOpen || "Open"}

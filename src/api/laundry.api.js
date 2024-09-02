@@ -14,9 +14,13 @@ export default {
       );
       const { laundry_shops } = data;
 
+      const filteredLaundryShop = laundry_shops?.filter(
+        (item) => item?.status === "APPROVE"
+      );
+
       const transformPayload = (
         await Promise.all(
-          laundry_shops.map(async (item) => {
+          filteredLaundryShop.map(async (item) => {
             const { laundry_shop_address, ...rest } = item;
 
             try {

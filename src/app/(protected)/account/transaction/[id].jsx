@@ -140,7 +140,7 @@ const TransactionCard = ({
   method,
   ...props
 }) => {
-  const transformedTitle = title.split("_").join(" ");
+  const transformedTitle = title?.split("_")?.join(" ");
   return (
     <TouchableOpacity
       onPress={() => {

@@ -69,7 +69,7 @@ const FullServiceScreen = () => {
         text1: "Order Placed",
         text2: "Thank you for using wash ease",
       });
-      router.replace("/customer/home");
+      router.push("/customer/choosen-shop");
     },
     onError: (error) => {
       Toast.show({

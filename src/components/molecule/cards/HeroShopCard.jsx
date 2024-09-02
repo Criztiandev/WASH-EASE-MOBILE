@@ -67,7 +67,9 @@ const HeroShopCard = ({
             <View className="mr-2">
               <Icon source={"information"} size={24} color="black" />
             </View>
-            <Text className="text-[16px]">{details?.schedule || "N/A"}</Text>
+            <Text className="text-[16px]">
+              {details?.schedule || "8:00 AM - 5:00 PM"}
+            </Text>
           </View>
 
           <View className="flex-row items-center ">

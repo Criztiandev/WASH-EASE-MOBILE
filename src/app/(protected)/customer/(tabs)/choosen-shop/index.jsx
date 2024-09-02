@@ -27,7 +27,7 @@ const RootScreen = () => {
   const filteredData = useMemo(() => {
     return (
       data?.filter((item) =>
-        item.service_type.toLowerCase().includes(searchQuery.toLowerCase())
+        item.service_type?.toLowerCase()?.includes(searchQuery.toLowerCase())
       ) || []
     );
   }, [data, searchQuery]);
